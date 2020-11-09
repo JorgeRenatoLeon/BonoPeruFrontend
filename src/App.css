@@ -1,5 +1,12 @@
+
 .App {
   text-align: center;
+  background-image: url("../src/assets/img/FondoBeneficiario.jpg");
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  background-size: cover;
+  background-position: center;
 }
 
 .App-logo {
@@ -36,3 +43,9 @@
     transform: rotate(360deg);
   }
 }
+/* img */
+
+/* img{
+  height: 700px;
+  width: 1450px;
+} */
