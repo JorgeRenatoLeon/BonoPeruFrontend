@@ -42,7 +42,7 @@ const theme = createMuiTheme({
     fontFamily: 'Arvo',
     button: {
       textTransform: 'none'
-    }
+    },
   },
   overrides: {
     MuiCssBaseline: {

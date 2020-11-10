@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.Contenedor {
+  text-align: left;
+  background-color: white;
+  border-radius: 20px;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  margin-left: 40px;
+  margin-right: 40px;
+}
