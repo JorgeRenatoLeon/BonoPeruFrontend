@@ -45,18 +45,18 @@ const AccesoSistema = (props) => {
             <Grid container direction="column" style={{minHeight: '88vh'}}>
                 {from.pathname!=='/' && <p> You must log in to view the content at {from.pathname} </p>}
                 <Grid container justify="center" style={{paddingBottom: '10vh',paddingTop: '10vh'}}>
-                    <Typography variant="h2" color="inherit" noWrap>
+                    <Typography variant="h2" color="inherit">
                         Inicio de Sesión
                     </Typography>
                 </Grid>
                 <Grid container direction="row" justify="center">
                     <Grid container direction="row" item md={12} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                        <Grid container item md={1} alignContent="center">
-                            <Typography variant="subtitle2" color="inherit" noWrap>
+                        <Grid container item md={1} alignContent="center" justify="center">
+                            <Typography variant="subtitle2" color="inherit">
                                 Usuario
                             </Typography>
                         </Grid>
-                        <Grid container item md={3}>
+                        <Grid container item md={2} justify="center">
                             <TextField
                                 value={usuario}
                                 onChange={(event) => {setUsuario(event.target.value)}}
@@ -68,12 +68,12 @@ const AccesoSistema = (props) => {
                         </Grid>
                     </Grid>
                     <Grid container direction="row" item md={12} justify="center" style={{paddingBottom: '3vh'}}>
-                        <Grid container item md={1} alignContent="center">
-                            <Typography variant="subtitle2" color="inherit" noWrap>
+                        <Grid container item md={1} justify="center" alignContent="center">
+                            <Typography variant="subtitle2" color="inherit">
                                 Contraseña
                             </Typography>
                         </Grid>
-                        <Grid container item md={3}>
+                        <Grid container item md={2} justify="center">
                             <TextField
                                 value={contrasena}
                                 onChange={(event) => {setContrasena(event.target.value)}}
@@ -86,7 +86,7 @@ const AccesoSistema = (props) => {
                         </Grid>
                     </Grid>
                     <Grid container item md={12} justify="center" style={{paddingBottom: '3vh'}}>
-                        <Typography variant="subtitle2" color="inherit" noWrap>
+                        <Typography variant="subtitle2" color="inherit">
                             ¿Olvidó su contraseña?
                         </Typography>
                     </Grid>

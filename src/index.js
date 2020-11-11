@@ -30,7 +30,7 @@ const theme = createMuiTheme({
     fontFamily: font,
     button: {
       textTransform: 'none'
-    }
+    },
   },
 });
 
