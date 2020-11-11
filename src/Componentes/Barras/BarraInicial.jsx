@@ -1,4 +1,4 @@
-import {AppBar, Grid, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, Grid, SvgIcon, Toolbar, Typography} from '@material-ui/core';
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
@@ -89,12 +89,14 @@ function BarraInicial () {
                                     {currentUser.username}
                                 </Link>
                                 <Link to={"/acceso"} onClick={logOut} style={{paddingLeft: 10}}>
-                                    LogOut
+                                    <SvgIcon color="inherit">
+                                        <path d="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z" />
+                                    </SvgIcon>
                                 </Link>
                             </Grid>
                             ) : (
                             <Grid item style={{paddingLeft: 10}}>
-                                <Link to={"/acceso"} >
+                                <Link to={"/acceso"}>
                                     Login
                                 </Link>
                             </Grid>
