@@ -8,8 +8,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import SearchField from "react-search-field";
 import IconButton from '@material-ui/core/IconButton';

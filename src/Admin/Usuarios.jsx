@@ -22,34 +22,35 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { AppBar, Container, Grid } from "@material-ui/core"
+import Buscador from '../Componentes/Elementos/Buscador.jsx'
 
-function createData(nombre, apellido, correo) {
-  return { nombre, apellido, correo};
+function createData(id, nombre, apellido, correo) {
+  return { id, nombre, apellido, correo};
 }
 
 const editIdx= -1;
 
 const rows = [
-    createData('Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
-    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
-    createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
-    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
-    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
-    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
-    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
-    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
-    createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
-    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
-    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
-    createData('Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
-    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
-    createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
-    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
-    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
-    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
-    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
-    createData('Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
-    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
+    createData(0, 'Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
+    createData(1, 'Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
+    createData(2, 'Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
+    createData(3, 'Sarah Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData(4, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
+    createData(5, 'Sarita Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData(6, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
+    createData(7, 'Victoria Andrea', 'Baron Solana', 'victorbaron@bancoabc.com'),
+    createData(8, 'Sabado', 'Serrano Araque', 'dserrano@bancoxyz.com'),
+    createData(9, 'Saragovia Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData(10, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
+    createData(11, 'Pablo Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
+    createData(12, 'Manuel Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
+    createData(13, 'Lunes', 'Serrano Araque', 'dserrano@bancoxyz.com'),
+    createData(14, 'Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData(15, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
+    createData(16, 'Sarana Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData(17, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
+    createData(18, 'Jorge Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
+    createData(19, 'Spiderman Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
     
 ];
 
@@ -198,10 +199,12 @@ export default function EnhancedTable() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    console.log(property);
   };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    console.log(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -227,67 +230,69 @@ export default function EnhancedTable() {
                               </Grid>
                           </Toolbar>
                   </AppBar>
-                  </div>
+                </div>
 
-                  <div className='BuscadorPrincipal'>
-                  <SearchField
-                      placeholder="Buscar usuarios..."
-                      classNames="test-class"
-                  />
-                  </div>
+                <div className='Contenedor'>
+                  <Grid container direction="row" justify="left">
+                      <Grid container item xs={12} justify="left">
+                          <Buscador mensaje = "Buscar nombre"></Buscador> 
+                          {/* //Cambiarle de nombre//Cambiarle de nombre */}
+                      </Grid>
+                  </Grid>
 
                   <div className={classes.root}>
-                  <Grid className={classes.paper}>                      
-                      <TableContainer>
-                      <Table
-                          className={classes.table}
-                          aria-labelledby="tableTitle"
-                          aria-label="enhanced table"
-                          //handleRemove={this.handleRemove}
-                          //startEditing={this.startEditing}
-                          //editIdx={this.state.editIdx}
-                          //stopEditing={this.stopEditing}
-                          //handleSave={this.handleSave}
-                      >
-                          <EnhancedTableHead
-                          classes={classes}
-                          order={order}
-                          orderBy={orderBy}
-                          onRequestSort={handleRequestSort}
-                          />
-                          <TableBody>
-                          {stableSort(rows, getComparator(order, orderBy))
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                              .map((row, index) => {                            
-                              
-                              return (
-                                  <TableRow hover tabIndex={-1} key={row.nombre}>
-                                  <TableCell align="left">{row.nombre}</TableCell>
-                                  <TableCell align="left">{row.apellido}</TableCell>
-                                  <TableCell align="left">{row.correo}</TableCell>
-                                  
-                                  {/* <TableRowColumn>
-                                    <EditIcon onClick={() => startEditing(i)} />
-                                    <TrashIcon onClick={() => handleRemove(i)} />
-                                  </TableRowColumn> */}
-                                  </TableRow>
-                              );
-                              })}
-                          
-                          </TableBody>
-                      </Table>
-                      </TableContainer>
-                      <TablePagination
-                      //rowsPerPageOptions={[5, 10, 25]}
-                      rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
-                      component="div"
-                      count={rows.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onChangePage={handleChangePage}
-                      onChangeRowsPerPage={handleChangeRowsPerPage}
-                      />
-                  </Grid>                  
+                    <Grid className={classes.paper}>                      
+                        <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby="tableTitle"
+                            aria-label="enhanced table"
+                            //handleRemove={this.handleRemove}
+                            //startEditing={this.startEditing}
+                            //editIdx={this.state.editIdx}
+                            //stopEditing={this.stopEditing}
+                            //handleSave={this.handleSave}
+                        >
+                            <EnhancedTableHead
+                            classes={classes}
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            />
+                            <TableBody>
+                            {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {                            
+                                
+                                return (
+                                    <TableRow hover tabIndex={-1} key={row.id}>
+                                    <TableCell align="left">{row.nombre}</TableCell>
+                                    <TableCell align="left">{row.apellido}</TableCell>
+                                    <TableCell align="left">{row.correo}</TableCell>
+                                    
+                                    {/* <TableRowColumn>
+                                      <EditIcon onClick={() => startEditing(i)} />
+                                      <TrashIcon onClick={() => handleRemove(i)} />
+                                    </TableRowColumn> */}
+                                    </TableRow>
+                                );
+                                })}
+                            
+                            </TableBody>
+                        </Table>
+                        </TableContainer>
+                        <TablePagination
+                        //rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </Grid>                  
+                  </div>
                 </div>
              </Container>
          <BarraFinal/>
