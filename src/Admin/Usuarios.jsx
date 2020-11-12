@@ -4,7 +4,7 @@ import BarraFinal from '../Componentes/Barras/BarraFinal'
 import SearchField from "react-search-field";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,14 +17,26 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 import { AppBar, Container, Grid } from "@material-ui/core"
 
 function createData(nombre, apellido, correo) {
   return { nombre, apellido, correo};
 }
 
+const editIdx= -1;
+
 const rows = [
     createData('Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
+    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
+    createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
+    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
+    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
     createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
     createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
     createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
@@ -34,6 +46,10 @@ const rows = [
     createData('Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
     createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
     createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),
+    createData('Sara Susana', 'Llano', 'dserrano@bancoxyz.com'),
+    createData('María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
+    createData('Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
+    createData('Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
     
 ];
 
@@ -62,12 +78,43 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
+/*
+const handleRemove = i => {
+  this.setState(state => ({
+    data: state.data.filter((row, j) => j !== i)
+  }));
+};
 
+const startEditing = i => {
+  this.setState({ editIdx: i });
+};
+
+const stopEditing = () => {
+  this.setState({ editIdx: -1 });
+};
+
+const handleSave = (i, x) => {
+  this.setState(state => ({
+    data: state.data.map((row, j) => (j === i ? x : row))
+  }));
+  this.stopEditing();
+};
+*/
 const headCells = [
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido' },
   { id: 'correo', numeric: false, disablePadding: false, label: 'Correo' },
 ];
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: "5AB9EA",
+    color: theme.palette.common.black,
+  },
+  body: {
+    fontSize: 18,
+  },
+}))(TableCell);
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
@@ -79,11 +126,12 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell
+          <StyledTableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{background: '#5AB9EA'}}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -97,7 +145,7 @@ function EnhancedTableHead(props) {
                 </span>
               ) : null}
             </TableSortLabel>
-          </TableCell>
+          </StyledTableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -114,7 +162,7 @@ EnhancedTableHead.propTypes = {
 const useStyles = makeStyles({
     root: {
       width: '100%',
-      maxWidth: 500,
+      //maxWidth: 750,
       justify:"center",    
     },
     table: {
@@ -124,14 +172,6 @@ const useStyles = makeStyles({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    paper: {
-      //backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      //boxShadow: theme.shadows[5],
-      //padding: theme.spacing(2, 4, 3),
-      //width: '100%',
-      //marginBottom: theme.spacing(2),
     },
     visuallyHidden: {
         border: 0,
@@ -146,7 +186,7 @@ const useStyles = makeStyles({
       },
   });
 
-
+ 
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -181,7 +221,7 @@ export default function EnhancedTable() {
                               <Grid container direction="row" justify="center">
                                   <Grid container item xs={12} justify="center">                        
                                       <Typography variant="h3"  gutterBottom justify="center" >
-                                          <h3 style={{color: 'black', margin: 20,justify:"center" }}>Listado de Usuarios</h3>
+                                          <h4 style={{color: 'black', margin: 20,justify:"center" }}>Listado de Usuarios</h4>
                                       </Typography>                               
                                   </Grid>                                                  
                               </Grid>
@@ -203,6 +243,11 @@ export default function EnhancedTable() {
                           className={classes.table}
                           aria-labelledby="tableTitle"
                           aria-label="enhanced table"
+                          //handleRemove={this.handleRemove}
+                          //startEditing={this.startEditing}
+                          //editIdx={this.state.editIdx}
+                          //stopEditing={this.stopEditing}
+                          //handleSave={this.handleSave}
                       >
                           <EnhancedTableHead
                           classes={classes}
@@ -216,17 +261,15 @@ export default function EnhancedTable() {
                               .map((row, index) => {                            
                               
                               return (
-                                  <TableRow
-                                  hover
-                                  key={row.name}
-                                  >
-                                  <TableCell component="th" scope="row" padding="none">
-                                      {row.name}
-                                  </TableCell>
-                                  <TableCell align="right">{row.nombre}</TableCell>
-                                  <TableCell align="right">{row.apellido}</TableCell>
-                                  <TableCell align="right">{row.correo}</TableCell>
-
+                                  <TableRow hover tabIndex={-1} key={row.nombre}>
+                                  <TableCell align="left">{row.nombre}</TableCell>
+                                  <TableCell align="left">{row.apellido}</TableCell>
+                                  <TableCell align="left">{row.correo}</TableCell>
+                                  
+                                  {/* <TableRowColumn>
+                                    <EditIcon onClick={() => startEditing(i)} />
+                                    <TrashIcon onClick={() => handleRemove(i)} />
+                                  </TableRowColumn> */}
                                   </TableRow>
                               );
                               })}
@@ -235,7 +278,8 @@ export default function EnhancedTable() {
                       </Table>
                       </TableContainer>
                       <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
+                      //rowsPerPageOptions={[5, 10, 25]}
+                      rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
                       component="div"
                       count={rows.length}
                       rowsPerPage={rowsPerPage}
