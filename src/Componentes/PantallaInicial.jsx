@@ -3,7 +3,7 @@ import { Grid, Button, AppBar, Toolbar, Typography, Container } from "@material-
 import { Link } from "react-router-dom"
 import '../assets/css/FondoBeneficiario.css'
 
-import Buscador from '../Componentes/Elementos/Buscador.jsx'
+import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
 function PantallaInicial () {
 
     return (
@@ -28,10 +28,10 @@ function PantallaInicial () {
                         </Typography>
                     </Grid>
                 </Grid>
-                {/* Barra Buscador */}
+                {/* Barra BuscadorPrincipal */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <Buscador ></Buscador> 
+                        <BuscadorPrincipal ></BuscadorPrincipal> 
                         {/* //Cambiarle de nombre//Cambiarle de nombre */}
                     </Grid>
                 </Grid>
