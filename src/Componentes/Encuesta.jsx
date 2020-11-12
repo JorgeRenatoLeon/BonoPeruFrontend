@@ -7,7 +7,7 @@ class Encuesta extends Component {
         super(props)
 
         this.state = {
-            preguntasHard: [{id: 0,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "No"},{id:1, pregunta:'¿Recogió su bono en el lugar y hora indicado en su cronograma?',respuesta: "No"}],
+            preguntasHard: [{id: 0,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "No"},{id:1, pregunta:'¿Recogió su bono en el lugar y hora indicado en su cronograma?',respuesta: "No"},{id: 2,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "Si"}],
             opcion: {
                 nombre: 'Agencia ABC- Turno Mañana',
                 preguntas:[
