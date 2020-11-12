@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function Buscador() {
+export default function BuscadorPrincipal() {
   const classes = useStyles();
 
   return (

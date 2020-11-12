@@ -1,6 +1,5 @@
 import React from 'react'
 import {  AppBar, Toolbar, Typography, Container} from "@material-ui/core"
-//import { Grid } from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
 
@@ -37,7 +36,7 @@ function RespuestaNo () {
                     </Grid>
                     <Grid container direction="row" justify="center">
                         <Grid container item md={2} justify="center">
-                            <Link to='/'>
+                            <Link to='/' style={{textDecoration:"none"}}>
                                 <Button variant="contained" size="small" color="secondary">
                                     Salir
                                 </Button>

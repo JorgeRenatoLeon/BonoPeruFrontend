@@ -229,7 +229,7 @@ export default function EnhancedTable() {
                   </AppBar>
                   </div>
 
-                  <div className='Buscador'>
+                  <div className='BuscadorPrincipal'>
                   <SearchField
                       placeholder="Buscar usuarios..."
                       classNames="test-class"

@@ -8,7 +8,7 @@ import {CssBaseline} from '@material-ui/core'
 import store from './store'
 import { Provider } from 'react-redux';
 
-const font =  "'Arvo', sans-serif";
+const font =  "Arvo, sans-serif";
 
 //Declaración del tema de los colores de los botones
 const theme = createMuiTheme({
