@@ -31,21 +31,22 @@ function PantallaInicial () {
                 {/* Barra Buscador */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <Buscador ></Buscador>
+                        <Buscador ></Buscador> 
+                        {/* //Cambiarle de nombre//Cambiarle de nombre */}
                     </Grid>
                 </Grid>
                
                    {/* botones */}
                 <Grid container direction="row" justify="center">
                     <Grid container item md={2} justify="center">
-                        <Link to='/'>
+                        <Link to='/' style={{textDecoration:"none"}}>
                             <Button variant="contained" size="small" color="primary">
                                 Sin AppBar
                             </Button>
                         </Link>
                     </Grid>
                     <Grid container item md={2} justify="center">
-                        <Link to='/home'>
+                        <Link to='/home' style={{textDecoration:"none"}}>
                             <Button variant="contained"  size="small" color="secondary">
                                 Con AppBar
                             </Button>
@@ -54,14 +55,14 @@ function PantallaInicial () {
                 </Grid>
                 <Grid container direction="row" justify="center">
                     <Grid container item md={2} justify="center">
-                        <Link to='/'>
+                        <Link to='/' style={{textDecoration:"none"}}>
                             <Button variant="contained" size="small" color="primary">
                                 Soy Beneficiario
                             </Button>
                         </Link>
                     </Grid>
                     <Grid container item md={2} justify="center">
-                        <Link to='/consulta'>
+                        <Link to='/consulta' style={{textDecoration:"none"}}>
                             <Button variant="contained"  size="small" color="secondary">
                                 No Soy Beneficario
                             </Button>
@@ -77,7 +78,8 @@ function PantallaInicial () {
                 </Grid>
             </Grid>
             {/* contenedor clásico, fondo blanco redondeado */}
-            <div className='Contenedor'>
+            <div className='Contenedor'> 
+            {/* //cambiarlo por Grid */}
                  {/* Título */}
 
                 <Container style={{margin: 10}}>
