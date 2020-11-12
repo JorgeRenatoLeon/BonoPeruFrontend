@@ -13,6 +13,7 @@ import {Container} from '@material-ui/core';
 
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
+import Usuarios from './Admin/Usuarios'
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
       <div className="App">
         <Switch>
           <Route exact path="/" component={PantallaInicial}/>
+          <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route exact path="/consulta" >
