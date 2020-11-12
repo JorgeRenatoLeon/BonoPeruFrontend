@@ -15,9 +15,11 @@ code {
   text-align: left;
   background-color: white;
   border-radius: 20px;
-  min-height: 68vh;
+  min-height: 65vh;
   background-size: cover;
   background-position: center;
   margin-left: 40px;
   margin-right: 40px;
+  padding: 10px;
+  margin: 20px;
 }

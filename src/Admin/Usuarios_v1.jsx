@@ -10,18 +10,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import SearchField from "react-search-field";
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
+//import IconButton from '@material-ui/core/IconButton';
+//import DeleteIcon from '@material-ui/icons/Delete';
+//import VisibilityIcon from '@material-ui/icons/Visibility';
+//import EditIcon from '@material-ui/icons/Edit';
+//import AddIcon from '@material-ui/icons/Add';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import '../assets/css/FondoBeneficiario.css'
 import { AppBar, Toolbar, Typography, Container } from "@material-ui/core"
-import { Grid, Button } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Grid } from "@material-ui/core"
+//import { Link } from "react-router-dom"
 
 const useStyles = makeStyles({
   root: {
@@ -117,13 +117,13 @@ export default function Usuarios() {
     //estilo
     const classes = useStyles();
     //ventana modal
-    const [open, setOpen] = React.useState(false);  
+    /* const [open, setOpen] = React.useState(false);  
     const handleOpen = () => {
       setOpen(true);
     };  
     const handleClose = () => {
       setOpen(false);
-    };
+    }; */
   
     return (
     <div>

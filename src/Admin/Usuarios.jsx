@@ -1,9 +1,8 @@
 import React from 'react';
 import BarraInicial from '../Componentes/Barras/BarraInicial'
 import BarraFinal from '../Componentes/Barras/BarraFinal'
-import SearchField from "react-search-field";
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+//import clsx from 'clsx';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +14,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -222,7 +220,7 @@ export default function EnhancedTable() {
                   <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                           <Toolbar>
                               <Grid container direction="row" justify="center">
-                                  <Grid container item xs={12} justify="center">                        
+                                  <Grid container item xs={10} justify="center">                        
                                       <Typography variant="h3"  gutterBottom justify="center" >
                                           <h4 style={{color: 'black', margin: 20,justify:"center" }}>Listado de Usuarios</h4>
                                       </Typography>                               
