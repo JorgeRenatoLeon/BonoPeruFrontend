@@ -221,7 +221,7 @@ export default function EnhancedTable() {
                               <Grid container direction="row" justify="center">
                                   <Grid container item xs={12} justify="center">                        
                                       <Typography variant="h3"  gutterBottom justify="center" >
-                                          <h3 style={{color: 'black', margin: 20,justify:"center" }}>Listado de Usuarios</h3>
+                                          <h4 style={{color: 'black', margin: 20,justify:"center" }}>Listado de Usuarios</h4>
                                       </Typography>                               
                                   </Grid>                                                  
                               </Grid>
