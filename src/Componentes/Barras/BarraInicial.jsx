@@ -58,37 +58,20 @@ function BarraInicial () {
                         BONO PERU
                     </Typography>
                     <Grid style={{marginLeft: 'auto'}}>
-                        <Grid md={12} container item direction="row" justify="flex-end">
-                            {showModeratorBoard && (
-                            <Grid item style={{paddingLeft: 10}}>
-                                <Link to={"/mod"} >
-                                    Moderator Board
-                                </Link>
-                            </Grid>
-                            )}
-
-                            {showAdminBoard && (
-                            <Grid item style={{paddingLeft: 10}}>
-                                <Link to={"/admin"} >
-                                Admin Board
-                                </Link>
-                            </Grid>
-                            )}
-
-                            {currentUser && (
-                            <Grid item style={{paddingLeft: 10}}>
-                                <Link to={"/user"} >
-                                User
-                                </Link>
-                            </Grid>
-                            )}
-
+                        <Grid md={12} container item direction="row" justify="flex-end" alignContent="flex-end">
                             {currentUser ? (
-                            <Grid item style={{paddingLeft: 10}}>
-                                <Link to={"/profile"}>
+                            <Grid item style={{paddingLeft: 10}} align="center">
+                                <Link to={"/profile"} style={{textDecoration: 'none'}}>
                                     {currentUser.username}
                                 </Link>
-                                <Link to={"/acceso"} onClick={logOut} style={{paddingLeft: 10}}>
+                            </Grid>
+                            ) : (
+                                <div></div>
+                            )
+                            }
+                            {currentUser ? (
+                            <Grid item style={{paddingLeft: 10}}>
+                                <Link to={"/acceso"} onClick={logOut} style={{paddingLeft: 10, height: 'auto',display: 'flex'}}>
                                     <SvgIcon color="inherit">
                                         <path d="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z" />
                                     </SvgIcon>
