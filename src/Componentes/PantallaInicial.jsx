@@ -3,7 +3,9 @@ import { Grid, Button, AppBar, Toolbar, Typography, Container } from "@material-
 import { Link } from "react-router-dom"
 import '../assets/css/FondoBeneficiario.css'
 
+import Buscador from '../Componentes/Elementos/Buscador.jsx'
 function PantallaInicial () {
+
     return (
         <div>
             <div className='Fondo'>
@@ -26,6 +28,13 @@ function PantallaInicial () {
                         </Typography>
                     </Grid>
                 </Grid>
+                {/* Barra Buscador */}
+                <Grid container direction="row" justify="center">
+                    <Grid container item xs={12} justify="center">
+                        <Buscador ></Buscador>
+                    </Grid>
+                </Grid>
+               
                    {/* botones */}
                 <Grid container direction="row" justify="center">
                     <Grid container item md={2} justify="center">
@@ -101,7 +110,7 @@ function PantallaInicial () {
                              <h4 color="inherit">Respuesta 3</h4>                        
                         </Grid>
                     </Grid>
-                    
+                  
                 </Container>
             </div>
         </div>
