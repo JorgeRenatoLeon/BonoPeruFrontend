@@ -1,24 +1,12 @@
 import React from 'react'
-import {  AppBar, Toolbar, Typography, Container } from "@material-ui/core"
+import {  AppBar, Toolbar, Typography, Container} from "@material-ui/core"
 //import { Grid } from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
-// import '../assets/css/FondoBeneficiario.css'
-import SearchField from "react-search-field";
-import { makeStyles } from '@material-ui/core/styles';
-//Para el título grandote
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-    maxWidth: 500,
-    justify:"center",
-    
-  },
-});
 
 
 function RespuestaNo () {
-    
+   
 
     return (
         <div>
@@ -58,10 +46,7 @@ function RespuestaNo () {
                     </Grid>
                    
                 </Container>
-                <SearchField
-                    placeholder="Search..." 
-                    classNames="test-class"
-                />
+             
             </div>
             <div>
            
