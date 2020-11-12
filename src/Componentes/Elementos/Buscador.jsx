@@ -33,6 +33,7 @@ export default function Buscador() {
       <InputBase
         className={classes.input}
         placeholder="Ingrese el Código de familia. Ejemplo: 1234"
+        style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
       <IconButton
