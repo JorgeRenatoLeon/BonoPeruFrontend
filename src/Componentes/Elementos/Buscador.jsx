@@ -25,14 +25,15 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function Buscador() {
+export default function Buscador(props) {
   const classes = useStyles();
+  const mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
 
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
         className={classes.input}
-        placeholder="Ingrese el Código de familia. Ejemplo: 1234"
+        placeholder= {mensaje}
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
@@ -46,8 +47,8 @@ export default function Buscador() {
             backgroundColor: "#5AB9EA",
             borderRadius: 100,
             borderTopLeftRadius: 0,
-            width: 50,
-            height: 50,
+            width: 44,
+            height: 44,
             padding: 0,
             margin: 0
           }}
