@@ -4,7 +4,7 @@ import PantallaInicial from './Componentes/PantallaInicial'
 import RutaProtegida from './Componentes/RutaProtegida'
 import AccesoSistema from './Componentes/AccesoSistema'
 import { Router, Route, Switch} from "react-router-dom"
-import RespuestaNo from './Componentes/Beneficiario/RespuestaNo'
+import RespuestaBeneficiario from './Componentes/Beneficiario/RespuestaBeneficiario'
 import BarraInicial from './Componentes/Barras/BarraInicial'
 import BarraFinal from './Componentes/Barras/BarraFinal'
 import {Container} from '@material-ui/core';
@@ -25,10 +25,10 @@ const App = () => {
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
-          <Route exact path="/consulta" >
+          <Route exact path="/consulta" component={RespuestaBeneficiario} >
             <BarraInicial/>
             <Container>
-              <RespuestaNo/>
+              <RespuestaBeneficiario/>
             </Container>
             <BarraFinal/>
           </Route>

@@ -4,8 +4,21 @@ import { Link } from "react-router-dom"
 import '../assets/css/FondoBeneficiario.css'
 
 import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
+    // const handleSearch=(e)=>{
+    //   console.log(e);
+    // }
+    // state={
+    //     handleSearch:['a']
+    //   }
+    //   this.setState({
+    //     handleSearch:handleSearch
+    //   })   
 function PantallaInicial () {
-
+  
+// const handleSearch=this.state;
+    // const mensajeBuscador="Tellooooo";
+    const esBeneficiario=true;
+    // console.log('flag: ', esBeneficiario);
     return (
         <div>
             <div className='Fondo'>
@@ -31,8 +44,8 @@ function PantallaInicial () {
                 {/* Barra BuscadorPrincipal */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <BuscadorPrincipal ></BuscadorPrincipal> 
-                        {/* //Cambiarle de nombre//Cambiarle de nombre */}
+                        <BuscadorPrincipal  direction={esBeneficiario}></BuscadorPrincipal> 
+                      
                     </Grid>
                 </Grid>
                

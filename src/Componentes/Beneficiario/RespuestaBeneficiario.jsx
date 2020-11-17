@@ -3,9 +3,8 @@ import {  AppBar, Toolbar, Typography, Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
 
-
-function RespuestaNo () {
-   
+//  path: /consulta
+function RespuestaBeneficiario () {   
 
     return (
         <div>
@@ -54,5 +53,5 @@ function RespuestaNo () {
     );
     
 }
-export default RespuestaNo;
+export default RespuestaBeneficiario;
 
