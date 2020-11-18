@@ -1,21 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Grid, Button, AppBar, Toolbar, Typography, Container } from "@material-ui/core"
 import { Link } from "react-router-dom"
 import '../assets/css/FondoBeneficiario.css'
 
 import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
-    // const handleSearch=(e)=>{
-    //   console.log(e);
-    // }
-    // state={
-    //     handleSearch:['a']
-    //   }
-    //   this.setState({
-    //     handleSearch:handleSearch
-    //   })   
-function PantallaInicial () {
   
-// const handleSearch=this.state;
+function PantallaInicial () {
+
     // const mensajeBuscador="Tellooooo";
     const esBeneficiario=true;
     // console.log('flag: ', esBeneficiario);
@@ -91,7 +82,7 @@ function PantallaInicial () {
                 </Grid>
             </Grid>
             {/* contenedor clásico, fondo blanco redondeado */}
-            <div className='Contenedor'> 
+            <Grid className='Contenedor'> 
             {/* //cambiarlo por Grid */}
                  {/* Título */}
 
@@ -127,7 +118,7 @@ function PantallaInicial () {
                     </Grid>
                   
                 </Container>
-            </div>
+            </Grid>
         </div>
     );
 

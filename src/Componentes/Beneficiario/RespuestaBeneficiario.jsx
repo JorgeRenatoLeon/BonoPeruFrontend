@@ -8,7 +8,7 @@ function RespuestaBeneficiario () {
 
     return (
         <div>
-            <div >                
+                      
                 <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <Grid container direction="row" justify="center">
@@ -22,7 +22,7 @@ function RespuestaBeneficiario () {
                         </Grid>
                     </Toolbar>
                 </AppBar>
-            </div>
+            
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">

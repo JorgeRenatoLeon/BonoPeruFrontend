@@ -21,11 +21,11 @@ const App = () => {
     <Router history={history}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={PantallaInicial}/>
+          <Route exact path="/" component={PantallaInicial}/>  {/* Pantalla Johana */}
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
-          <Route exact path="/consulta" component={RespuestaBeneficiario} >
+          <Route exact path="/consulta" component={RespuestaBeneficiario} > {/* Pantalla Johana */}
             <BarraInicial/>
             <Container>
               <RespuestaBeneficiario/>

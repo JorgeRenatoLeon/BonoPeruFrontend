@@ -47,6 +47,7 @@ export default function BuscadorPrincipal(props) {
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
+      {/* {classes.input} */}
        <Link to='/consulta' style={{textDecoration:"none"}}>        
      
           <IconButton
@@ -71,6 +72,6 @@ export default function BuscadorPrincipal(props) {
        {/* no compilaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 15/11*/}
     </Paper>
   );
- 
+            console.log(classes.input);
 }
 
