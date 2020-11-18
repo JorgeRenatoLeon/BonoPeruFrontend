@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button ,Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import React, {Component, useReducer} from 'react';
 import { Link } from 'react-router-dom';
@@ -24,8 +24,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { useHistory } from 'react-router-dom';
 
-function createData(id, codigo, nombre, lugar, direccion) {
-    return { id, codigo, nombre, lugar, direccion};
+import '../../assets/css/Cronograma.css';
+
+function createData(id, nombre, locacion, turno, capacidad, beneficiarios, mujeres, hombres, discapacitados, riesgo) {
+    return { id, nombre, locacion,turno, capacidad, beneficiarios, mujeres, hombres, discapacitados, riesgo};
 }
 
 const reducer = (state, action) => {
@@ -33,9 +35,10 @@ const reducer = (state, action) => {
 }
 
 const rows = [
-    createData(0, 11, 'Agencia 1', 'LIMA-LIMA-LA VICTORIA', 'Jr. Cuzco 500'),
-    createData(1, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
-    createData(2, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
+    createData(0, 'ABC', 'LIMA-LIMA-LA VICTORIA', '1pm - 5pm', 50, 40, 30, 10, '100%', 'Bajo'),
+    createData(1, 'ABC', 'LIMA-LIMA-LA VICTORIA', '9am - 1pm', 50, 40, 25, 15, '1%', 'Medio'),
+    createData(2, 'PQR', 'LIMA-LIMA-SURCO', '9am - 1:30pm', 100, 40, 40, 10, '2%', 'Alto'),
+    createData(3, 'PQR', 'LIMA-LIMA-SURCO', '1:30pm - 6pm', 100, 40, 35, 15, '60%', 'Bajo'),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -63,34 +66,17 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-/*
-const handleRemove = i => {
-  this.setState(state => ({
-    data: state.data.filter((row, j) => j !== i)
-  }));
-};
 
-const startEditing = i => {
-  this.setState({ editIdx: i });
-};
-
-const stopEditing = () => {
-  this.setState({ editIdx: -1 });
-};
-
-const handleSave = (i, x) => {
-  this.setState(state => ({
-    data: state.data.map((row, j) => (j === i ? x : row))
-  }));
-  this.stopEditing();
-};
-*/
 const headCells = [
-  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
-  { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
-  { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar' },
-  { id: 'direccion', numeric: false, disablePadding: false, label: 'Direccion' },
+  { id: 'locacion', numeric: false, disablePadding: false, label: 'Locación' },
+  { id: 'turno', numeric: false, disablePadding: false, label: 'Turno' },
+  { id: 'capacidad', numeric: false, disablePadding: false, label: 'Capacidad' },
+  { id: 'beneficiarios', numeric: false, disablePadding: false, label: 'Beneficiarios' },
+  { id: 'mujeres', numeric: false, disablePadding: false, label: 'Mujeres' },
+  { id: 'hombres', numeric: false, disablePadding: false, label: 'Hombres' },
+  { id: 'discapacitados', numeric: false, disablePadding: false, label: '%Discapacitados' },
+  { id: 'riesgo', numeric: false, disablePadding: false, label: 'Riesgo' },
 ];
 
 const StyledTableCell = withStyles((theme) => ({
@@ -176,7 +162,8 @@ const useStyles = makeStyles({
 
 
 
-function BusquedaLugares() {
+function Cronograma() {
+    const styles = { width: 260, display: 'block', marginBottom: 10 };
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -237,6 +224,11 @@ function BusquedaLugares() {
     }
     console.log({selectedId});
     console.log({selectedCod});
+    const history = useHistory();
+
+    const consultarLugar = () => {
+        history.push("/consultasBeneficiarios");
+    }
 
     return ( 
         <Grid>
@@ -246,7 +238,7 @@ function BusquedaLugares() {
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
                             <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Búsqueda de Lugares</h3>
+                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Cronograma</h3>
                             </Typography> 
                         </Grid>                                                  
                     </Grid>
@@ -268,26 +260,25 @@ function BusquedaLugares() {
                         </Typography>
                         <Combobox options={distritos}/>
                     </Grid>
-                    <Grid container direction="row"  item xs={6} justify="space-evenly" alignItems="center">
+                    <Grid container direction="row"  justify="space-evenly" alignItems="center">
                         <Typography variant="subtitle1" color="inherit">
-                            Buscar:
+                            Fechas:
                         </Typography>
-                        <Buscador mensaje = " "></Buscador> 
+                        
+                        <Typography variant="subtitle1" color="inherit">
+                            Nombre lugar de entrega:
+                        </Typography>
+                        <TextField className="inputRounded" id="outlined-basic" label={null} variant="outlined" />
                     </Grid>
                 </Grid>
             </Paper> 
-            <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>
+            <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10, marginBottom:20,  boxShadow: 'none'}}>
                 <Grid className={classes.paper}>                      
                     <TableContainer>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         aria-label="enhanced table"
-                        //handleRemove={this.handleRemove}
-                        //startEditing={this.startEditing}
-                        //editIdx={this.state.editIdx}
-                        //stopEditing={this.stopEditing}
-                        //handleSave={this.handleSave}
                     >
                         <EnhancedTableHead
                         classes={classes}
@@ -303,11 +294,15 @@ function BusquedaLugares() {
                             
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
-                                <RadioButton id={row.id} cod={row.codigo}/>
-                                <TableCell align="left">{row.codigo}</TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
-                                <TableCell align="left">{row.lugar}</TableCell>
-                                <TableCell align="left">{row.direccion}</TableCell>
+                                <TableCell align="left">{row.locacion}</TableCell>
+                                <TableCell align="left">{row.turno}</TableCell>
+                                <TableCell align="left">{row.capacidad}</TableCell>
+                                <TableCell align="left">{row.beneficiarios}</TableCell>
+                                <TableCell align="left">{row.mujeres}</TableCell>
+                                <TableCell align="left">{row.hombres}</TableCell>
+                                <TableCell align="left">{row.discapacitados}</TableCell>
+                                <TableCell align="left">{row.riesgo}</TableCell>
                                 </TableRow>
                             );
                             })}
@@ -326,21 +321,22 @@ function BusquedaLugares() {
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
-                </Grid>                  
-            </Paper> 
-            <Grid container direction="column" justify="flex-start" alignItems="center" >
-                <Link to='/consultasBeneficiarios' style={{textDecoration:"none"}}>
+                </Grid> 
+                <Grid container direction="row" justify="space-evenly" alignItems="center" >
                     <Button variant="contained" size="medium" color="primary" style={{margin: 10}}>
-                        Consultar
+                        Descargar
                     </Button> 
-                </Link> 
-            </Grid>    
-                
+                    <Link to='/' style={{textDecoration:"none"}}>
+                        <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
+                            Regresar
+                        </Button>
+                    </Link> 
+                </Grid>                  
+            </Paper>  
             <BarraFinal/>
- 
         </Grid>
     );
 
 }
  
-export default BusquedaLugares;
+export default Cronograma;

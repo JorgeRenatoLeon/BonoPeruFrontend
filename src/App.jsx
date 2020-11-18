@@ -16,6 +16,8 @@ import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
 import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
+import Cronograma from "./Componentes/Representante/Cronograma";
+import Quejas from "./Componentes/Quejas";
 
 const App = () => {
 
@@ -27,6 +29,8 @@ const App = () => {
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route exact path="/lugares" component={BusquedaLugares}/>
           <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
+          <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
+          <Route exact path='/quejas' component={Quejas}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route exact path="/consulta" >

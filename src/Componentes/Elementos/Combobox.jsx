@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Select,  { components }from 'react-select';
+import Select,  { components } from 'react-select';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import {  Grid, InputLabel} from '@material-ui/core';
 
