@@ -41,7 +41,7 @@ function PantallaInicial () {
                 </Grid>
                
                    {/* botones */}
-                <Grid container direction="row" justify="center">
+                {/* <Grid container direction="row" justify="center">
                     <Grid container item md={2} justify="center">
                         <Link to='/' style={{textDecoration:"none"}}>
                             <Button variant="contained" size="small" color="primary">
@@ -56,7 +56,7 @@ function PantallaInicial () {
                             </Button>
                         </Link>
                     </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid container direction="row" justify="center">
                     <Grid container item md={2} justify="center">
                         <Link to='/' style={{textDecoration:"none"}}>
