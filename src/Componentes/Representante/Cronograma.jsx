@@ -6,7 +6,7 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
 import BarraFinal from '../Barras/BarraFinal';
 import Combobox from '../Elementos/Combobox';
-import Buscador from '../Elementos/Buscador.jsx';
+import RangoFechas from '../Elementos/RangoFechas';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Table from '@material-ui/core/Table';
@@ -23,7 +23,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { useHistory } from 'react-router-dom';
-
 import '../../assets/css/Cronograma.css';
 
 function createData(id, nombre, locacion, turno, capacidad, beneficiarios, mujeres, hombres, discapacitados, riesgo) {
@@ -237,7 +236,7 @@ function Cronograma() {
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
-                            <Typography variant="h3"  gutterBottom justify="center" >
+                          <Typography variant="h3"  gutterBottom justify="center" >
                                     <h3 style={{color: 'black', margin: 20,justify:"center" }}>Cronograma</h3>
                             </Typography> 
                         </Grid>                                                  
@@ -260,11 +259,12 @@ function Cronograma() {
                         </Typography>
                         <Combobox options={distritos}/>
                     </Grid>
+                    <br></br>
                     <Grid container direction="row"  justify="space-evenly" alignItems="center">
                         <Typography variant="subtitle1" color="inherit">
                             Fechas:
                         </Typography>
-                        
+                          <RangoFechas/>
                         <Typography variant="subtitle1" color="inherit">
                             Nombre lugar de entrega:
                         </Typography>

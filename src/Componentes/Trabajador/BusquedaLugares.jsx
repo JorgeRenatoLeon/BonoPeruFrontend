@@ -1,6 +1,6 @@
-import { AppBar, Toolbar, Typography, Button, Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button, Grid, Radio } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import React, {Component, useReducer} from 'react';
+import React, {useReducer} from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
@@ -8,7 +8,6 @@ import BarraFinal from '../Barras/BarraFinal';
 import Combobox from '../Elementos/Combobox';
 import Buscador from '../Elementos/Buscador.jsx';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,12 +16,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import { useHistory } from 'react-router-dom';
+import axios from "axios";
+import DepartamentosService from "../../Servicios/departamentos.service";
+
 
 function createData(id, codigo, nombre, lugar, direccion) {
     return { id, codigo, nombre, lugar, direccion};
@@ -37,6 +33,10 @@ const rows = [
     createData(1, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
     createData(2, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
 ];
+
+function traerDepartamentos(){
+    console.log(DepartamentosService.mostrarDepartamentos()); 
+}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -177,6 +177,7 @@ const useStyles = makeStyles({
 
 
 function BusquedaLugares() {
+    traerDepartamentos();
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
