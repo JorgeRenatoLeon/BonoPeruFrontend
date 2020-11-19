@@ -34,9 +34,6 @@ const rows = [
     createData(2, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
 ];
 
-function traerDepartamentos(){
-    console.log(DepartamentosService.mostrarDepartamentos()); 
-}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -177,7 +174,9 @@ const useStyles = makeStyles({
 
 
 function BusquedaLugares() {
-    traerDepartamentos();
+
+    const departamentos = DepartamentosService.mostrarDepartamentos();
+    console.log(departamentos);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -202,11 +201,7 @@ function BusquedaLugares() {
     };
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    const departamentos = [
-        { value: 'Lima', label: 'LIMA' },
-        { value: 'Tumbes', label: 'TUMBES' },
-        { value: 'Tacna', label: 'TACNA' }
-    ];
+
     const provincias = [
         { value: 'Lima', label: 'LIMA' },
         { value: 'Tumbes', label: 'TUMBES' },
@@ -217,7 +212,7 @@ function BusquedaLugares() {
         { value: 'Surco', label: 'SURCO' },
         { value: 'Miraflores', label: 'MIRAFLORES' }
     ];
-
+    console.log(departamentos);
 
     const [state, dispatch] = useReducer(reducer, {})
     const RadioButton = ({id,cod}) => (
