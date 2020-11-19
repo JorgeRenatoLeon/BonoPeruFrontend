@@ -7,9 +7,7 @@ import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
   
 function PantallaInicial () {
 
-    // const mensajeBuscador="Tellooooo";
     const esBeneficiario=true;
-    // console.log('flag: ', esBeneficiario);
     return (
         <div>
             <div className='Fondo'>

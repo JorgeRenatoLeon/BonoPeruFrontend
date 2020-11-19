@@ -5,8 +5,10 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom"
-
-// import PropTypes from 'prop-types'
+//para la redireccion
+import { useEffect,useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {fetchPokemons} from "../../actions/prueba";
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "0px 0px",
@@ -27,34 +29,42 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function BuscadorPrincipal(props) {
-// const BuscadorPrincipal=(props) =>{
+export default function BuscadorPrincipal(props,{history}) {
+
   const classes = useStyles();
-  // const {handleSearch} =this.state; //  
   var mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
-  const flag = props.direction;
-  // console.log('flag: ', flag);
-  if (flag===false){
-    mensaje= "Soy falso";
+  const flag = props.direction; 
+  //Para redireccionar
+ 
+  
+ 
+  const dispatch =useDispatch();
+  function hola(){
+    // console.log('hola');
+    dispatch(fetchPokemons());
+      
+      
+   
   }
-    
   return (
     <Paper component="form" className={classes.root}>
       
       <InputBase
+        //value={pokemons[0]}
+        // onChange={(event) => {setCodFam(event.target.value)}}
         className={classes.input}
         placeholder={mensaje}
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
-      {/* {classes.input} */}
-       <Link to='/consulta' style={{textDecoration:"none"}}>        
+    
+       <Link to= '/consulta'     style={{textDecoration:"none"}}>        
      
           <IconButton
             type="submit"
             className={classes.iconButton}
             aria-label="search"
-            
+            onClick={hola}
           >
           <SearchIcon
             style={{
@@ -69,9 +79,9 @@ export default function BuscadorPrincipal(props) {
         />
       </IconButton>
       </Link>
-       {/* no compilaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 15/11*/}
+     
     </Paper>
   );
-            console.log(classes.input);
+
 }
 
