@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Button, Grid, Radio } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import React, {useReducer} from 'react';
+import React, {Component, useReducer} from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
@@ -18,6 +18,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import axios from "axios";
 import DepartamentosService from "../../Servicios/departamentos.service";
+import LugaresService from "../../Servicios/lugares.service";
+import { render } from '@testing-library/react';
 
 
 function createData(id, codigo, nombre, lugar, direccion) {
@@ -173,10 +175,11 @@ const useStyles = makeStyles({
 
 
 
-function BusquedaLugares() {
+const BusquedaLugares = (props) => {
 
     const departamentos = DepartamentosService.mostrarDepartamentos();
     console.log(departamentos);
+    const lugares = LugaresService.obtenerLugares();
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -262,7 +265,7 @@ function BusquedaLugares() {
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
-                        <Combobox options={distritos}/>
+                        <Combobox options={departamentos}/>
                     </Grid>
                     <Grid container direction="row"  item xs={6} justify="space-evenly" alignItems="center">
                         <Typography variant="subtitle1" color="inherit">

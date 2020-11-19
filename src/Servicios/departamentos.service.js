@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8084/api/departamento/";
+const API_URL = "http://3.87.144.73:8084/api/departamento/";
 
-function mostrarDepartamentos(){
+async function mostrarDepartamentos(){
   return axios
     .post(API_URL+ 'listar')
     .then(response =>{
@@ -14,7 +14,7 @@ function mostrarDepartamentos(){
                 label: dep.nombre,
             });
         });
-        console.log(departamentos);
+        //console.log(departamentos);
       return departamentos;
     })
     .catch(() => {
