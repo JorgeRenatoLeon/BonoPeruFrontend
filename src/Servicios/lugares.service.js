@@ -7,16 +7,10 @@ const lugar ={
     "iddistrito": null,
     "nombre": ""
 }
-async function obtenerLugares(idUsuario){
+
+const obtenerLugares=(props)=>{
     return axios
-      .post(API_URL, { lugar})
-      .then(response =>{
-        console.log(response.data)
-        return response.data;
-      })
-      .catch(() => {
-        console.log('Error al obtener Lugares')
-      });
+      .post(API_URL, {lugar})
   };
   
   const exportar = {

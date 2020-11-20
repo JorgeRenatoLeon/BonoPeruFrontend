@@ -30,12 +30,17 @@ const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-const rows = [
-    createData(0, 11, 'Agencia 1', 'LIMA-LIMA-LA VICTORIA', 'Jr. Cuzco 500'),
-    createData(1, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
-    createData(2, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
-];
+let rows = [];
 
+LugaresService.obtenerLugares().then(response =>{
+  console.log(response.data);
+  for(var i=0;i<response.data.length();i++){
+    rows.push(createData(response.data[i].idlugarentrega, response.data[i].codigo, response.data[i].nombre, response.data[i].depprodis, response.data[i].direccion))
+  }
+})
+.catch(() => {
+  console.log('Error al obtener Lugares')
+});
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -177,9 +182,21 @@ const useStyles = makeStyles({
 
 const BusquedaLugares = (props) => {
 
-    const departamentos = DepartamentosService.mostrarDepartamentos();
-    console.log(departamentos);
-    const lugares = LugaresService.obtenerLugares();
+    let departamentos=[];
+    DepartamentosService.mostrarDepartamentos().then(response =>{
+        response.data.map(dep => {
+          departamentos.push({
+                value: dep.iddepartamento,
+                label: dep.nombre,
+            });
+        });
+        console.log(departamentos);
+    })
+    .catch(() => {
+      console.log('Error al pedir los departamentos')
+    });
+    
+    
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -265,7 +282,7 @@ const BusquedaLugares = (props) => {
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
-                        <Combobox options={departamentos}/>
+                        <Combobox options={distritos}/>
                     </Grid>
                     <Grid container direction="row"  item xs={6} justify="space-evenly" alignItems="center">
                         <Typography variant="subtitle1" color="inherit">
