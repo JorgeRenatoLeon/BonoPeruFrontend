@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Button, Grid, Radio } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import React, {Component, useReducer} from 'react';
+import React, {Component, useReducer, useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
@@ -30,17 +30,7 @@ const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-let rows = [];
 
-LugaresService.obtenerLugares().then(response =>{
-  console.log(response.data);
-  for(var i=0;i<response.data.length();i++){
-    rows.push(createData(response.data[i].idlugarentrega, response.data[i].codigo, response.data[i].nombre, response.data[i].depprodis, response.data[i].direccion))
-  }
-})
-.catch(() => {
-  console.log('Error al obtener Lugares')
-});
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,15 +48,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+
 /*
 const handleRemove = i => {
   this.setState(state => ({
@@ -181,22 +163,54 @@ const useStyles = makeStyles({
 
 
 const BusquedaLugares = (props) => {
-
-    let departamentos=[];
+  const [departamentos, setDep] = useState([]);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
     DepartamentosService.mostrarDepartamentos().then(response =>{
-        response.data.map(dep => {
-          departamentos.push({
-                value: dep.iddepartamento,
-                label: dep.nombre,
-            });
-        });
-        console.log(departamentos);
+      let depAux=[];
+      response.data.map(dep => {
+        depAux.push({
+              value: dep.iddepartamento,
+              label: dep.nombre,
+          });
+      });
+      setDep(depAux);
+      console.log(departamentos);
+      })
+      .catch(() => {
+        console.log('Error al pedir los departamentos')
+      });
+  
+    LugaresService.obtenerLugares().then(response =>{
+      let rowsAux = [];
+      response.data.map(lug => {
+        rowsAux.push({
+          id: lug.idlugarentrega, 
+          codigo: lug.codigo, 
+          nombre: lug.nombre, 
+          lugar: lug.depprodis, 
+          direccion: lug.direccion
+          });
+      });
+      setRows(rowsAux);
+      console.log(rows);
     })
     .catch(() => {
-      console.log('Error al pedir los departamentos')
+      console.log('Error al obtener Lugares')
     });
+  },[]);
     
-    
+  function stableSort(array, comparator) {
+    console.log(array);
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
+
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -232,7 +246,6 @@ const BusquedaLugares = (props) => {
         { value: 'Surco', label: 'SURCO' },
         { value: 'Miraflores', label: 'MIRAFLORES' }
     ];
-    console.log(departamentos);
 
     const [state, dispatch] = useReducer(reducer, {})
     const RadioButton = ({id,cod}) => (
