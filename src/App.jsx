@@ -9,11 +9,10 @@ import BarraInicial from './Componentes/Barras/BarraInicial'
 import BarraFinal from './Componentes/Barras/BarraFinal'
 import {Container} from '@material-ui/core';
 // import imagenes from './assets/imagenes.js';
-
-
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
+import Formulario from './Admin/Formulario'
 
 const App = () => {
 
@@ -23,6 +22,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={PantallaInicial}/>
           <Route exact path="/usuarios" component={Usuarios}/>
+          <Route exact path="/formulario" component={Formulario}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route exact path="/consulta" >

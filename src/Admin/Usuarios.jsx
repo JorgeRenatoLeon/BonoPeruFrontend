@@ -2,7 +2,6 @@ import React from 'react';
 import BarraInicial from '../Componentes/Barras/BarraInicial'
 import BarraFinal from '../Componentes/Barras/BarraFinal'
 import PropTypes from 'prop-types';
-//import clsx from 'clsx';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,21 +13,26 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
 import { AppBar, Container, Grid } from "@material-ui/core"
 import Buscador from '../Componentes/Elementos/Buscador.jsx'
+import Formulario from './Formulario'
+import VerFormulario from './VerFormulario'
+import EditarFormulario from './EditarFormulario'
+import EliminarUsuario from "./EliminarUsuario";
 
 function createData(id, nombre, apellido, correo) {
   return { id, nombre, apellido, correo};
 }
 
-const editIdx= -1;
+const state = {
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  editIdx: -1,
+};
 
-const rows = [
+let rows = [
     createData(0, 'Pedro Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
     createData(1, 'Víctor Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
     createData(2, 'Domingo', 'Serrano Araque', 'dserrano@bancoxyz.com'),
@@ -48,8 +52,7 @@ const rows = [
     createData(16, 'Sarana Susana', 'Llano', 'dserrano@bancoxyz.com'),
     createData(17, 'María Concepción', 'Arrieta Granada', 'dserrano@bancoxyz.com'),    
     createData(18, 'Jorge Luis', 'Ramos Rojas', 'pedroramos@bancoabc.com'),
-    createData(19, 'Spiderman Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),
-    
+    createData(19, 'Spiderman Andres', 'Baron Solana', 'victorbaron@bancoabc.com'),    
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -77,32 +80,29 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-/*
+
 const handleRemove = i => {
-  this.setState(state => ({
-    data: state.data.filter((row, j) => j !== i)
-  }));
+  rows = rows.filter((row, j) => j !== i);
 };
 
 const startEditing = i => {
-  this.setState({ editIdx: i });
+  state.editIdx = i;
 };
 
 const stopEditing = () => {
-  this.setState({ editIdx: -1 });
+  state.editIdx = -1;
 };
 
 const handleSave = (i, x) => {
-  this.setState(state => ({
-    data: state.data.map((row, j) => (j === i ? x : row))
-  }));
-  this.stopEditing();
+  rows = rows.map((row, j) => (j === i ? x : row));
+  stopEditing();
 };
-*/
+
 const headCells = [
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido' },
   { id: 'correo', numeric: false, disablePadding: false, label: 'Correo' },
+  { id: 'editar', numeric: false, disablePadding: false, label: ' ' }
 ];
 
 const StyledTableCell = withStyles((theme) => ({
@@ -210,8 +210,6 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
   return (
      <div>
          <BarraInicial/>
@@ -232,9 +230,9 @@ export default function EnhancedTable() {
 
                 <div className='Contenedor'>
                   <Grid container direction="row" justify="left">
-                      <Grid container item xs={12} justify="left">
-                          <Buscador mensaje = "Buscar nombre"></Buscador> 
-                          {/* //Cambiarle de nombre//Cambiarle de nombre */}
+                      <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="center" >
+                          <Buscador mensaje = "Buscar nombre"></Buscador>                           
+                          <Formulario></Formulario>                        
                       </Grid>
                   </Grid>
 
@@ -245,11 +243,11 @@ export default function EnhancedTable() {
                             className={classes.table}
                             aria-labelledby="tableTitle"
                             aria-label="enhanced table"
-                            //handleRemove={this.handleRemove}
-                            //startEditing={this.startEditing}
-                            //editIdx={this.state.editIdx}
-                            //stopEditing={this.stopEditing}
-                            //handleSave={this.handleSave}
+                            handleRemove={handleRemove}
+                            startEditing={startEditing}
+                            editIdx={state.editIdx}
+                            stopEditing={stopEditing}
+                            handleSave={handleSave}
                         >
                             <EnhancedTableHead
                             classes={classes}
@@ -268,10 +266,13 @@ export default function EnhancedTable() {
                                     <TableCell align="left">{row.apellido}</TableCell>
                                     <TableCell align="left">{row.correo}</TableCell>
                                     
-                                    {/* <TableRowColumn>
-                                      <EditIcon onClick={() => startEditing(i)} />
-                                      <TrashIcon onClick={() => handleRemove(i)} />
-                                    </TableRowColumn> */}
+                                    {<TableCell>  
+                                      <Grid container item xs={10} justify="center">                                    
+                                        <VerFormulario/>
+                                        <EditarFormulario/>
+                                        <EliminarUsuario/>
+                                      </Grid>                                           
+                                    </TableCell>}
                                     </TableRow>
                                 );
                                 })}
