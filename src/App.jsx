@@ -5,6 +5,7 @@ import RutaProtegida from './Componentes/RutaProtegida'
 import AccesoSistema from './Componentes/AccesoSistema'
 import { Router, Route, Switch} from "react-router-dom"
 import RespuestaNo from './Componentes/Beneficiario/RespuestaNo'
+import BusquedaLugares from './Componentes/Trabajador/BusquedaLugares'
 import BarraInicial from './Componentes/Barras/BarraInicial'
 import BarraFinal from './Componentes/Barras/BarraFinal'
 import {Container} from '@material-ui/core';
@@ -13,6 +14,9 @@ import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
 import Formulario from './Admin/Formulario'
+import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
+import Cronograma from "./Componentes/Representante/Cronograma";
+import Quejas from "./Componentes/Quejas";
 
 const App = () => {
 
@@ -23,6 +27,10 @@ const App = () => {
           <Route exact path="/" component={PantallaInicial}/>
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route exact path="/formulario" component={Formulario}/>
+          <Route exact path="/lugares" component={BusquedaLugares}/>
+          <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
+          <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
+          <Route exact path='/quejas' component={Quejas}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route exact path="/consulta" >
