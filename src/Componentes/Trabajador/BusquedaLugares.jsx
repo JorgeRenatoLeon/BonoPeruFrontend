@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Button, Grid, Radio } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import React, {useReducer} from 'react';
+import React, {Component, useReducer, useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
@@ -18,6 +18,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import axios from "axios";
 import DepartamentosService from "../../Servicios/departamentos.service";
+import LugaresService from "../../Servicios/lugares.service";
+import { render } from '@testing-library/react';
 
 
 function createData(id, codigo, nombre, lugar, direccion) {
@@ -28,11 +30,6 @@ const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-const rows = [
-    createData(0, 11, 'Agencia 1', 'LIMA-LIMA-LA VICTORIA', 'Jr. Cuzco 500'),
-    createData(1, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
-    createData(2, 12, 'Agencia 2', 'LIMA-LIMA-LA VICTORIA', 'Jr. Las Americas 455'),
-];
 
 
 function descendingComparator(a, b, orderBy) {
@@ -51,15 +48,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+
 /*
 const handleRemove = i => {
   this.setState(state => ({
@@ -173,10 +162,55 @@ const useStyles = makeStyles({
 
 
 
-function BusquedaLugares() {
+const BusquedaLugares = (props) => {
+  const [departamentos, setDep] = useState([]);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    DepartamentosService.mostrarDepartamentos().then(response =>{
+      let depAux=[];
+      response.data.map(dep => {
+        depAux.push({
+              value: dep.iddepartamento,
+              label: dep.nombre,
+          });
+      });
+      setDep(depAux);
+      console.log(departamentos);
+      })
+      .catch(() => {
+        console.log('Error al pedir los departamentos')
+      });
+  
+    LugaresService.obtenerLugares().then(response =>{
+      let rowsAux = [];
+      response.data.map(lug => {
+        rowsAux.push({
+          id: lug.idlugarentrega, 
+          codigo: lug.codigo, 
+          nombre: lug.nombre, 
+          lugar: lug.depprodis, 
+          direccion: lug.direccion
+          });
+      });
+      setRows(rowsAux);
+      console.log(rows);
+    })
+    .catch(() => {
+      console.log('Error al obtener Lugares')
+    });
+  },[]);
+    
+  function stableSort(array, comparator) {
+    console.log(array);
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
 
-    const departamentos = DepartamentosService.mostrarDepartamentos();
-    console.log(departamentos);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -212,7 +246,6 @@ function BusquedaLugares() {
         { value: 'Surco', label: 'SURCO' },
         { value: 'Miraflores', label: 'MIRAFLORES' }
     ];
-    console.log(departamentos);
 
     const [state, dispatch] = useReducer(reducer, {})
     const RadioButton = ({id,cod}) => (
