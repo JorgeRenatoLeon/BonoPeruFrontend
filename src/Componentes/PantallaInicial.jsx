@@ -5,7 +5,7 @@ import '../assets/css/FondoBeneficiario.css'
 
 import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
   
-function PantallaInicial () {
+function PantallaInicial (props) {
 
     const esBeneficiario=true;
     return (
@@ -25,15 +25,15 @@ function PantallaInicial () {
                 {/* Título */}
                  <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <Typography variant="h2"  gutterBottom justify="center" >
-                            <h3 style={{color: 'black', margin: 0,justify:"center",padding: 50 }}>Consulte su Bono</h3>
+                        <Typography variant="h1"  gutterBottom justify="center" style={{color: 'black', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
+                            Consulte su Bono
                         </Typography>
                     </Grid>
                 </Grid>
                 {/* Barra BuscadorPrincipal */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <BuscadorPrincipal  direction={esBeneficiario}></BuscadorPrincipal> 
+                        <BuscadorPrincipal mensaje="Buscar"   direction={esBeneficiario}></BuscadorPrincipal> 
                       
                     </Grid>
                 </Grid>
@@ -74,8 +74,8 @@ function PantallaInicial () {
             </div>
             <Grid container direction="row" justify="center">
                 <Grid container item xs={12} justify="center">
-                        <Typography variant="h2"  gutterBottom justify="center" >
-                            <h3 style={{color: 'black', margin: 0,justify:"center",padding: 20 }}>Preguntas</h3>
+                        <Typography variant="h1"  gutterBottom justify="center" style={{color: 'black', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
+                            Preguntas
                         </Typography>
                 </Grid>
             </Grid>

@@ -14,6 +14,7 @@ import {Container} from '@material-ui/core';
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
+import PruebaC from "./Componentes/Beneficiario/pruebaC";
 
 const App = () => {
 
@@ -21,14 +22,15 @@ const App = () => {
     <Router history={history}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={PantallaInicial}/>  {/* Pantalla Johana */}
-          <Route exact path="/usuarios" component={Usuarios}/>
-          <Route path="/acceso" component={AccesoSistema}/>
-          <RutaProtegida path="/encuesta" component={Encuesta}/>
-          <Route exact path="/consulta" component={RespuestaBeneficiario} > {/* Pantalla Johana */}
+          <Route exact path="/" component={PantallaInicial}/>        {/* Pantalla Johana */}
+          <Route exact path="/usuarios" component={Usuarios}/>        {/* Pantalla Vale */}
+          <Route path="/acceso" component={AccesoSistema}/>            {/* Pantalla Jorge */}
+          <RutaProtegida path="/encuesta" component={Encuesta}/>  {/* Pantalla Jorge */}
+          <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
+          <Route  path="/consulta"  > {/* Pantalla Johana */}
             <BarraInicial/>
             <Container>
-              <RespuestaBeneficiario/>
+              <RespuestaBeneficiario />
             </Container>
             <BarraFinal/>
           </Route>
