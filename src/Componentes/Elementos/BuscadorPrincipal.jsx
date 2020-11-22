@@ -5,12 +5,10 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 
-
-
 //para la redireccion
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import {fetchPokemons} from "../../actions/prueba";
+import {fetchConsulta} from "../../actions/cronograma";
  import { history } from "../../helpers/history";
 // import { useHistory } from 'react-router-dom';
 
@@ -46,18 +44,17 @@ export default function BuscadorPrincipal(props) {
  
   const dispatch =useDispatch();
   function buscarBeneficiario(){
-
-    console.log('antes de dispatch', dispatch(fetchPokemons(searchText,history)));
-    
-    dispatch(fetchPokemons(searchText,history))
-    .then(() => {
-      console.log('history',history);     
-      history.push("/consulta");     
-    })
-    .catch(() => {
-      console.log('Error en las credenciales');
-    });
-   
+        // console.log('antes de dispatch', dispatch(fetchConsulta(searchText,history)));
+        
+        dispatch(fetchConsulta(searchText,history))
+        .then(() => {
+          // console.log('history',history);     
+          history.push("/consulta");     
+        })
+        .catch(() => {
+          console.log('Error en las credenciales');
+        });
+      
   }
 
   return (

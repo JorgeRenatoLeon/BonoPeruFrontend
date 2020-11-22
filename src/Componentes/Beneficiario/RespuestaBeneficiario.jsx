@@ -11,18 +11,18 @@ import { history } from "../../helpers/history";
 
 function RespuestaBeneficiario (props) { 
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-        const [pokemons,setPokemons]=useState([]); //Set pokemons, creando y un estado de toda la función
+        const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
    
-            useEffect((pokemons) => {
+            useEffect((cronograma) => {
                
-                console.log('api',JSON.parse(localStorage.getItem("beneficiario")) );    //La hemos obtenido             
-                const api = JSON.parse(localStorage.getItem("beneficiario")) ;    //La hemos obtenido             
-                if(pokemons===undefined || pokemons.length===0){
-                    if (api ===undefined || api===null) {
+                console.log('apiBeneficiario',JSON.parse(localStorage.getItem("beneficiario")) );    //La hemos obtenido             
+                const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiario")) ;    //La hemos obtenido             
+                if(cronograma===undefined || cronograma.length===0){
+                    if (apiBeneficiario ===undefined || apiBeneficiario===null) {
                         history.push('/'); //si no tengo pokemones ni item en beneficiario,lo mando a consutla
                     }
                     else{
-                        setPokemons(api); 
+                        setCronograma(apiBeneficiario); 
                         localStorage.removeItem("beneficiario");                        
                     }
                    
@@ -30,14 +30,14 @@ function RespuestaBeneficiario (props) {
                 }
             },  [])
        
-        console.log('pokemons:',pokemons);
+        console.log('cronograma:',cronograma);
         var respuesta;
-        if(pokemons.length===0){
+        if(cronograma.length===0){
           respuesta=  "No hay un bono asignado a esta familia. Verifique que lo ha ingresado correctamente. ";
         }
-        else if (pokemons.length===1){
+        else if (cronograma.length===1){
 
-            respuesta=  "Usted sí es beneficiario. Puede recoger su bono el día " + pokemons[0].fecha + " en " + pokemons[0].horariolugarentrega.lugarentrega.direccion;
+            respuesta=  "Usted sí es beneficiario. Puede recoger su bono el día " + cronograma[0].fecha + " en " + cronograma[0].horariolugarentrega.lugarentrega.direccion;
         }
        
     
@@ -77,7 +77,7 @@ function RespuestaBeneficiario (props) {
                                 {/* <h1 style={{color: 'black', margin: 0,padding: 30}}>Información</h1>  */}
                                 <h2 > { respuesta } </h2>
                                      
-                                {/* {pokemons.map(pokemon=> (
+                                {/* {cronograma.map(pokemon=> (
                                     <Typography variant="h3"  gutterBottom justify="center" >
                                         {pokemon.name+" "+pokemon.url}
                                     </Typography>

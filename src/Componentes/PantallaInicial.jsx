@@ -33,44 +33,12 @@ function PantallaInicial (props) {
                 {/* Barra BuscadorPrincipal */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <BuscadorPrincipal mensaje="Buscar"   direction={esBeneficiario}></BuscadorPrincipal> 
+                        <BuscadorPrincipal   direction={esBeneficiario}></BuscadorPrincipal> 
                       
                     </Grid>
                 </Grid>
-               
-                   {/* botones */}
-                {/* <Grid container direction="row" justify="center">
-                    <Grid container item md={2} justify="center">
-                        <Link to='/' style={{textDecoration:"none"}}>
-                            <Button variant="contained" size="small" color="primary">
-                                Sin AppBar
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid container item md={2} justify="center">
-                        <Link to='/home' style={{textDecoration:"none"}}>
-                            <Button variant="contained"  size="small" color="secondary">
-                                Con AppBar
-                            </Button>
-                        </Link>
-                    </Grid>
-                </Grid> */}
-                <Grid container direction="row" justify="center">
-                    <Grid container item md={2} justify="center">
-                        <Link to='/' style={{textDecoration:"none"}}>
-                            <Button variant="contained" size="small" color="primary">
-                                Soy Beneficiario
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid container item md={2} justify="center">
-                        <Link to='/consulta' style={{textDecoration:"none"}}>
-                            <Button variant="contained"  size="small" color="secondary">
-                                No Soy Beneficario
-                            </Button>
-                        </Link>
-                    </Grid>
-                </Grid>
+
+
             </div>
             <Grid container direction="row" justify="center">
                 <Grid container item xs={12} justify="center">
