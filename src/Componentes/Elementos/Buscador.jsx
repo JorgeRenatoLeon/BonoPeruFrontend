@@ -41,6 +41,7 @@ export default function Buscador(props) {
         type="submit"
         className={classes.iconButton}
         aria-label="search"
+        size="medium"
       >
         <SearchIcon
           style={{
