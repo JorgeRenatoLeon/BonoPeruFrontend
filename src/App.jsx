@@ -13,12 +13,12 @@ import {Container} from '@material-ui/core';
 // import imagenes from './assets/imagenes.js';
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
-import Usuarios from './Admin/Usuarios'
+import Usuarios from './Componentes/Admin/Usuarios'
 import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
 import Cronograma from "./Componentes/Representante/Cronograma";
 import Quejas from "./Componentes/Quejas";
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
-import Formulario from './Admin/Formulario'
+import Formulario from './Componentes/Admin/Formulario'
 
 
 const App = () => {

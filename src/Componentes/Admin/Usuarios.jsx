@@ -1,6 +1,6 @@
 import React from 'react';
-import BarraInicial from '../Componentes/Barras/BarraInicial'
-import BarraFinal from '../Componentes/Barras/BarraFinal'
+import BarraInicial from '../Barras/BarraInicial'
+import BarraFinal from '../Barras/BarraFinal'
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,7 +14,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { AppBar, Container, Grid } from "@material-ui/core"
-import Buscador from '../Componentes/Elementos/Buscador.jsx'
+import Buscador from '../Elementos/Buscador.jsx'
 import Formulario from './Formulario'
 import VerFormulario from './VerFormulario'
 import EditarFormulario from './EditarFormulario'
