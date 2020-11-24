@@ -18,6 +18,7 @@ import Cronograma from "./Componentes/Representante/Cronograma";
 import Quejas from "./Componentes/Quejas";
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
 import Formulario from './Admin/Formulario'
+import GestionBonos from './Componentes/Representante/GestionBonos'
 
 
 const App = () => {
@@ -36,6 +37,8 @@ const App = () => {
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
           <Route exact path="/formulario" component={Formulario}/>
+          <RutaProtegida path="/bonos" component={GestionBonos}         
+          />
           <Route exact path="/consulta" >  {/* pantalla de Johana :D */}
             <BarraInicial/>
             <Container>
@@ -43,6 +46,9 @@ const App = () => {
             </Container>
             <BarraFinal/>
           </Route>
+
+
+          
         </Switch>
       </div>
     </Router>

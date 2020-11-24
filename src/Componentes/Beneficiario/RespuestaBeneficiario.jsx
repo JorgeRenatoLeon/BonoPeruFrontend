@@ -124,7 +124,7 @@ function RespuestaBeneficiario (props) {
                 }
             },  [])
        
-        console.log('cronograma:',cronograma);
+       // console.log('cronograma:',cronograma);
         var titulo;
         var respuesta;
      
@@ -167,18 +167,10 @@ function RespuestaBeneficiario (props) {
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         aria-label="enhanced table"
-                        // handleRemove={handleRemove}
-                        // startEditing={startEditing}
-                        // editIdx={state.editIdx}
-                        // stopEditing={stopEditing}
-                        // handleSave={handleSave}
                     >
                        
                         <EnhancedTableHead
                         classes={classes}
-                        // order={order}
-                        // orderBy={orderBy}
-                        // onRequestSort={handleRequestSort}
                         />
                         
                     </Table>
