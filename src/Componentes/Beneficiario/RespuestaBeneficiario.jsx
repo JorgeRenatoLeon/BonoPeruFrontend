@@ -152,7 +152,7 @@ function RespuestaBeneficiario (props) {
              //Todoooo la muestra del cronograma está manejado por respuesta
             respuesta= rpta.map((rpta,index)   =>   
             <Grid key={rpta.id} container direction="col" justify="center">
-                <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>
+                <Grid container direction="row" item md={12} sm={2} style={{paddingTop: '1.5vh'}}>
                     <Typography variant="subtitle1" color="inherit">
                         {mensajeBeneficiario}
                      </Typography>   

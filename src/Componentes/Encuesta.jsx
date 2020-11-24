@@ -182,52 +182,56 @@ const Encuesta = (props) => {
                         Encuesta de Satisfacción
                     </Typography>
                 </Grid>
-                <Grid container direction="row">
-                    <Typography variant="subtitle1" color="inherit">
-                        Nos interesa su satisfacción , por eso le pedimos constestar las siguientes preguntas 
-                    </Typography>
+                <Grid className='Contenedor'>
+                    <Grid container direction="row">
+                        <Typography variant="subtitle1" color="inherit">
+                            Nos interesa su satisfacción , por eso le pedimos constestar las siguientes preguntas 
+                        </Typography>
+                    </Grid>
+                    {componentesPreguntas}
                 </Grid>
-                {componentesPreguntas}
                 
-                <Grid container direction="row">
-                    <Grid item md={1} style={{paddingTop: '1.5vh'}}>
-                        <Typography variant="subtitle1" color="inherit">
-                            Opción:
-                        </Typography>
+                <Grid className='Contenedor'>
+                    <Grid container direction="row">
+                        <Grid item md={1} style={{paddingTop: '1.5vh'}}>
+                            <Typography variant="subtitle1" color="inherit">
+                                Opción:
+                            </Typography>
+                        </Grid>
+                        <Grid item md={1} style={{paddingTop: '1.5vh'}}>
+                            <Select variant="outlined" value={opcionSel} style={{padding: 0, height: '3vh'}}>
+                                {opciones.map((opcion,index) => <MenuItem value={index+1} onClick={()=>setOpcionSel(index+1)}>1</MenuItem>)}
+                            </Select>
+                        </Grid>
+                        <Grid item md={4} style={{paddingTop: '1.5vh'}}>
+                            <Typography variant="subtitle1" color="inherit">
+                                {opciones[opcionSel-1].horario.horariolugarentrega.lugarentrega.nombre}
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item md={1} style={{paddingTop: '1.5vh'}}>
-                        <Select value={opcionSel}>
-                            {opciones.map((opcion,index) => <MenuItem value={index+1} onClick={()=>setOpcionSel(index+1)}>1</MenuItem>)}
-                        </Select>
-                    </Grid>
-                    <Grid item md={4} style={{paddingTop: '1.5vh'}}>
-                        <Typography variant="subtitle1" color="inherit">
-                            {opciones[opcionSel-1].horario.horariolugarentrega.lugarentrega.nombre}
-                        </Typography>
-                    </Grid>
-                </Grid>
 
-                <Grid container direction="row" justify="center">
-                    <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>
-                        <Typography variant="subtitle1" color="inherit">
-                            Califique la atención de su cronograma siendo 1 (muy mala) la calificación más baja y 5 (muy buena) la más alta.
-                        </Typography>
+                    <Grid container direction="row" justify="center">
+                        <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>
+                            <Typography variant="subtitle1" color="inherit">
+                                Califique la atención de su cronograma siendo 1 (muy mala) la calificación más baja y 5 (muy buena) la más alta.
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
 
-                {componentesPreguntasOpcion}
-                <Grid container direction="row" justify="center">
-                    <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                        <Button variant="contained" size="medium" color="primary" onClick={enviarEncuesta}>
-                            Enviar
-                        </Button>
-                    </Grid>
-                    <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                        <Link to='/'>
-                            <Button variant="contained"  size="medium" color="secondary">
-                                Cancelar
+                    {componentesPreguntasOpcion}
+                    <Grid container direction="row" justify="center">
+                        <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                            <Button variant="contained" size="medium" color="primary" onClick={enviarEncuesta}>
+                                Enviar
                             </Button>
-                        </Link>
+                        </Grid>
+                        <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                            <Link to='/'>
+                                <Button variant="contained"  size="medium" color="secondary">
+                                    Cancelar
+                                </Button>
+                            </Link>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
