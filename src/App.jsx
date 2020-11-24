@@ -4,12 +4,9 @@ import PantallaInicial from './Componentes/PantallaInicial'
 import RutaProtegida from './Componentes/RutaProtegida'
 import AccesoSistema from './Componentes/AccesoSistema'
 import { Router, Route, Switch} from "react-router-dom"
-<<<<<<< HEAD
 import RespuestaBeneficiario from './Componentes/Beneficiario/RespuestaBeneficiario'
-=======
-import RespuestaNo from './Componentes/Beneficiario/RespuestaNo'
+
 import BusquedaLugares from './Componentes/Trabajador/BusquedaLugares'
->>>>>>> Kayt
 import BarraInicial from './Componentes/Barras/BarraInicial'
 import BarraFinal from './Componentes/Barras/BarraFinal'
 import {Container} from '@material-ui/core';
@@ -17,14 +14,11 @@ import {Container} from '@material-ui/core';
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
-<<<<<<< HEAD
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
 import Formulario from './Admin/Formulario'
-=======
 import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
 import Cronograma from "./Componentes/Representante/Cronograma";
 import Quejas from "./Componentes/Quejas";
->>>>>>> Kayt
 
 const App = () => {
 

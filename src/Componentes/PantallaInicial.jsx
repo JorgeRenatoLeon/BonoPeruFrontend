@@ -1,6 +1,6 @@
 import React from 'react'
-import { Grid, Button, AppBar, Toolbar, Typography, Container } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Grid,  AppBar, Toolbar, Typography, Container } from "@material-ui/core"
+
 import '../assets/css/FondoBeneficiario.css'
 
 import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
@@ -25,7 +25,7 @@ function PantallaInicial (props) {
                 {/* Título */}
                  <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <Typography variant="h1"  gutterBottom justify="center" style={{color: 'black', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
+                        <Typography variant="h1"  gutterBottom justify="center" style={{color: '#EFF0F4', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
                             Consulte su Bono
                         </Typography>
                     </Grid>
