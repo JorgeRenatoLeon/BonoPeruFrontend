@@ -5,7 +5,6 @@ import RutaProtegida from './Componentes/RutaProtegida'
 import AccesoSistema from './Componentes/AccesoSistema'
 import { Router, Route, Switch} from "react-router-dom"
 import RespuestaBeneficiario from './Componentes/Beneficiario/RespuestaBeneficiario'
-
 import BusquedaLugares from './Componentes/Trabajador/BusquedaLugares'
 import BarraInicial from './Componentes/Barras/BarraInicial'
 import BarraFinal from './Componentes/Barras/BarraFinal'
@@ -14,11 +13,12 @@ import {Container} from '@material-ui/core';
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
 import Usuarios from './Admin/Usuarios'
-import PruebaC from "./Componentes/Beneficiario/pruebaC";
-import Formulario from './Admin/Formulario'
 import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
 import Cronograma from "./Componentes/Representante/Cronograma";
 import Quejas from "./Componentes/Quejas";
+import PruebaC from "./Componentes/Beneficiario/pruebaC";
+import Formulario from './Admin/Formulario'
+
 
 const App = () => {
 
