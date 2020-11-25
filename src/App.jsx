@@ -12,15 +12,15 @@ import {Container} from '@material-ui/core';
 // import imagenes from './assets/imagenes.js';
 import { history } from "./helpers/history";
 import Encuesta from "./Componentes/Encuesta";
-import Usuarios from './Componentes/Admin/Usuarios'
 import ConsultasBeneficiarios from "./Componentes/Trabajador/ConsultasBeneficiarios";
 import Cronograma from "./Componentes/Representante/Cronograma";
 import Quejas from "./Componentes/Quejas";
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
-import Formulario from './Componentes/Admin/Formulario';
 import GestionBonos from './Componentes/Representante/GestionBonos'
 import Monitoreo from "./Componentes/Representante/Monitoreo";
 
+import Usuarios from './Admin/Usuarios'
+import Formulario from './Admin/Formulario'
 
 const App = () => {
 
@@ -30,6 +30,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={PantallaInicial}/> {/* pantalla de Johana */}
           <Route exact path="/usuarios" component={Usuarios}/>
+          <Route exact path="/formulario" component={Formulario}/>
           <Route exact path="/lugares" component={BusquedaLugares}/>
           <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
           <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
