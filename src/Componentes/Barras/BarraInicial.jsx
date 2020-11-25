@@ -52,15 +52,18 @@ function BarraInicial () {
 
     const classes = useStyles();
 
-    const tabsRepresentante = [{nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
-                            {nombre: 'Gestión de Bonos', path: '/gestion'},
+    const tabsRepresentante = [
+                            // {nombre: 'Cargar Datos', path: '/cargar'},
+                            {nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
+                            {nombre: 'Gestión de Bonos', path: '/bonos'},
                             {nombre: 'Monitoreo', path: '/monitoreo'},
                             {nombre: 'Reportes', path: '/reportes'},
                             {nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
-    const tabsAdmin = [{nombre: 'Cargar Datos', path: '/cargar'},
-                        {nombre: 'Gestión de Bonos', path: '/gestion'},
-                        {nombre: 'Reportes', path: '/reportes'},
-                        {nombre: 'Encuestas', path: '/encuesta'}]
+    const tabsAdmin = [
+                        {nombre: 'Gestión de Bonos', path: '/bonos'},
+                        // {nombre: 'Reportes', path: '/reportes'},
+                        {nombre: 'Encuestas', path: '/encuesta'},
+                        {nombre: 'Usuarios', path: '/usuarios'}]
 
     const AdminTabs = 
         admin ? 
