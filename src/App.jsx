@@ -19,6 +19,7 @@ import Quejas from "./Componentes/Quejas";
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
 import Formulario from './Componentes/Admin/Formulario';
 import GestionBonos from './Componentes/Representante/GestionBonos'
+import Monitoreo from "./Componentes/Representante/Monitoreo";
 
 
 const App = () => {
@@ -46,7 +47,8 @@ const App = () => {
             </Container>
             <BarraFinal/>
           </Route>
-
+          <RutaProtegida path="/monitoreo" component={Monitoreo}         
+          />
 
           
         </Switch>
