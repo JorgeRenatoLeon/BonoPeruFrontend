@@ -259,7 +259,7 @@ function RespuestaBeneficiario (props) {
     
         
     return (
-        <div>
+        <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <Grid container direction="row" justify="center">
@@ -313,7 +313,7 @@ function RespuestaBeneficiario (props) {
             <div>
            
             </div>
-        </div>
+        </Grid>
     );
     
     
