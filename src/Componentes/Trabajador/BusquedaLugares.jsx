@@ -22,13 +22,8 @@ import LugaresService from "../../Servicios/lugares.service";
 import { render } from '@testing-library/react';
 
 
-function createData(id, codigo, nombre, lugar, direccion) {
-    return { id, codigo, nombre, lugar, direccion};
-}
 
-const reducer = (state, action) => {
-    return { checkedId: action.id }
-}
+
 
 
 
@@ -49,28 +44,6 @@ function getComparator(order, orderBy) {
 }
 
 
-/*
-const handleRemove = i => {
-  this.setState(state => ({
-    data: state.data.filter((row, j) => j !== i)
-  }));
-};
-
-const startEditing = i => {
-  this.setState({ editIdx: i });
-};
-
-const stopEditing = () => {
-  this.setState({ editIdx: -1 });
-};
-
-const handleSave = (i, x) => {
-  this.setState(state => ({
-    data: state.data.map((row, j) => (j === i ? x : row))
-  }));
-  this.stopEditing();
-};
-*/
 const headCells = [
   { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
   { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
@@ -198,10 +171,10 @@ const BusquedaLugares = (props) => {
     .catch(() => {
       console.log('Error al obtener Lugares')
     });
+  
   },[]);
     
   function stableSort(array, comparator) {
-    console.log(array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -247,25 +220,39 @@ const BusquedaLugares = (props) => {
         { value: 'Miraflores', label: 'MIRAFLORES' }
     ];
 
+    const reducer = (state, action) => {
+      return { checkedId: action.id }
+    }
     const [state, dispatch] = useReducer(reducer, {})
-    const RadioButton = ({id,cod}) => (
+    const RadioButton = ({id,cod,nom,lug,dir}) => (
         <Radio
           id={id}
           cod={cod}
+          nom={nom}
+          lug={lug}
+          dir={dir}
           onClick={() => dispatch({ id})}
           checked={state.checkedId === id}
           type="radio"
-          onChange={handlerChange}
+          onChange={() => handleChange(id,cod,nom,lug,dir)}
         />
     )
-    const [selectedId, setSelectedId] = React.useState("");
-    const [selectedCod, setSelectedCod] = React.useState("");
-    function handlerChange(event) {
-        setSelectedId(event.target.id);
-        setSelectedCod(event.target.cod);
+
+    
+    const [identificador, setSelectedId] = useState("");
+    const [codigo,setSelectedCod] = useState(" ");
+    const [nombre, setSelectedNom] = useState("");
+    const [lugar,setSelectedLug] = useState(" ");
+    const [direccion,setSelectedDir] = useState(" ");
+    function handleChange(id,cod,nom,lug,dir) {
+        setSelectedId(id);
+        console.log(identificador);
+        setSelectedCod(cod);
+        console.log(codigo);
+        setSelectedNom(nom);
+        setSelectedLug(lug);
+        setSelectedDir(dir);
     }
-    console.log({selectedId});
-    console.log({selectedCod});
 
     return ( 
         <Grid>
@@ -332,7 +319,11 @@ const BusquedaLugares = (props) => {
                             
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
-                                <RadioButton id={row.id} cod={row.codigo}/>
+                                <TableCell padding="checkbox">
+                                  <RadioButton id={row.id} cod={row.codigo}
+                                    nom={row.nombre} lug={row.lugar}
+                                    dir={row.direccion}/>
+                                </TableCell> 
                                 <TableCell align="left">{row.codigo}</TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
                                 <TableCell align="left">{row.lugar}</TableCell>
@@ -346,7 +337,6 @@ const BusquedaLugares = (props) => {
                     </Table>
                     </TableContainer>
                     <TablePagination
-                    //rowsPerPageOptions={[5, 10, 25]}
                     rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
                     component="div"
                     count={rows.length}
@@ -358,7 +348,13 @@ const BusquedaLugares = (props) => {
                 </Grid>                  
             </Paper> 
             <Grid container direction="column" justify="flex-start" alignItems="center" >
-                <Link to='/consultasBeneficiarios' style={{textDecoration:"none"}}>
+                <Link to='/consultasBeneficiarios'
+                    params={{ id: identificador,
+                      codigo: codigo,
+                      nombre: nombre,
+                      lugar: lugar,
+                      direccion: direccion}}
+                  style={{textDecoration:"none"}}>
                     <Button variant="contained" size="medium" color="primary" style={{margin: 10}}>
                         Consultar
                     </Button> 
