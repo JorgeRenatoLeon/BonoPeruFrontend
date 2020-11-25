@@ -254,6 +254,10 @@ const BusquedaLugares = (props) => {
         setSelectedDir(dir);
     }
 
+    function handleCombobox(e){
+      console.log(e.target.value);
+    }
+
     return ( 
         <Grid>
             <BarraInicial/>              
@@ -274,7 +278,7 @@ const BusquedaLugares = (props) => {
                         <Typography variant="subtitle1" color="inherit">
                             Departamento:
                         </Typography>
-                        <Combobox options={departamentos}/>
+                        <Combobox options={departamentos} onChange={handleCombobox}/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>

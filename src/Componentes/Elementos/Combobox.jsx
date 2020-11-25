@@ -33,8 +33,6 @@ const customStyles = {
 
 export default function Combobox(props){
     return(
-        <Grid>
             <Select components={{DropdownIndicator, IndicatorSeparator: () => null}} styles={customStyles} options={props.options} placeholder=' '/>
-        </Grid>
     );
 }

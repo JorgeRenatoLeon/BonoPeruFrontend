@@ -184,9 +184,9 @@ const Cronograma =(props) => {
     })
     .catch(() => {
       console.log('Error al obtener Lugares')
-    });
-  
+    });  
   },[]);
+  
     const styles = { width: 260, display: 'block', marginBottom: 10 };
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
@@ -230,29 +230,9 @@ const Cronograma =(props) => {
 
 
     const [state, dispatch] = useReducer(reducer, {})
-    const RadioButton = ({id,cod}) => (
-        <Radio
-          id={id}
-          cod={cod}
-          onClick={() => dispatch({ id})}
-          checked={state.checkedId === id}
-          type="radio"
-          onChange={handlerChange}
-        />
-    )
-    const [selectedId, setSelectedId] = React.useState("");
-    const [selectedCod, setSelectedCod] = React.useState("");
-    function handlerChange(event) {
-        setSelectedId(event.target.id);
-        setSelectedCod(event.target.cod);
-    }
-    console.log({selectedId});
-    console.log({selectedCod});
-    const history = useHistory();
+    
 
-    const consultarLugar = () => {
-        history.push("/consultasBeneficiarios");
-    }
+    
 
     return ( 
         <Grid>
