@@ -17,20 +17,20 @@ const customStyles = {
     option: (provided, state) => ({
       ...provided,
       borderRadius: "50px",
-      width:"300px",
+      width:"250px",
        height: "30px",
       // margin:"10px",
     }),
     control: (provided) => ({
       ...provided,
       borderRadius: "50px",
-      width:"300px",
+      width:"250px",
        height: "30px",
       // margin:"10px",
     }),
     container: (provided) => ({
         ...provided,
-        width: '300px',
+        width: '250px',
         borderRadius: "50px",
          height: "30px",
         // margin:"10px",

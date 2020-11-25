@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://3.87.144.73:8084/api/cronograma/listarhorariocronograma";
 
 const cronograma ={
-    idcronograma: 1,
+    idcronograma: 2,
     iddepartamento:null,
     idprovincia:null,
     iddistrito:null,

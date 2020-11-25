@@ -1,14 +1,13 @@
- import RespuestaNegativa from './RespuestaNegativa'
- import RespuestaPositiva from './RespuestaPositiva'
+ import Respuesta from './Respuesta'
  import { AppBar, Toolbar, Typography, Button, Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
  import Paper from '@material-ui/core/Paper';
- import React, {Component, useReducer} from 'react';
+ import React, {Component, useReducer, useEffect,useState } from 'react';
  import { Link } from 'react-router-dom';
  import { withStyles, makeStyles } from '@material-ui/core/styles';
  import BarraInicial from '../Barras/BarraInicial';
  import BarraFinal from '../Barras/BarraFinal';
  import Combobox from '../Elementos/Combobox';
- import Buscador from '../Elementos/Buscador.jsx';
+ import BuscadorConsulta from '../Elementos/BuscadorConsulta.jsx';
  import PropTypes from 'prop-types';
  import clsx from 'clsx';
  import Table from '@material-ui/core/Table';
@@ -19,6 +18,7 @@
  import TablePagination from '@material-ui/core/TablePagination';
  import TableRow from '@material-ui/core/TableRow';
  import TableSortLabel from '@material-ui/core/TableSortLabel';
+ import {useLocation} from "react-router-dom";
  import IconButton from '@material-ui/core/IconButton';
  import DeleteIcon from '@material-ui/icons/Delete';
  import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -26,7 +26,11 @@
  import AddIcon from '@material-ui/icons/Add';
  import { useHistory } from 'react-router-dom';
 import { idText } from 'typescript';
- 
+import ConsultaService from "../../Servicios/consultacod.service";
+import axios from "axios";
+
+const API_URL = "http://3.87.144.73:8084/api/horario/consultarCodigoFamilia";
+
 //Para el título grandote
 function createData(id, codigo, nombre, lugar, direccion) {
     return { id, codigo, nombre, lugar, direccion};
@@ -151,15 +155,15 @@ const useStyles = makeStyles({
   });
 
 
-function ConsultasBeneficiarios (params) {
+const ConsultasBeneficiarios = (params) => {
+    let data = useLocation();
     let rows = [{
-      id:  params.id,
-      codigo: params.codigo,
-      nombre: params.nombre,
-      lugar: params.lugar,
-      direccion: params.direccion,   
+      id:  data.state.id,
+      codigo: data.state.codigo,
+      nombre: data.state.nombre,
+      lugar: data.state.lugar,
+      direccion: data.state.direccion,   
     }];
-    console.log(rows.id);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -183,6 +187,7 @@ function ConsultasBeneficiarios (params) {
         setPage(0);
     };
 
+    const [msg, setMsg] =useState(" ");
     return (
         <Grid>
             <BarraInicial/>                
@@ -233,10 +238,53 @@ function ConsultasBeneficiarios (params) {
                     </Table>
                 </TableContainer>
                 <Grid container direction="row" justify="center" alignItems="center">
-                    <Buscador mensaje = "Ingrese el Código de familia"></Buscador> 
+                    <BuscadorConsulta mensaje = "Ingrese el Código de familia"></BuscadorConsulta> 
                 </Grid>
             </Paper> 
-            <RespuestaPositiva/> 
+            {/* {(() => {
+              switch () {
+                case 'bono':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'no bono':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'lugar':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'horario':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'dia':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'lugar dia horario':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'lugar horario':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'lugar dia':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                case 'dia horario':
+                  return (
+                    <Respuesta mensaje="Probemos esto"></Respuesta>
+                  )
+                default:
+                  return (
+                    <Respuesta mensaje="Ups! Algo salió mal"></Respuesta>
+                  )
+              }
+            })()} */}
             <BarraFinal/>
         </Grid>
     );

@@ -139,21 +139,6 @@ const BusquedaLugares = (props) => {
   const [departamentos, setDep] = useState([]);
   const [rows, setRows] = useState([]);
   useEffect(() => {
-    DepartamentosService.mostrarDepartamentos().then(response =>{
-      let depAux=[];
-      response.data.map(dep => {
-        depAux.push({
-              value: dep.iddepartamento,
-              label: dep.nombre,
-          });
-      });
-      setDep(depAux);
-      console.log(departamentos);
-      })
-      .catch(() => {
-        console.log('Error al pedir los departamentos')
-      });
-  
     LugaresService.obtenerLugares().then(response =>{
       let rowsAux = [];
       response.data.map(lug => {
@@ -171,6 +156,22 @@ const BusquedaLugares = (props) => {
     .catch(() => {
       console.log('Error al obtener Lugares')
     });
+
+    DepartamentosService.mostrarDepartamentos().then(response =>{
+      let depAux=[];
+      response.data.map(dep => {
+        depAux.push({
+              value: dep.iddepartamento,
+              label: dep.nombre,
+          });
+      });
+      setDep(depAux);
+      console.log(departamentos);
+      })
+      .catch(() => {
+        console.log('Error al pedir los departamentos')
+      });
+
   
   },[]);
     
@@ -352,13 +353,16 @@ const BusquedaLugares = (props) => {
                 </Grid>                  
             </Paper> 
             <Grid container direction="column" justify="flex-start" alignItems="center" >
-                <Link to='/consultasBeneficiarios'
-                    params={{ id: identificador,
-                      codigo: codigo,
-                      nombre: nombre,
-                      lugar: lugar,
-                      direccion: direccion}}
-                  style={{textDecoration:"none"}}>
+                <Link 
+                    to={{
+                      pathname: "/consultasBeneficiarios",
+                      state: { id: identificador,
+                        codigo: codigo,
+                        nombre: nombre,
+                        lugar: lugar,
+                        direccion: direccion}
+                    }}
+                    style={{textDecoration:"none"}}>
                     <Button variant="contained" size="medium" color="primary" style={{margin: 10}}>
                         Consultar
                     </Button> 

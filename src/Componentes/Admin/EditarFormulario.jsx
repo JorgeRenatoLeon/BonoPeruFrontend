@@ -13,7 +13,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
 
-import UsuariosService from "../Servicios/user.service";
+import UsuariosService from "../../Servicios/user.service";
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;

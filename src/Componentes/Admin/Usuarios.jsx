@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import BarraInicial from '../Componentes/Barras/BarraInicial'
-import BarraFinal from '../Componentes/Barras/BarraFinal'
+import BarraInicial from '../Barras/BarraInicial'
+import BarraFinal from '../Barras/BarraFinal'
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,12 +14,12 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { AppBar, Container, Grid } from "@material-ui/core"
-import Buscador from './BuscadorUsuarios'
+import Buscador from '../../Admin/BuscadorUsuarios'
 import Formulario from './Formulario'
 import VerFormulario from './VerFormulario'
 import EditarFormulario from './EditarFormulario'
 import EliminarUsuario from "./EliminarUsuario";
-import UsuariosService from "../Servicios/user.service";
+import UsuariosService from "../../Servicios/user.service";
 
 function createData(id, nombre, apellido, correo) {
   return { id, nombre, apellido, correo };
