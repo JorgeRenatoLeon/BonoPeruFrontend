@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
-import { Grid, Button, AppBar, Toolbar, Typography, Container } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import React from 'react'
+import { Grid,  AppBar, Toolbar, Typography, Container } from "@material-ui/core"
+
 import '../assets/css/FondoBeneficiario.css'
 
 import BuscadorPrincipal from '../Componentes/Elementos/BuscadorPrincipal.jsx'
-function PantallaInicial () {
+  
+function PantallaInicial (props) {
 
+    const esBeneficiario=true;
     return (
         <div>
             <div className='Fondo'>
@@ -23,62 +25,30 @@ function PantallaInicial () {
                 {/* Título */}
                  <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <Typography variant="h2"  gutterBottom justify="center" >
-                            <h3 style={{color: 'black', margin: 0,justify:"center",padding: 50 }}>Consulte su Bono</h3>
+                        <Typography variant="h1"  gutterBottom justify="center" style={{color: '#EFF0F4', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
+                            Consulte su Bono
                         </Typography>
                     </Grid>
                 </Grid>
                 {/* Barra BuscadorPrincipal */}
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={12} justify="center">
-                        <BuscadorPrincipal ></BuscadorPrincipal> 
-                        {/* //Cambiarle de nombre//Cambiarle de nombre */}
+                        <BuscadorPrincipal   direction={esBeneficiario}></BuscadorPrincipal> 
+                      
                     </Grid>
                 </Grid>
-               
-                   {/* botones */}
-                {/* <Grid container direction="row" justify="center">
-                    <Grid container item md={2} justify="center">
-                        <Link to='/' style={{textDecoration:"none"}}>
-                            <Button variant="contained" size="small" color="primary">
-                                Sin AppBar
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid container item md={2} justify="center">
-                        <Link to='/home' style={{textDecoration:"none"}}>
-                            <Button variant="contained"  size="small" color="secondary">
-                                Con AppBar
-                            </Button>
-                        </Link>
-                    </Grid>
-                </Grid> */}
-                <Grid container direction="row" justify="center">
-                    <Grid container item md={2} justify="center">
-                        <Link to='/' style={{textDecoration:"none"}}>
-                            <Button variant="contained" size="small" color="primary">
-                                Soy Beneficiario
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid container item md={2} justify="center">
-                        <Link to='/consulta' style={{textDecoration:"none"}}>
-                            <Button variant="contained"  size="small" color="secondary">
-                                No Soy Beneficario
-                            </Button>
-                        </Link>
-                    </Grid>
-                </Grid>
+
+
             </div>
             <Grid container direction="row" justify="center">
                 <Grid container item xs={12} justify="center">
-                        <Typography variant="h2"  gutterBottom justify="center" >
-                            <h3 style={{color: 'black', margin: 0,justify:"center",padding: 20 }}>Preguntas</h3>
+                        <Typography variant="h1"  gutterBottom justify="center" style={{color: 'black', margin: 0,justify:"center",padding: 50, fontWeight:"bold" }} >
+                            Preguntas
                         </Typography>
                 </Grid>
             </Grid>
             {/* contenedor clásico, fondo blanco redondeado */}
-            <div className='Contenedor'> 
+            <Grid className='Contenedor'> 
             {/* //cambiarlo por Grid */}
                  {/* Título */}
 
@@ -114,7 +84,7 @@ function PantallaInicial () {
                     </Grid>
                   
                 </Container>
-            </div>
+            </Grid>
         </div>
     );
 

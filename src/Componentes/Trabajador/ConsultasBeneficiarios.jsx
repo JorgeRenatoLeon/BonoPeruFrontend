@@ -25,6 +25,7 @@
  import EditIcon from '@material-ui/icons/Edit';
  import AddIcon from '@material-ui/icons/Add';
  import { useHistory } from 'react-router-dom';
+import { idText } from 'typescript';
  
 //Para el título grandote
 function createData(id, codigo, nombre, lugar, direccion) {
@@ -35,9 +36,6 @@ const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-const rows = [
-    createData(0, 11, 'Agencia 1', 'LIMA-LIMA-LA VICTORIA', 'Jr. Cuzco 500'),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -64,28 +62,7 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-/*
-const handleRemove = i => {
-  this.setState(state => ({
-    data: state.data.filter((row, j) => j !== i)
-  }));
-};
 
-const startEditing = i => {
-  this.setState({ editIdx: i });
-};
-
-const stopEditing = () => {
-  this.setState({ editIdx: -1 });
-};
-
-const handleSave = (i, x) => {
-  this.setState(state => ({
-    data: state.data.map((row, j) => (j === i ? x : row))
-  }));
-  this.stopEditing();
-};
-*/
 const headCells = [
   { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
@@ -174,7 +151,15 @@ const useStyles = makeStyles({
   });
 
 
-function ConsultasBeneficiarios () {
+function ConsultasBeneficiarios (params) {
+    let rows = [{
+      id:  params.id,
+      codigo: params.codigo,
+      nombre: params.nombre,
+      lugar: params.lugar,
+      direccion: params.direccion,   
+    }];
+    console.log(rows.id);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -220,11 +205,6 @@ function ConsultasBeneficiarios () {
                             className={classes.table}
                             aria-labelledby="tableTitle"
                             aria-label="enhanced table"
-                            //handleRemove={this.handleRemove}
-                            //startEditing={this.startEditing}
-                            //editIdx={this.state.editIdx}
-                            //stopEditing={this.stopEditing}
-                            //handleSave={this.handleSave}
                         >
                             <EnhancedTableHead
                             classes={classes}

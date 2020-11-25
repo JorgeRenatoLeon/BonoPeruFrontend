@@ -5,6 +5,13 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 
+//para la redireccion
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {fetchConsulta} from "../../actions/cronograma";
+ import { history } from "../../helpers/history";
+// import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "0px 0px",
@@ -25,34 +32,67 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function BuscadorPrincipal() {
+export default function BuscadorPrincipal(props) {
+
   const classes = useStyles();
+  var mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
+
+  const [searchText,setSearchText] =useState("");
+  const handleSearchText = event =>{
+      setSearchText(event.target.value);
+  } 
+ 
+  const dispatch =useDispatch();
+  function buscarBeneficiario(){
+        // console.log('antes de dispatch', dispatch(fetchConsulta(searchText,history)));
+        
+        dispatch(fetchConsulta(searchText,history))
+        .then(() => {
+          // console.log('history',history);     
+          history.push("/consulta");     
+        })
+        .catch(() => {
+          console.log('Error en las credenciales');
+        });
+      
+  }
 
   return (
     <Paper component="form" className={classes.root}>
+      
       <InputBase
+        value={searchText}
+        onChange={handleSearchText}
         className={classes.input}
-        placeholder="Ingrese el Código de familia. Ejemplo: 1234"
+        placeholder={mensaje}
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
-      <IconButton
-        type="submit"
-        className={classes.iconButton}
-        aria-label="search"
-      >
-        <SearchIcon
-          style={{
-            backgroundColor: "#5AB9EA",
-            borderRadius: 100,
-            borderTopLeftRadius: 0,
-            width: 50,
-            height: 50,
-            padding: 0,
-            margin: 0
-          }}
+    
+    
+          <IconButton
+            // type="submit"
+            className={classes.iconButton}
+            aria-label="search"
+            onClick={buscarBeneficiario}
+          >
+          <SearchIcon
+            style={{
+              backgroundColor: "#5AB9EA",
+              borderRadius: 100,
+              borderTopLeftRadius: 0,
+              width: 50,
+              height: 50,
+              padding: 0,
+              margin: 0
+            }}
         />
       </IconButton>
+     
+     
     </Paper>
   );
+
 }
+
+// export default  withRouter(BuscadorPrincipal)

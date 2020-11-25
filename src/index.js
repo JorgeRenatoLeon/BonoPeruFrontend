@@ -32,6 +32,12 @@ const theme = createMuiTheme({
       textTransform: 'none'
     },
   },
+  radio: {
+    '&$checked': {
+      color: '#4B8DF8'
+    }
+  },
+  checked: {}
 });
 
 

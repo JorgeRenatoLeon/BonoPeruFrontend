@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Button ,Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import React, {Component, useReducer} from 'react';
+import React, {Component, useReducer,  useEffect,useState} from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
@@ -24,6 +24,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { useHistory } from 'react-router-dom';
 import '../../assets/css/Cronograma.css';
+import Checkbox from '@material-ui/core/Checkbox';
+import HorariosService from "../../Servicios/horarios.service";
 
 function createData(id, nombre, locacion, turno, capacidad, beneficiarios, mujeres, hombres, discapacitados, riesgo) {
     return { id, nombre, locacion,turno, capacidad, beneficiarios, mujeres, hombres, discapacitados, riesgo};
@@ -33,12 +35,6 @@ const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-const rows = [
-    createData(0, 'ABC', 'LIMA-LIMA-LA VICTORIA', '1pm - 5pm', 50, 40, 30, 10, '100%', 'Bajo'),
-    createData(1, 'ABC', 'LIMA-LIMA-LA VICTORIA', '9am - 1pm', 50, 40, 25, 15, '1%', 'Medio'),
-    createData(2, 'PQR', 'LIMA-LIMA-SURCO', '9am - 1:30pm', 100, 40, 40, 10, '2%', 'Alto'),
-    createData(3, 'PQR', 'LIMA-LIMA-SURCO', '1:30pm - 6pm', 100, 40, 35, 15, '60%', 'Bajo'),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -97,6 +93,9 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox/>
+        </TableCell>
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}
@@ -161,7 +160,33 @@ const useStyles = makeStyles({
 
 
 
-function Cronograma() {
+const Cronograma =(props) => {
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    HorariosService.obtenerHorarios().then(response =>{
+      let rowsAux = [];
+      response.data.map(lug => {
+        rowsAux.push({
+          id: lug.idlugarentrega, 
+          nombre: lug.nombre, 
+          locacion: lug.locacion,
+          turno: lug.horainicio + '-'+ lug.horafin,
+          capacidad: lug.aforo,
+          beneficiarios: lug.beneficiarios, 
+          mujeres: lug.mujeres,
+          hombres: lug.hombres,
+          discapacitados: lug.discapacitados,
+          riesgo:lug.riesgo,
+          });
+      });
+      setRows(rowsAux);
+      console.log(rows);
+    })
+    .catch(() => {
+      console.log('Error al obtener Lugares')
+    });  
+  },[]);
+  
     const styles = { width: 260, display: 'block', marginBottom: 10 };
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
@@ -205,29 +230,9 @@ function Cronograma() {
 
 
     const [state, dispatch] = useReducer(reducer, {})
-    const RadioButton = ({id,cod}) => (
-        <Radio
-          id={id}
-          cod={cod}
-          onClick={() => dispatch({ id})}
-          checked={state.checkedId === id}
-          type="radio"
-          onChange={handlerChange}
-        />
-    )
-    const [selectedId, setSelectedId] = React.useState("");
-    const [selectedCod, setSelectedCod] = React.useState("");
-    function handlerChange(event) {
-        setSelectedId(event.target.id);
-        setSelectedCod(event.target.cod);
-    }
-    console.log({selectedId});
-    console.log({selectedCod});
-    const history = useHistory();
+    
 
-    const consultarLugar = () => {
-        history.push("/consultasBeneficiarios");
-    }
+    
 
     return ( 
         <Grid>
@@ -236,9 +241,9 @@ function Cronograma() {
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
-                          <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Cronograma</h3>
-                            </Typography> 
+                              <Typography variant="h2" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                     Cronograma
+                                </Typography>                         
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
@@ -294,6 +299,9 @@ function Cronograma() {
                             
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
+                                <TableCell padding="checkbox">
+                                  <Checkbox/>                                 
+                                </TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
                                 <TableCell align="left">{row.locacion}</TableCell>
                                 <TableCell align="left">{row.turno}</TableCell>

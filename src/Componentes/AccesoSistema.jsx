@@ -14,6 +14,8 @@ const AccesoSistema = (props) => {
     
     const [usuario, setUsuario] = useState("");
     const [contrasena, setContrasena] = useState("");
+    const [usuarioValido, setUsuarioValido] = useState(true);
+    const [contrasenaValida, setContrasenaValida] = useState(true);
     
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -26,14 +28,22 @@ const AccesoSistema = (props) => {
 
 
     const loginF = () => {
-        dispatch(login(usuario, contrasena))
-        .then(() => {
-            props.history.push("/encuesta");
-            // window.location.reload();
-        })
-        .catch(() => {
-          console.log('Error en las credenciales')
-        });
+        setContrasenaValida(true)
+        setUsuarioValido(true)
+        if(usuario==='' || contrasena === ''){
+            setContrasenaValida(contrasena===''?false:true)
+            setUsuarioValido(usuario===''?false:true)
+        }
+        else{
+            dispatch(login(usuario, contrasena))
+            .then(() => {
+                props.history.push("/usuarios");
+                // window.location.reload();
+            })
+            .catch(() => {
+              console.log('Error en las credenciales')
+            });
+        }
     };
 
     const { from } = props.location.state || {from: {pathname: '/'}};
@@ -75,12 +85,12 @@ const AccesoSistema = (props) => {
                             <TextField
                                 value={usuario}
                                 onChange={(event) => {setUsuario(event.target.value)}}
-                                error={message}
+                                error={message || !usuarioValido}
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 fullWidth={true}
-                                // helperText={!usuarioValido ? "Incorrect entry.":null}
+                                helperText={!usuarioValido ? "Completar el campo Usuario":null}
                                 onKeyPress={onKeyPress.bind(this)}
                                 inputProps={{ maxLength: 50 }}/>
                         </Grid>
@@ -95,13 +105,14 @@ const AccesoSistema = (props) => {
                             <TextField
                                 value={contrasena}
                                 onChange={(event) => {setContrasena(event.target.value)}}
-                                error={message}
+                                error={message || !contrasenaValida}
                                 id="outlined-basic"
                                 variant="outlined"
                                 type={showPassword ? "text" : "password"}
                                 size="small"
                                 autoComplete="current-password"
                                 fullWidth={true}
+                                helperText={!contrasenaValida ? "Completar el campo Contraseña":null}
                                 inputProps={{maxLength: 20}}
                                 InputProps={{
                                     endAdornment: (
