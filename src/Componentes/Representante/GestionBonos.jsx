@@ -5,7 +5,7 @@ import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
 
 //Para el api
  import { useEffect,useState } from "react";
-import { history } from "../../helpers/history";
+//import { history } from "../../helpers/history";
 
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
@@ -35,7 +35,7 @@ function formato(texto){
  */   
   
  function GenerarCronograma(){
-     var llamarAlAlgoritmo;
+     //var llamarAlAlgoritmo;
  }    
   
 //  path: /bonos
@@ -66,8 +66,7 @@ function GestionBonos (props) {
       
 
         if(cronograma.length===0){
-
-          respuesta=  "No hay un bono asignado a esta familia. Verifique que lo ha ingresado correctamente. ";
+          respuesta=  "No hay cronograma";
         }
         else if (cronograma.length>=1){
 
@@ -208,7 +207,7 @@ function GestionBonos (props) {
 
 
     return (
-        <div style={{minHeight:"88vh"}}>
+        <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <Grid container direction="row" justify="center">
@@ -221,7 +220,7 @@ function GestionBonos (props) {
                     </Toolbar>
                 </AppBar>
 
-            <div className='Contenedor'>
+            <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">                            
@@ -237,11 +236,11 @@ function GestionBonos (props) {
 
                 </Container>
 
-            </div>
-            <div>
+            </Grid>
+            <Grid>
 
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     );
 
 

@@ -1,12 +1,14 @@
 import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
- import { Link } from "react-router-dom"
- import Chart from "../../Componentes/Graficos/Chart.js"
-
+//  import { Link } from "react-router-dom"
+//  import Chart from "../../Componentes/Graficos/Chart.js"
+ import { makeStyles } from '@material-ui/core/styles';
+ import Card from '@material-ui/core/Card';
+ import CardActions from '@material-ui/core/CardActions';
+ import CardContent from '@material-ui/core/CardContent';
 //Para el api
 import { useEffect,useState } from "react";
-// import { history } from "../../helpers/history";
 
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
@@ -20,11 +22,32 @@ function formato(texto){
   var Arrcronograma = [{ fechaInicio:"2020-11-28", 
                          fechaFin:"2020-12-15",
                          totalBeneficiarios:1024,
+                         totalMujeres:701,
+                         totalHombres:323,
                          totalLugares:32,                       
+                         totalActivo:32,                       
+                         totalQuejas:1,                       
                         
                         }]
 
-  
+  //Para card de reprote 
+  const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+      marginRight:20,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
 
   
 //  path: /monitoreo
@@ -50,7 +73,8 @@ function Monitoreo (props) {
        // console.log('cronograma:',cronograma);
         var titulo="Monitoreo";
             var respuesta;
-        
+            const classes = useStyles();
+            const bull = <span className={classes.bullet}>•</span>;
         var      chartData={
                 labels: ['Boston', 'Worcester', 'Springfield', 'Lowell', 'Cambridge', 'New Bedford'],
                 datasets:[
@@ -83,78 +107,126 @@ function Monitoreo (props) {
             <Grid key={rpta.id} container direction="col" justify="center">
                 {/* <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}> */}
                    
-                   <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/>
+                {/* <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/> */}
+               {/* Reporte de Beneficiarios */}
 
-            
+               <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                     <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        Beneficiarios
+                        </Typography>                
+                        {/* total de beneficiarios */}
+                                {/* <Grid container direction="col" style={{ textAlign:"center"}}>
+                                    {cronograma.map(opcion=> (
+                                        <Grid container direction="col" >
+                                            <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.totalBeneficiarios}
+                                            </Typography>
+                                            <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.totalBeneficiarios}
+                                            </Typography>     
+                                            <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                                Total2
+                                            </Typography>                           
+                                        </Grid>                                
+                                    ))
+                                     } 
+                               
+                                    <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Total
+                                    </Typography>  
+                                    <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Mujeres
+                                    </Typography>            
+                                </Grid>                        */}
+                                {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalBeneficiarios}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 40,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Total
+                                    </Typography>                           
+                                </Grid>                                
+                            ))}
+                            {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalMujeres}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Mujeres
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                             {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalHombres}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Hombres
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
 
 
-                <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                     <Grid container direction="row" item md={4} >
-                            <Typography variant="subtitle2" color="inherit">
-                                {'Fecha de inicio de reparto: '}
-                            </Typography>
-                      </Grid>
-                    {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >
-                            <Typography variant="subtitle2" color="inherit">
-                                    {opcion.fechaInicio?opcion.fechaInicio:"Por definir"}
-                            </Typography>
-                        </Grid>
+                        
+                    </CardContent>
+                    {/* <CardActions>
+                        <Button size="small"> Total de Beneficiarios</Button>
+                    </CardActions> */}
+                </Card>
+                    {/* Card de Lugares de Entrega */}
+                    <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                     <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        Lugares de entrega
+                        </Typography>                
+                                      
+                                {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalLugares}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 40,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Total
+                                    </Typography>                           
+                                </Grid>                                
+                            ))}
+                            {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalActivo}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Activos
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                             {cronograma.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.totalQuejas}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Quejas
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
 
-                        )) }
 
-
-                </Grid>
-                <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                    <Grid container direction="row" item md={4} >
-                        <Typography variant="subtitle2" color="inherit">
-                            {'Fecha de final de reparto: '}
-                        </Typography>
-                    </Grid>
-                    {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >
-                            <Typography variant="subtitle2" color="inherit">
-                            {opcion.fechaFin? opcion.fechaFin:"Por definir" }
-                            </Typography>
-                        </Grid>
-
-                        )) }
-
-                </Grid>
-                <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                    <Grid container direction="row" item md={4} >
-                        <Typography variant="subtitle2" color="inherit">
-                            {'Total de Beneficiarios: '}
-                        </Typography>
-                    </Grid>
-                    {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >
-                            <Typography variant="subtitle2" color="inherit">
-                                {opcion.totalBeneficiarios}
-                            </Typography>
-                        </Grid>
-
-                    ))
-                    }
-
-                </Grid>
-
-                <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                     <Grid container direction="row" item md={4} >
-                        <Typography variant="subtitle2" color="inherit">
-                            {'Total de Lugares de Entrega:  '}
-                        </Typography>
-                    </Grid>
-                    {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >
-                            <Typography variant="subtitle2" color="inherit">
-                                {opcion.totalLugares}
-                            </Typography>
-                        </Grid>
-                     ))
-                    }
-
-                </Grid>
+                        
+                    </CardContent>
+                    {/* <CardActions>
+                        <Button size="small"> Total de Beneficiarios</Button>
+                    </CardActions> */}
+                </Card>
+ 
 
             </Grid>
 
@@ -164,7 +236,7 @@ function Monitoreo (props) {
 
 
     return (
-        <div>
+        <div style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <Grid container direction="row" justify="center">
