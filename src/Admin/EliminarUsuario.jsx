@@ -58,7 +58,6 @@ export default function AlertDialogSlide(props) {
                     <DialogContentText id="alert-dialog-slide-description">
                         Tenga en consideración que una vez eliminado el usuario no se puede volver a recuperar.
           </DialogContentText>
-
                 </DialogContent>
                 <DialogActions>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
@@ -68,7 +67,7 @@ export default function AlertDialogSlide(props) {
                     </Link>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="secondary" onClick={handleClose}>
-                            Cancelar
+                    npm        Cancelar
             </Button>
                     </Link>
                 </DialogActions>
