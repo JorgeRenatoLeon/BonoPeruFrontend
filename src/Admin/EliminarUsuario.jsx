@@ -58,19 +58,11 @@ export default function AlertDialogSlide(props) {
                     <DialogContentText id="alert-dialog-slide-description">
                         Tenga en consideración que una vez eliminado el usuario no se puede volver a recuperar.
           </DialogContentText>
-<<<<<<< HEAD:src/Componentes/Admin/EliminarUsuario.jsx
-        </DialogContent>
-        <DialogActions>
-          <Link to='/usuarios' style={{textDecoration:"none"}}>
-            <Button variant="contained" size="small" color="primary" >
-              Aceptar
-=======
                 </DialogContent>
                 <DialogActions>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="primary" onClick={() => handleRemove()}>
                             Aceptar
->>>>>>> origin/Vale:src/Admin/EliminarUsuario.jsx
             </Button>
                     </Link>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
