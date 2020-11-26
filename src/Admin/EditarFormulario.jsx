@@ -6,22 +6,25 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-
 //import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
-
 import UsuariosService from "../Servicios/user.service";
 
+/*
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+*/
 
 export default function FormDialog(props) {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [nombre, setNombre] = useState(props.usuario.nombre);
+    const [apellido, setApellido] = useState(props.usuario.apellido);
+    const [usuario, setUsuario] = useState(props.usuario.correo);
+    //const [openConfirmacion, setOpenConfirmacion] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -38,9 +41,14 @@ export default function FormDialog(props) {
         setOpen(false);
     };
 
-    const [nombre, setNombre] = useState(props.usuario.nombre);
-    const [apellido, setApellido] = useState(props.usuario.apellido);
-    const [usuario, setUsuario] = useState(props.usuario.correo);
+    /*
+    const handleCloseConfirmacion = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenConfirmacion(false);
+    };
+    */
 
     const changeNombre = e => {
         setNombre(e.target.value);
@@ -74,7 +82,6 @@ export default function FormDialog(props) {
         if (apellido.length > 200) {
             isError = true;
             setApellidoErr("La longitud del apellido no puede exceder a 200 caracteres");
-
         }
 
         if (apellido.length < 2) {
@@ -100,7 +107,6 @@ export default function FormDialog(props) {
         const err = validate();
 
         if (!err) {
-            //onSubmit(state);
             const user = {
                 id: props.usuario.id,
                 usuario: usuario,
@@ -127,6 +133,8 @@ export default function FormDialog(props) {
             window.location.reload();
             handleClose();
         }
+
+        setOpenConfirmacion(true);
     };
 
     return (
@@ -191,8 +199,8 @@ export default function FormDialog(props) {
                     </Link>
                 </DialogActions>
 
-                {/* <Snackbar open={open} autoHideDuration={300} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
-                    <Alert onClose={handleClose} severity="success">
+                {/* <Snackbar open={openConfirmacion} autoHideDuration={300} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
+                    <Alert onClose={handleCloseConfirmacion} severity="success">
                         Edición exitosa
                     </Alert>
                 </Snackbar> */}
