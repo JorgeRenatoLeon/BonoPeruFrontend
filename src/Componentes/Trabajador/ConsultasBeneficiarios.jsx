@@ -1,14 +1,13 @@
- import RespuestaNegativa from './RespuestaNegativa'
- import RespuestaPositiva from './RespuestaPositiva'
+ import Respuesta from './Respuesta'
  import { AppBar, Toolbar, Typography, Button, Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
  import Paper from '@material-ui/core/Paper';
- import React, {Component, useReducer} from 'react';
+ import React, {Component, useReducer, useEffect,useState } from 'react';
  import { Link } from 'react-router-dom';
  import { withStyles, makeStyles } from '@material-ui/core/styles';
  import BarraInicial from '../Barras/BarraInicial';
  import BarraFinal from '../Barras/BarraFinal';
  import Combobox from '../Elementos/Combobox';
- import Buscador from '../Elementos/Buscador.jsx';
+ import BuscadorConsulta from '../Elementos/BuscadorConsulta.jsx';
  import PropTypes from 'prop-types';
  import clsx from 'clsx';
  import Table from '@material-ui/core/Table';
@@ -19,14 +18,9 @@
  import TablePagination from '@material-ui/core/TablePagination';
  import TableRow from '@material-ui/core/TableRow';
  import TableSortLabel from '@material-ui/core/TableSortLabel';
- import IconButton from '@material-ui/core/IconButton';
- import DeleteIcon from '@material-ui/icons/Delete';
- import VisibilityIcon from '@material-ui/icons/Visibility';
- import EditIcon from '@material-ui/icons/Edit';
- import AddIcon from '@material-ui/icons/Add';
- import { useHistory } from 'react-router-dom';
-import { idText } from 'typescript';
- 
+ import {useLocation} from "react-router-dom";
+ import ConsultaService from "../../Servicios/consultacod.service";
+
 //Para el título grandote
 function createData(id, codigo, nombre, lugar, direccion) {
     return { id, codigo, nombre, lugar, direccion};
@@ -151,15 +145,15 @@ const useStyles = makeStyles({
   });
 
 
-function ConsultasBeneficiarios (params) {
+const ConsultasBeneficiarios = (params) => {
+    let data = useLocation();
     let rows = [{
-      id:  params.id,
-      codigo: params.codigo,
-      nombre: params.nombre,
-      lugar: params.lugar,
-      direccion: params.direccion,   
+      id:  data.state.id,
+      codigo: data.state.codigo,
+      nombre: data.state.nombre,
+      lugar: data.state.lugar,
+      direccion: data.state.direccion,   
     }];
-    console.log(rows.id);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -182,6 +176,53 @@ function ConsultasBeneficiarios (params) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const [mensaje, setMensaje] = useState(null);
+
+    const buscarBeneficiario=(texto) =>{
+      console.log(texto,mensaje,"ayuda");
+      ConsultaService.consultarCodigoFamilia().then(response =>{
+        console.log(response.data);
+        let respuesta= response.data;
+        switch (respuesta) {
+          case 'bono':
+            setMensaje("bono");
+            break;
+          case 'no bono':
+            setMensaje("no bono");
+            break;
+          case 'lugar':
+            setMensaje("lugar");
+            break;
+          case 'horario':
+            setMensaje("horario");
+            break;
+          case 'dia':
+            setMensaje("dia");
+            break;
+          case 'lugar dia horario':
+            setMensaje("lugar dia horario");
+            break;
+          case 'lugar horario':
+            setMensaje("lugar horario");
+            break;
+          case 'lugar dia':
+            setMensaje("lugar dia");
+            break;
+          case ' dia horario':
+            setMensaje("dia horario");
+            break;
+          default:
+            setMensaje("Ups! Algo salió mal");
+            break;
+        } 
+      })
+      .catch(() => {
+          console.log('Error al consultar el codigo de Familia')
+      });
+    }
+
+    const [busqueda, setBusq] = useState("");
 
     return (
         <Grid>
@@ -233,10 +274,11 @@ function ConsultasBeneficiarios (params) {
                     </Table>
                 </TableContainer>
                 <Grid container direction="row" justify="center" alignItems="center">
-                    <Buscador mensaje = "Ingrese el Código de familia"></Buscador> 
+                    <BuscadorConsulta mensaje = "Ingrese el Código de familia" buscar={buscarBeneficiario} texto={busqueda}></BuscadorConsulta> 
                 </Grid>
             </Paper> 
-            <RespuestaPositiva/> 
+            {mensaje?
+            <Respuesta mensaje={mensaje}></Respuesta>:<Grid></Grid>}
             <BarraFinal/>
         </Grid>
     );

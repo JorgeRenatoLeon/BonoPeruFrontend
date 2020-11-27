@@ -18,17 +18,22 @@ const useStyles = makeStyles({
 });
 
 
-function RespuestaPositiva () {
+function RespuestaPositiva (props) {
     
 
     return (
-            <Paper elevation={1} style={{marginLeft: 400, marginRight:400, marginBottom:60}} >
-                <h>Al beneficiario sí  le corresponde bono en este horario y en esta agencia.</h><br></br>
+            <Grid container
+              direction="column"
+              justify="center"
+              alignItems="center">
+              <Paper elevation={1} style={{ marginBottom:76}} >
                 <br></br>
                 <br></br>
+                <h>{props.mensaje}</h><br></br>
                 <br></br>
                 <br></br>
-            </Paper> 
+              </Paper> 
+            </Grid>  
     );
     
 }

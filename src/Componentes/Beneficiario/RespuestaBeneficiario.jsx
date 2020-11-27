@@ -124,7 +124,7 @@ function RespuestaBeneficiario (props) {
                 }
             },  [])
        
-       // console.log('cronograma:',cronograma);
+       //console.log('cronograma:',cronograma);
         var titulo;
         var respuesta;
      
@@ -160,24 +160,24 @@ function RespuestaBeneficiario (props) {
                 </Grid>
                 {/* llamada  a la cabecera */}
                 <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>                    
-                <div className={classes.root}>
-                <Grid className={classes.paper}>                      
-                    <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        aria-label="enhanced table"
-                    >
-                       
-                        <EnhancedTableHead
-                        classes={classes}
-                        />
+                <Grid className={classes.root}>
+                    <Grid className={classes.paper}>                      
+                        <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby="tableTitle"
+                            aria-label="enhanced table"
+                        >
                         
-                    </Table>
-                    </TableContainer>
-                
-                </Grid>                  
-            </div>
+                            <EnhancedTableHead
+                            classes={classes}
+                            />
+                            
+                        </Table>
+                        </TableContainer>
+                    
+                    </Grid>                  
+                </Grid>
              
                 </Grid>
                 
@@ -276,7 +276,7 @@ function RespuestaBeneficiario (props) {
                     </Toolbar>
                 </AppBar>
             
-            <div className='Contenedor'>
+            <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
@@ -286,16 +286,9 @@ function RespuestaBeneficiario (props) {
                                 {/* <h1 style={{color: 'black', margin: 0,padding: 30}}>Información</h1>  */}
                                 
                                 <Typography variant="h5"  gutterBottom justify="center" >
-                                { respuesta } 
-                                    </Typography>                                     
-                                {/* {cronograma.map(pokemon=> (
-                                    <Typography variant="h3"  gutterBottom justify="center" >
-                                        {pokemon.name+" "+pokemon.url}
-                                    </Typography>
-                                    )) } */}
-                                   
-                        </Grid>      
-                                         
+                                     { respuesta } 
+                                </Typography>     
+                        </Grid>          
                     </Grid>
                     <Grid container direction="row" justify="center">
                         <Grid container item md={2} justify="center">
@@ -306,21 +299,11 @@ function RespuestaBeneficiario (props) {
                             </Link>
                         </Grid>                    
                     </Grid>
-                   
-                </Container>
-             
-            </div>
-            <div>
-           
-            </div>
+                </Container>             
+            </Grid>
         </Grid>
     );
     
     
 }
 export default RespuestaBeneficiario;
-
-/*
-
-
-*/
