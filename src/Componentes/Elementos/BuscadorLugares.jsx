@@ -1,11 +1,9 @@
-import React,{useEffect} from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-import ConsultaService from "../../Servicios/consultacod.service";
-import ConsultaBeneficiarios from "../Trabajador/ConsultasBeneficiarios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,40 +24,24 @@ const useStyles = makeStyles((theme) => ({
   },
   
 }));
-let respuesta = "";
 
-const ConsultasBeneficiarios = (props) =>{
-
+export default function Buscador(props) {
   const classes = useStyles();
   const mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
 
-  const [searchText,setSearchText] =React.useState("");
-  const handleSearchText = event =>{
-      setSearchText(event.target.value);
-      console.log(searchText);
-  } 
-
-  const handleBuscar = () =>{
-    console.log(searchText, "buscando");
-    props.buscar(searchText);
-  }
-   
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
-        value={searchText}
-        onChange={handleSearchText}
         className={classes.input}
         placeholder= {mensaje}
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
       <IconButton
-        //type="submit"
+        type="submit"
         className={classes.iconButton}
         aria-label="search"
         size="medium"
-        onClick={handleBuscar}
       >
         <SearchIcon
           style={{
@@ -76,5 +58,3 @@ const ConsultasBeneficiarios = (props) =>{
     </Paper>
   );
 }
-
-export default ConsultasBeneficiarios;

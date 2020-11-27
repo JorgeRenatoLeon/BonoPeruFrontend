@@ -19,8 +19,8 @@ import PruebaC from "./Componentes/Beneficiario/pruebaC";
 import GestionBonos from './Componentes/Representante/GestionBonos'
 import Monitoreo from "./Componentes/Representante/Monitoreo";
 
-import Usuarios from './Componentes/Admin/Usuarios'
-import Formulario from './Componentes/Admin/Formulario'
+import Usuarios from './Admin/Usuarios'
+import Formulario from './Admin/Formulario'
 
 const App = () => {
 

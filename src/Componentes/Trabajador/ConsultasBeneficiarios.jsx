@@ -19,17 +19,7 @@
  import TableRow from '@material-ui/core/TableRow';
  import TableSortLabel from '@material-ui/core/TableSortLabel';
  import {useLocation} from "react-router-dom";
- import IconButton from '@material-ui/core/IconButton';
- import DeleteIcon from '@material-ui/icons/Delete';
- import VisibilityIcon from '@material-ui/icons/Visibility';
- import EditIcon from '@material-ui/icons/Edit';
- import AddIcon from '@material-ui/icons/Add';
- import { useHistory } from 'react-router-dom';
-import { idText } from 'typescript';
-import ConsultaService from "../../Servicios/consultacod.service";
-import axios from "axios";
-
-const API_URL = "http://3.87.144.73:8084/api/horario/consultarCodigoFamilia";
+ import ConsultaService from "../../Servicios/consultacod.service";
 
 //Para el título grandote
 function createData(id, codigo, nombre, lugar, direccion) {
@@ -187,7 +177,53 @@ const ConsultasBeneficiarios = (params) => {
         setPage(0);
     };
 
-    const [msg, setMsg] =useState(" ");
+    const [mensaje, setMensaje] = useState(null);
+
+    const buscarBeneficiario=(texto) =>{
+      console.log(texto,mensaje,"ayuda");
+      ConsultaService.consultarCodigoFamilia().then(response =>{
+        console.log(response.data);
+        let respuesta= response.data;
+        switch (respuesta) {
+          case 'bono':
+            setMensaje("bono");
+            break;
+          case 'no bono':
+            setMensaje("no bono");
+            break;
+          case 'lugar':
+            setMensaje("lugar");
+            break;
+          case 'horario':
+            setMensaje("horario");
+            break;
+          case 'dia':
+            setMensaje("dia");
+            break;
+          case 'lugar dia horario':
+            setMensaje("lugar dia horario");
+            break;
+          case 'lugar horario':
+            setMensaje("lugar horario");
+            break;
+          case 'lugar dia':
+            setMensaje("lugar dia");
+            break;
+          case ' dia horario':
+            setMensaje("dia horario");
+            break;
+          default:
+            setMensaje("Ups! Algo salió mal");
+            break;
+        } 
+      })
+      .catch(() => {
+          console.log('Error al consultar el codigo de Familia')
+      });
+    }
+
+    const [busqueda, setBusq] = useState("");
+
     return (
         <Grid>
             <BarraInicial/>                
@@ -238,53 +274,11 @@ const ConsultasBeneficiarios = (params) => {
                     </Table>
                 </TableContainer>
                 <Grid container direction="row" justify="center" alignItems="center">
-                    <BuscadorConsulta mensaje = "Ingrese el Código de familia"></BuscadorConsulta> 
+                    <BuscadorConsulta mensaje = "Ingrese el Código de familia" buscar={buscarBeneficiario} texto={busqueda}></BuscadorConsulta> 
                 </Grid>
             </Paper> 
-            {/* {(() => {
-              switch () {
-                case 'bono':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'no bono':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'lugar':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'horario':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'dia':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'lugar dia horario':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'lugar horario':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'lugar dia':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                case 'dia horario':
-                  return (
-                    <Respuesta mensaje="Probemos esto"></Respuesta>
-                  )
-                default:
-                  return (
-                    <Respuesta mensaje="Ups! Algo salió mal"></Respuesta>
-                  )
-              }
-            })()} */}
+            {mensaje?
+            <Respuesta mensaje={mensaje}></Respuesta>:<Grid></Grid>}
             <BarraFinal/>
         </Grid>
     );

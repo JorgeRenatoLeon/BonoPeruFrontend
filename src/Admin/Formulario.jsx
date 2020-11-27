@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
 
-import UsuariosService from "../../Servicios/user.service";
+import UsuariosService from "../Servicios/user.service";
 
 export default function FormDialog() {
 

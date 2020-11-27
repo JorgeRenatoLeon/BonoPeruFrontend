@@ -39,7 +39,14 @@ const customStyles = {
 }
 
 export default function Combobox(props){
-    return(
-            <Select components={{DropdownIndicator, IndicatorSeparator: () => null}} styles={customStyles} options={props.options} placeholder=' '/>
-    );
+
+  const seleccionar=(e)=>{
+    console.log(e, "este es el select");
+    props.onSeleccion(e.value);
+  }
+  
+
+  return(
+          <Select components={{DropdownIndicator, IndicatorSeparator: () => null}} styles={customStyles} options={props.options} placeholder=' ' onChange={seleccionar}/>
+  );
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://3.87.144.73:8084/api/cronograma/listarhorariocronograma";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/listarhorariocronograma";
 
 const cronograma ={
     idcronograma: 2,

@@ -10,7 +10,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
 
-import UsuariosService from "../../Servicios/user.service";
+import UsuariosService from "../Servicios/user.service";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
