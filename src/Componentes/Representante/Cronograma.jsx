@@ -274,6 +274,9 @@ const Cronograma =(props) => {
                             Nombre lugar de entrega:
                         </Typography>
                         <TextField className="inputRounded" id="outlined-basic" label={null} variant="outlined" />
+                        <Button variant="contained" size="medium" color="primary" style={{margin: 10}}>
+                          Buscar
+                        </Button> 
                     </Grid>
                 </Grid>
             </Paper> 
