@@ -1,6 +1,6 @@
  import React, {Component} from 'react';
  import {Bar, Line, Pie} from 'react-chartjs-2';
-
+ import { Grid} from "@material-ui/core"
  class Chart extends Component{
    constructor(props){
      super(props);
@@ -18,7 +18,7 @@
 
    render(){
      return (
-       <div className="chart">
+       <Grid className="chart">
           <Bar
            data={this.state.chartData}
            options={{
@@ -97,7 +97,7 @@
            
          /> 
          
-       </div>
+       </Grid>
      )
    }
  }

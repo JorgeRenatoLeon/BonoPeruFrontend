@@ -2,10 +2,11 @@ import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
+ import axios from "axios";
 
 //Para el api
  import { useEffect,useState } from "react";
-import { history } from "../../helpers/history";
+//import { history } from "../../helpers/history";
 
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
@@ -15,29 +16,74 @@ function formato(texto){
 
   ];
 //   cronograma ya generado
-//  /*
-  var Arrcronograma = [{ fechaInicio:"2020-11-28", 
-                         fechaFin:"2020-12-15",
-                         totalBeneficiarios:1024,
-                         totalLugares:32,                       
+  /*
+  var Arrcronograma = [{ fechaini:"2020-11-28", 
+                         fechafin:"2020-12-15",
+                         beneficiarios:1024,
+                         lugares:32,                       
                         
                         }]
                         
-//*/
+*/
     // cronograma no iniciado
-  /*    
-    var Arrcronograma = [{ fechaInicio:null, 
-                            fechaFin:null,
-                            totalBeneficiarios:1024,
-                            totalLugares:32,                       
+ // /*    
+    var Arrcronograma = [{ 
+        fechaini:null, 
+        fechafin:null,
+        beneficiarios:1024,
+        lugares:32,                    
 
     }]  
- */   
+ //*/   
   
  function GenerarCronograma(){
-     var llamarAlAlgoritmo;
+     //var llamarAlAlgoritmo;
+
+     /*
+     let Arrcronograma = [{ 
+            fechaini:"2020-11-28", 
+            fechafin:"2020-12-15",
+            beneficiarios:1024,
+            lugares:32,                       
+    
+    }]
+        useEffect((cronograma) => {
+
+            //Para que se actualice y mande a la pantalla principal
+            if(cronograma===undefined || cronograma.length===0){
+
+                    setCronograma(Arrcronograma);
+
+            // /*     API API API API API
+            axios
+            .get('https://pokeapi.co/api/v2/pokemon')
+            // .post(API_URL)
+            .then(response =>{
+                console.log("API OBT pokemon: ",response.data);
+                // let apiCronograma = []
+                // apiCronograma.push(response.data)
+                // if(apiCronograma){
+                //     setCronograma(apiCronograma);
+                // }
+                //setCronograma(Arrcronograma);
+            })
+            .catch(() => {
+                console.log('Error al obtener Monitoreo')
+            });
+        
+
+
+            }
+        },  [])
+
+        */
+
  }    
   
+ const API_URL = "http://localhost:8084/api/cronograma/resumencronograma";
+
+ var rptaAPI;
+ 
 //  path: /bonos
 function GestionBonos (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
@@ -48,11 +94,26 @@ function GestionBonos (props) {
 
                 //Para que se actualice y mande a la pantalla principal
                 if(cronograma===undefined || cronograma.length===0){
-                    
-                //     else{
+
                          setCronograma(Arrcronograma);
-                         localStorage.removeItem("beneficiario");
-                //     }
+
+                // /*     API API API API API
+                 axios
+                 //.get('https://pokeapi.co/api/v2/pokemon')
+                  .post(API_URL)
+                 .then(response =>{
+                     console.log("API OBT : ",response.data);
+                     let apiCronograma = [];
+                     apiCronograma.push(response.data)
+                     if(apiCronograma){
+                         setCronograma(apiCronograma);
+                     }
+                     //setCronograma(Arrcronograma);
+                 })
+                 .catch(() => {
+                     console.log('Error al obtener Monitoreo')
+                 });
+                // */
 
 
                  }
@@ -66,20 +127,19 @@ function GestionBonos (props) {
       
 
         if(cronograma.length===0){
-
-          respuesta=  "No hay un bono asignado a esta familia. Verifique que lo ha ingresado correctamente. ";
+          respuesta=  "No hay cronograma";
         }
         else if (cronograma.length>=1){
 
             //cambio de formato de Fecha-super no eficiente :(
             var formatoFecha1,formatoFecha2;
-            if(cronograma.length===1 && cronograma[0].fechaInicio !==null && cronograma[0].fechaFin !==null){
-                // console.log('fecha antes:', cronograma[0].fechaInicio);
-               formatoFecha1=formato( cronograma[0].fechaInicio); 
+            if(cronograma.length===1 && cronograma[0].fechaini !==null && cronograma[0].fechafin !==null){
+                // console.log('fecha antes:', cronograma[0].fechaini);
+               formatoFecha1=formato( cronograma[0].fechaini); 
             //    console.log('fecha:',formatoFecha1);
-               cronograma[0].fechaInicio=formatoFecha1;
-               formatoFecha2=formato( cronograma[0].fechaFin);
-               cronograma[0].fechaFin=formatoFecha2;
+               cronograma[0].fechaini=formatoFecha1;
+               formatoFecha2=formato( cronograma[0].fechafin);
+               cronograma[0].fechafin=formatoFecha2;
                  
                 botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">
@@ -140,7 +200,7 @@ function GestionBonos (props) {
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
                             <Typography variant="subtitle2" color="inherit">
-                                    {opcion.fechaInicio?opcion.fechaInicio:"Por definir"}
+                                    {opcion.fechaini?opcion.fechaini:"Por definir"}
                             </Typography>
                         </Grid>
 
@@ -157,7 +217,7 @@ function GestionBonos (props) {
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
                             <Typography variant="subtitle2" color="inherit">
-                            {opcion.fechaFin? opcion.fechaFin:"Por definir" }
+                            {opcion.fechafin? opcion.fechafin:"Por definir" }
                             </Typography>
                         </Grid>
 
@@ -173,7 +233,7 @@ function GestionBonos (props) {
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
                             <Typography variant="subtitle2" color="inherit">
-                                {opcion.totalBeneficiarios}
+                                {opcion.beneficiarios}
                             </Typography>
                         </Grid>
 
@@ -191,7 +251,7 @@ function GestionBonos (props) {
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
                             <Typography variant="subtitle2" color="inherit">
-                                {opcion.totalLugares}
+                                {opcion.lugares}
                             </Typography>
                         </Grid>
                      ))
@@ -208,7 +268,7 @@ function GestionBonos (props) {
 
 
     return (
-        <div style={{minHeight:"88vh"}}>
+        <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <Grid container direction="row" justify="center">
@@ -221,7 +281,7 @@ function GestionBonos (props) {
                     </Toolbar>
                 </AppBar>
 
-            <div className='Contenedor'>
+            <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">                            
@@ -237,11 +297,11 @@ function GestionBonos (props) {
 
                 </Container>
 
-            </div>
-            <div>
+            </Grid>
+            <Grid>
 
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     );
 
 

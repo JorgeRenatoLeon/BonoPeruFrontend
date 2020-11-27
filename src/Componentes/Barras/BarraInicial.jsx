@@ -62,6 +62,7 @@ function BarraInicial () {
     const tabsAdmin = [
                         {nombre: 'Gestión de Bonos', path: '/bonos'},
                         // {nombre: 'Reportes', path: '/reportes'},
+                        {nombre: 'Monitoreo', path: '/monitoreo'},
                         {nombre: 'Encuestas', path: '/encuesta'},
                         {nombre: 'Usuarios', path: '/usuarios'}]
 
