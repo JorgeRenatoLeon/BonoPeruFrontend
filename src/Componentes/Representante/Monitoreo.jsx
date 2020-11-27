@@ -5,8 +5,9 @@ import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
 //  import Chart from "../../Componentes/Graficos/Chart.js"
  import { makeStyles } from '@material-ui/core/styles';
  import Card from '@material-ui/core/Card';
- import CardActions from '@material-ui/core/CardActions';
- import CardContent from '@material-ui/core/CardContent';
+// import CardActions from '@material-ui/core/CardActions';
+  import CardContent from '@material-ui/core/CardContent';
+ import axios from "axios";
 //Para el api
 import { useEffect,useState } from "react";
 
@@ -50,56 +51,46 @@ function formato(texto){
   });
 
   
-//  path: /monitoreo
+  const API_URL = "http://localhost:8084/api/encuesta/";
+  //  path: /monitoreo
+
 function Monitoreo (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-        //  const classes = useStyles();
+      
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
-
+       
             useEffect((cronograma) => {
-
                 //Para que se actualice y mande a la pantalla principal
-                if(cronograma===undefined || cronograma.length===0){
-                    
+                if(cronograma===undefined || cronograma.length===0){                   
                 //     else{
                          setCronograma(Arrcronograma);
-                         localStorage.removeItem("beneficiario");
-                //     }
-
-
                  }
+
+                 /*     API API API API API
+                 axios
+                 .get('https://pokeapi.co/api/v2/pokemon')
+                 // .post(API_URL)
+                 .then(response =>{
+                     console.log("API OBT pokemon: ",response.data);
+                     let apiCronograma = []
+                     apiCronograma.push(response.data)
+                     if(apiCronograma){
+                         setCronograma(apiCronograma);
+                     }
+                     //setCronograma(Arrcronograma);
+                 })
+                 .catch(() => {
+                     console.log('Error al obtener Monitoreo')
+                 });
+                 */
+
             },  [])
 
        // console.log('cronograma:',cronograma);
         var titulo="Monitoreo";
             var respuesta;
             const classes = useStyles();
-            const bull = <span className={classes.bullet}>•</span>;
-        var      chartData={
-                labels: ['Boston', 'Worcester', 'Springfield', 'Lowell', 'Cambridge', 'New Bedford'],
-                datasets:[
-                  {
-                    label:'Population',
-                    data:[
-                      617594,
-                      181045,
-                      153060,
-                      106519,
-                      105162,
-                      95072
-                    ],
-                    backgroundColor:[
-                      'rgba(255, 99, 132, 0.6)',
-                      'rgba(54, 162, 235, 0.6)',
-                      'rgba(255, 206, 86, 0.6)',
-                      'rgba(75, 192, 192, 0.6)',
-                      'rgba(153, 102, 255, 0.6)',
-                      'rgba(255, 159, 64, 0.6)',
-                      'rgba(255, 99, 132, 0.6)'
-                    ]
-                  }
-                ]
-              };
+           
         
               //Todoooo la muestra del cronograma está manejado por respuesta
           
@@ -262,9 +253,7 @@ function Monitoreo (props) {
                 </Container>
 
             </div>
-            <div>
 
-            </div>
         </div>
     );
 
