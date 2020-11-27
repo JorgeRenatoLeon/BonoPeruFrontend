@@ -214,6 +214,21 @@ export default function EnhancedTable() {
     stopEditing();
   };
 
+  const actualizarTabla = (valores) => {
+    UsuariosService.listarUsuariosFiltrado(valores).then(response => {
+      let userAux = [];
+      response.data.map(user => {
+        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username));
+      });
+
+      setUsuario(userAux);
+      console.log(userAux);
+    })
+      .catch(() => {
+        console.log('Error al listar usuarios')
+      });
+  }
+
   const [usuarios, setUsuario] = useState([]);
 
   useEffect(() => {
@@ -254,7 +269,7 @@ export default function EnhancedTable() {
         <div className='Contenedor'>
           <Grid container direction="row" justify="left">
             <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="center" >
-              <Buscador names={usuarios}></Buscador>
+              <Buscador names={usuarios} onBuscar={actualizarTabla}></Buscador>
               <Formulario></Formulario>
             </Grid>
           </Grid>

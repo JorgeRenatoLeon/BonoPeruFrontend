@@ -25,23 +25,19 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-/*
-const [searchTerm, setsearchTerm] = useState("");
-const [names, setNames] = useState(props.names);
-
-const editSearchTerm = (e) => {
-    setsearchTerm(e.target.value);
-}
-
-const dynamicSearch = () => {
-    return names.filter(name => name.toLowerCase().includes(searchTerm.toLowerCase()));
-}
-
-*/
-
 export default function Buscador(props) {
     const classes = useStyles();
     const mensaje = "Buscar usuario";
+
+    const [searchTerm, setsearchTerm] = useState("");
+
+    const editSearchTerm = (e) => {
+        setsearchTerm(e.target.value);
+    }
+
+    useEffect(() => {
+        props.onBuscar(searchTerm);
+    }, [searchTerm])
 
     return (
         <Paper component="form" className={classes.root}>
@@ -50,8 +46,8 @@ export default function Buscador(props) {
                 placeholder={mensaje}
                 style={{ padding: 6 }}
                 inputProps={{ "aria-label": "Buscar usuario" }}
-            //value={{ searchTerm }}
-            //onChange={editSearchTerm}
+                value={searchTerm}
+                onChange={editSearchTerm}
 
             />
             <IconButton

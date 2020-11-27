@@ -48,6 +48,11 @@ const eliminarUsuarios = (id) => {
     .post(API_URL_2 + 'eliminar?id=' + id)
 };
 
+const listarUsuariosFiltrado = (busqueda) => {
+  return axios
+    .post(API_URL_2 + 'listarFiltrado?busqueda=' + busqueda)
+};
+
 const exportar = {
   getPublicContent,
   getUserBoard,
@@ -57,6 +62,7 @@ const exportar = {
   modificarUsuarios,
   insertarUsuarios,
   eliminarUsuarios,
+  listarUsuariosFiltrado,
 }
 
 export default exportar;
