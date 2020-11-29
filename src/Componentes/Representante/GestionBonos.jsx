@@ -95,8 +95,6 @@ function GestionBonos (props) {
                 //Para que se actualice y mande a la pantalla principal
                 if(cronograma===undefined || cronograma.length===0){
 
-                         setCronograma(Arrcronograma);
-
                 // /*     API API API API API
                  axios
                  //.get('https://pokeapi.co/api/v2/pokemon')
@@ -127,19 +125,18 @@ function GestionBonos (props) {
       
 
         if(cronograma.length===0){
-          respuesta=  "No hay cronograma";
+          respuesta=  "Cargando Cronograma...";
         }
         else if (cronograma.length>=1){
 
             //cambio de formato de Fecha-super no eficiente :(
-            var formatoFecha1,formatoFecha2;
+            var formatoFecha;
             if(cronograma.length===1 && cronograma[0].fechaini !==null && cronograma[0].fechafin !==null){
                 // console.log('fecha antes:', cronograma[0].fechaini);
-               formatoFecha1=formato( cronograma[0].fechaini); 
-            //    console.log('fecha:',formatoFecha1);
-               cronograma[0].fechaini=formatoFecha1;
-               formatoFecha2=formato( cronograma[0].fechafin);
-               cronograma[0].fechafin=formatoFecha2;
+               formatoFecha=formato( cronograma[0].fechaini); 
+               cronograma[0].fechaini=formatoFecha;
+               formatoFecha=formato( cronograma[0].fechafin);
+               cronograma[0].fechafin=formatoFecha;
                  
                 botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">

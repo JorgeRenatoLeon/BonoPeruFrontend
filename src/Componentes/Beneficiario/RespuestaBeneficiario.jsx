@@ -97,12 +97,15 @@ const StyledTableCell = withStyles((theme) => ({
     });
 
 
-
 //fin de cosas para cabecera
 
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
   }
+function formatoHora(hora){
+    var nuevaHora=hora.substring(0,5); //Extraigo todo antes del : 
+    return nuevaHora;
+}
 function imprimir(){
     //  console.log('imp');
      return window.print();
@@ -110,7 +113,7 @@ function imprimir(){
 //  path: /consulta
 function RespuestaBeneficiario (props) { 
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-         const classes = useStyles();
+        const classes = useStyles();
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
        
             useEffect((cronograma) => {
@@ -130,7 +133,7 @@ function RespuestaBeneficiario (props) {
                 }
             },  [])
        
-       console.log('cronograma:',cronograma);
+        console.log('cronograma:',cronograma);
         var titulo;
         var respuesta;
      
@@ -142,21 +145,57 @@ function RespuestaBeneficiario (props) {
         else if (cronograma.length>=1){
             titulo="Cronograma"
             //cambio de formato de Fecha-super no eficiente :(
-            var formatoFecha1,formatoFecha2;
-            if(cronograma.length===1){
-               formatoFecha1=formato( cronograma[0].fecha); 
-               cronograma[0].fecha=formatoFecha1;
-            }
-            if(cronograma.length===2){
-                formatoFecha1=formato( cronograma[0].fecha); 
-                cronograma[0].fecha=formatoFecha1;
-                formatoFecha2=formato( cronograma[1].fecha); 
-                cronograma[1].fecha=formatoFecha2;
-             }
-             var direccionMaps="https://www.google.com/maps/place/"
-                                +cronograma[0].horariolugarentrega.lugarentrega.direccion+","
-                                +cronograma[0].horariolugarentrega.lugarentrega.distrito.nombre;
+            var formatoFecha=undefined,horaIni=undefined,horaFin=undefined;
+            if(cronograma.length===1 && formatoFecha===undefined && horaIni===undefined && horaFin===undefined){
+                // Manejo de fechas
+                //llamar a la función del formato de fecha DD/MM/AAAA
+               formatoFecha=formato( cronograma[0].fecha); 
+               //Asignar la fecha
+               cronograma[0].fecha=formatoFecha;
 
+               
+                if(horaIni===undefined && horaFin===undefined){
+                     //    Manejo de horas
+                    horaIni=formatoHora(cronograma[0].horaInicio); //HH:mm
+                    horaFin=formatoHora(cronograma[0].horaFin);
+                    cronograma[0].horaInicio=horaIni;
+                    cronograma[0].horaFin=horaFin;
+                }
+                    
+
+
+            }
+            if(cronograma.length===2 && formatoFecha===undefined && horaIni===undefined && horaFin===undefined){
+                //llamar a la función del formato de fecha DD/MM/AAAA
+                formatoFecha=formato( cronograma[0].fecha); 
+                //Asignar la fecha
+                cronograma[0].fecha=formatoFecha;
+                 //llamar a la función del formato de fecha DD/MM/AAAA
+                formatoFecha=formato( cronograma[1].fecha); 
+                //Asignar la fecha
+                cronograma[1].fecha=formatoFecha;
+                //    Manejo de horas
+                if(horaIni===undefined && horaFin===undefined){
+                    // llama a func de formato de hora
+                    horaIni=formatoHora(cronograma[0].horaInicio);//HH:mm
+                    horaFin=formatoHora(cronograma[0].horaFin);//HH:mm  
+                    //asigna en el api               
+                    cronograma[0].horaInicio=horaIni;
+                    cronograma[0].horaFin=horaFin;
+
+                    // llama a func de formato de hora
+                    horaIni=formatoHora(cronograma[1].horaInicio);//HH:mm
+                    horaFin=formatoHora(cronograma[1].horaFin);//HH:mm
+                     //asigna en el api
+                    cronograma[1].horaInicio=horaIni;
+                    cronograma[1].horaFin=horaFin;
+                }
+                
+                
+
+             }
+             
+           
              //Cabecera manejado por headCells
              var mensajeBeneficiario="Usted sí es beneficiario y  cuenta con las siguientes opciones, se le brindará información de cada lugar de entrega y la fecha de recojo.   ";
              //Todoooo la muestra del cronograma está manejado por respuesta
@@ -258,7 +297,7 @@ function RespuestaBeneficiario (props) {
                                 +opcion.horariolugarentrega.lugarentrega.direccion+","
                                 +opcion.horariolugarentrega.lugarentrega.distrito.nombre} 
                                 target="_blank" >
-                                <IconButton  style={{margin:"0px", padding:"0px"}}>
+                                <IconButton >
                                     <LocationOnIcon/>
                                 </IconButton>
                              </a>
@@ -279,8 +318,8 @@ function RespuestaBeneficiario (props) {
 
         }
        
-    
         
+   
     return (
         <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
