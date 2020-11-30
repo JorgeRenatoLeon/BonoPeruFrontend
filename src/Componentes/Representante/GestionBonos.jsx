@@ -27,7 +27,7 @@ function formato(texto){
 */
     // cronograma no iniciado
  // /*    
-    var Arrcronograma = [{ 
+    var ArrcronogramaNulo = [{ 
         fechaini:null, 
         fechafin:null,
         beneficiarios:1024,
@@ -35,18 +35,22 @@ function formato(texto){
 
     }]  
  //*/   
-  
+  var updateCronograma=false;
  function GenerarCronograma(){
+    updateCronograma=true;
      //var llamarAlAlgoritmo;
 
-     /*
-     let Arrcronograma = [{ 
+     
+     let ArrcronogramaFecha = [{ 
             fechaini:"2020-11-28", 
             fechafin:"2020-12-15",
             beneficiarios:1024,
             lugares:32,                       
     
     }]
+    //localStorage.setItem("cronograma", JSON.stringify(result)); 
+    localStorage.setItem("cronograma", ArrcronogramaFecha); 
+    /*
         useEffect((cronograma) => {
 
             //Para que se actualice y mande a la pantalla principal
@@ -66,6 +70,8 @@ function formato(texto){
                 //     setCronograma(apiCronograma);
                 // }
                 //setCronograma(Arrcronograma);
+
+                //updateCronograma=true;
             })
             .catch(() => {
                 console.log('Error al obtener Monitoreo')
@@ -96,9 +102,7 @@ function GestionBonos (props) {
                 if(cronograma===undefined || cronograma.length===0){
 
                 // /*     API API API API API
-                 axios
-                 //.get('https://pokeapi.co/api/v2/pokemon')
-                  .post(API_URL)
+                 axios.post(API_URL)
                  .then(response =>{
                      console.log("API OBT : ",response.data);
                      let apiCronograma = [];
@@ -118,11 +122,20 @@ function GestionBonos (props) {
             },  [])
 
        // console.log('cronograma:',cronograma);
+
         var titulo="Gestión de Bonos";
         var respuesta;
-
         var botones;
-      
+        if(updateCronograma===true){
+             let apiCronograma = [];
+             const cronGuardado = JSON.parse(localStorage.getItem("cronograma")) ;    //La hemos obtenido 
+             apiCronograma.push(cronGuardado)
+             if(apiCronograma){
+                 setCronograma(apiCronograma);
+             }
+
+            
+        }
 
         if(cronograma.length===0){
           respuesta=  "Cargando Cronograma...";
