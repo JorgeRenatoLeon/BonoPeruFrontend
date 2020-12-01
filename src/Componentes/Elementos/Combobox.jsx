@@ -47,6 +47,8 @@ export default function Combobox(props){
   
 
   return(
-          <Select components={{DropdownIndicator, IndicatorSeparator: () => null}} styles={customStyles} options={props.options} placeholder=' ' onChange={seleccionar}/>
+          <Select components={{DropdownIndicator, IndicatorSeparator: () => null}}
+           styles={customStyles} options={props.options} placeholder={props.placeholder} 
+           onChange={seleccionar} isDisabled={props.isDisabled} noOptionsMessage={() => "Sin opciones"}/>
   );
 }

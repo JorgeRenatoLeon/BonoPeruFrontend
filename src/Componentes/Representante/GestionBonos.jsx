@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {setState} from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
@@ -6,6 +6,7 @@ import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
 
 //Para el api
  import { useEffect,useState } from "react";
+import Cronograma from './Cronograma';
 //import { history } from "../../helpers/history";
 
 function formato(texto){
@@ -95,6 +96,9 @@ function GestionBonos (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
         //  const classes = useStyles();
         var respuesta;
+        const [fechaInicioAux,setFechaIni] = useState("2020-11-20");
+        const [fechaFinAux, setFechaFin] = useState("2020-12-10");
+        const [idcronograma,setIdCronograma] =useState(2);
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
 
             useEffect((cronograma) => {
@@ -153,11 +157,17 @@ function GestionBonos (props) {
                cronograma[0].fechaini=formatoFecha;
                formatoFecha=formato( cronograma[0].fechafin);
                cronograma[0].fechafin=formatoFecha;
-                 
                 botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">
                             <Grid container item md={3} justify="center">
-                                <Link to='/cronogramaParaRepresentante' style={{textDecoration:"none"}}>
+                                <Link 
+                                    to={{
+                                        pathname: "/cronogramaParaRepresentante",
+                                        state: { id: idcronograma,
+                                          fechaini: fechaInicioAux,
+                                          fechafin: fechaFinAux}
+                                      }}
+                                    style={{textDecoration:"none"}}>
                                     <Button variant="contained" size="medium" color="primary" >
                                         Ver Cronograma 
                                     </Button>
