@@ -180,13 +180,14 @@ const ConsultasBeneficiarios = (params) => {
     const [mensaje, setMensaje] = useState(null);
 
     const buscarBeneficiario=(texto) =>{
-      var dia = (new Date()).getDate();
-      var mes = (new Date()).getMonth()+1;
+      setMensaje("Cargando...");
+      var dia = ("0" + (new Date()).getDate()).slice(-2);
+      var mes = ("0" + ((new Date()).getMonth() + 1)).slice(-2);
       var anho = (new Date()).getFullYear();
       var dia = anho+'-'+mes+'-'+dia;
-      var horas = (new Date()).getHours();
-      var minutos = (new Date()).getMinutes();
-      var segundos = (new Date()).getSeconds();
+      var horas = ("0" + (new Date()).getHours()).slice(-2);
+      var minutos = ("0" + (new Date()).getMinutes()).slice(-2);
+      var segundos = ("0" + (new Date()).getSeconds()).slice(-2);
       var hora = horas+':'+minutos+':'+segundos;
       console.log(rows[0].id);
       console.log(dia);

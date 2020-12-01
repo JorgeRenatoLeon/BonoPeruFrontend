@@ -18,6 +18,7 @@ import Quejas from "./Componentes/Quejas";
 import PruebaC from "./Componentes/Beneficiario/pruebaC";
 import GestionBonos from './Componentes/Representante/GestionBonos'
 import Monitoreo from "./Componentes/Representante/Monitoreo";
+import Informacion from './Componentes/Beneficiario/Informacion';
 
 import Usuarios from './Admin/Usuarios'
 import Formulario from './Admin/Formulario'
@@ -34,6 +35,7 @@ const App = () => {
           <Route exact path="/lugares" component={BusquedaLugares}/>
           <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
           <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
+          <Route exact path="/informacion" component={Informacion}/>
           <Route exact path='/quejas' component={Quejas}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>

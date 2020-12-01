@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography, Button ,Cointaner, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import React, {Component, useReducer,  useEffect,useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
 import BarraFinal from '../Barras/BarraFinal';
@@ -155,15 +155,18 @@ const useStyles = makeStyles({
 
 
 const Cronograma = (props) => {
+  let data = useLocation();
   const cronogramaInicial={
-    idcronograma: 2,
+    idcronograma: data.state.id,
     iddepartamento:null,
     idprovincia:null,
     iddistrito:null,
-    fechaini:"2020-11-20",
-    fechafin: "2020-12-10",
+    fechaini: data.state.fechaini,
+    fechafin: data.state.fechafin,
     nombre:""
   }
+  console.log(cronogramaInicial.fechaini);
+  console.log(cronogramaInicial.fechafin);
 
   const apiCronograma = (valor)=>{
     console.log(valor);
@@ -296,8 +299,9 @@ const Cronograma = (props) => {
   const [provincias, setProv] =useState([]);
   const [distritos, setDis] =useState([]);
   useEffect(() => {
+    console.log("dentro del use effect",cronogramaInicial);
     apiCronograma(cronogramaInicial);  
-
+    
     DepartamentosService.mostrarDepartamentos().then(response =>{
       let depAux=[];
       response.data.map(dep => {

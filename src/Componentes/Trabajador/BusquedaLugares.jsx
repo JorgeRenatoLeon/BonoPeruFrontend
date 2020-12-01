@@ -450,7 +450,7 @@ const BusquedaLugares = (props) => {
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
                                 <TableCell padding="checkbox">
-                                  <RadioButton id={row.id} cod={row.codigo}
+                                  <RadioButton  id={row.id} cod={row.codigo}
                                     nom={row.nombre} lug={row.lugar}
                                     dir={row.direccion}/>
                                 </TableCell> 
