@@ -2,7 +2,8 @@ import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
-
+//Para la dirección en maps
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 //Para el api
  import { useEffect,useState } from "react";
 import { history } from "../../helpers/history";
@@ -12,9 +13,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import TableContainer from '@material-ui/core/TableContainer';
+import {TableContainer, IconButton } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+
+
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: "5AB9EA",
@@ -61,9 +64,9 @@ const StyledTableCell = withStyles((theme) => ({
   
   EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
+    // onRequestSort: PropTypes.func.isRequired,
+    // order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    // orderBy: PropTypes.string.isRequired,
   };
   
   const useStyles = makeStyles({
@@ -94,17 +97,23 @@ const StyledTableCell = withStyles((theme) => ({
     });
 
 
-
 //fin de cosas para cabecera
 
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
   }
-
+function formatoHora(hora){
+    var nuevaHora=hora.substring(0,5); //Extraigo todo antes del : 
+    return nuevaHora;
+}
+function imprimir(){
+    //  console.log('imp');
+     return window.print();
+}
 //  path: /consulta
 function RespuestaBeneficiario (props) { 
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-         const classes = useStyles();
+        const classes = useStyles();
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
        
             useEffect((cronograma) => {
@@ -124,7 +133,7 @@ function RespuestaBeneficiario (props) {
                 }
             },  [])
        
-       //console.log('cronograma:',cronograma);
+        console.log('cronograma:',cronograma);
         var titulo;
         var respuesta;
      
@@ -136,23 +145,63 @@ function RespuestaBeneficiario (props) {
         else if (cronograma.length>=1){
             titulo="Cronograma"
             //cambio de formato de Fecha-super no eficiente :(
-            var formatoFecha1,formatoFecha2;
-            if(cronograma.length===1){
-               formatoFecha1=formato( cronograma[0].fecha); 
-               cronograma[0].fecha=formatoFecha1;
+            var formatoFecha=undefined,horaIni=undefined,horaFin=undefined;
+            if(cronograma.length===1 && formatoFecha===undefined && horaIni===undefined && horaFin===undefined){
+                // Manejo de fechas
+                //llamar a la función del formato de fecha DD/MM/AAAA
+               formatoFecha=formato( cronograma[0].fecha); 
+               //Asignar la fecha
+               cronograma[0].fecha=formatoFecha;
+
+               
+                if(horaIni===undefined && horaFin===undefined){
+                     //    Manejo de horas
+                    horaIni=formatoHora(cronograma[0].horaInicio); //HH:mm
+                    horaFin=formatoHora(cronograma[0].horaFin);
+                    cronograma[0].horaInicio=horaIni;
+                    cronograma[0].horaFin=horaFin;
+                }
+                    
+
+
             }
-            if(cronograma.length===2){
-                formatoFecha1=formato( cronograma[0].fecha); 
-                cronograma[0].fecha=formatoFecha1;
-                formatoFecha2=formato( cronograma[1].fecha); 
-                cronograma[1].fecha=formatoFecha2;
+            if(cronograma.length===2 && formatoFecha===undefined && horaIni===undefined && horaFin===undefined){
+                //llamar a la función del formato de fecha DD/MM/AAAA
+                formatoFecha=formato( cronograma[0].fecha); 
+                //Asignar la fecha
+                cronograma[0].fecha=formatoFecha;
+                 //llamar a la función del formato de fecha DD/MM/AAAA
+                formatoFecha=formato( cronograma[1].fecha); 
+                //Asignar la fecha
+                cronograma[1].fecha=formatoFecha;
+                //    Manejo de horas
+                if(horaIni===undefined && horaFin===undefined){
+                    // llama a func de formato de hora
+                    horaIni=formatoHora(cronograma[0].horaInicio);//HH:mm
+                    horaFin=formatoHora(cronograma[0].horaFin);//HH:mm  
+                    //asigna en el api               
+                    cronograma[0].horaInicio=horaIni;
+                    cronograma[0].horaFin=horaFin;
+
+                    // llama a func de formato de hora
+                    horaIni=formatoHora(cronograma[1].horaInicio);//HH:mm
+                    horaFin=formatoHora(cronograma[1].horaFin);//HH:mm
+                     //asigna en el api
+                    cronograma[1].horaInicio=horaIni;
+                    cronograma[1].horaFin=horaFin;
+                }
+                
+                
+
              }
+             
+           
              //Cabecera manejado por headCells
              var mensajeBeneficiario="Usted sí es beneficiario y  cuenta con las siguientes opciones, se le brindará información de cada lugar de entrega y la fecha de recojo.   ";
              //Todoooo la muestra del cronograma está manejado por respuesta
             respuesta= rpta.map((rpta,index)   =>   
             <Grid key={rpta.id} container direction="col" justify="center">
-                <Grid container direction="row" item md={12} sm={2} style={{paddingTop: '1.5vh'}}>
+                <Grid  item md={12} xs={12} style={{paddingTop: '1.5vh'}}>
                     <Typography variant="subtitle1" color="inherit">
                         {mensajeBeneficiario}
                      </Typography>   
@@ -182,13 +231,13 @@ function RespuestaBeneficiario (props) {
                 </Grid>
                 
                 <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                     <Grid container direction="row" item md={4} >
+                     <Grid container direction="row" item md={4} xs={4}>
                             <Typography variant="subtitle2" color="inherit">
                                 {'Fecha de recojo: '}
                             </Typography>
                       </Grid>              
                     {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >  
+                        <Grid container direction="row" item md={4} xs={4} >  
                             <Typography variant="subtitle2" color="inherit">
                                     {opcion.fecha} 
                             </Typography> 
@@ -199,13 +248,13 @@ function RespuestaBeneficiario (props) {
                     
                 </Grid> 
                 <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                    <Grid container direction="row" item md={4} >
+                    <Grid container direction="row" item md={4} xs={4} >
                         <Typography variant="subtitle2" color="inherit">
                             {'Rango de horas de recojo: '}
                         </Typography>
                     </Grid>
                     {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >  
+                        <Grid container direction="row" item md={4} xs={4}>  
                             <Typography variant="subtitle2" color="inherit">
                             {opcion.horaInicio + "-" + opcion.horaFin} 
                             </Typography> 
@@ -215,13 +264,13 @@ function RespuestaBeneficiario (props) {
                   
                 </Grid>  
                 <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                    <Grid container direction="row" item md={4} >
+                    <Grid container direction="row" item md={4} xs={4} >
                         <Typography variant="subtitle2" color="inherit">
                             {'Lugar de entrega: '}  
                         </Typography>
                     </Grid>
                     {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >  
+                        <Grid container direction="row" item md={4} xs={4}>  
                             <Typography variant="subtitle2" color="inherit">
                             {opcion.horariolugarentrega.lugarentrega.nombre} 
                             </Typography> 
@@ -233,17 +282,30 @@ function RespuestaBeneficiario (props) {
                 </Grid>  
 
                 <Grid container direction="col" item md={12} style={{paddingTop: '1.5vh'}}>
-                     <Grid container direction="row" item md={4} >                    
+                     <Grid container direction="row" item md={4} xs={4} >                    
                         <Typography variant="subtitle2" color="inherit">
                             {'Dirección del Lugar de entrega: '}     
                         </Typography>
                     </Grid>
                     {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >  
+                        <Grid container direction="row" item md={4} xs={4}>  
                             <Typography variant="subtitle2" color="inherit">
                             {opcion.horariolugarentrega.lugarentrega.direccion}   
                             </Typography> 
+                            <Grid container direction="row" item md={4} xs={4}> 
+                            <a href={"https://www.google.com/maps/place/"
+                                +opcion.horariolugarentrega.lugarentrega.direccion+","
+                                +opcion.horariolugarentrega.lugarentrega.distrito.nombre} 
+                                target="_blank" >
+                                <IconButton >
+                                    <LocationOnIcon/>
+                                </IconButton>
+                             </a>
+                             </Grid>
                         </Grid> 
+                        
+                      
+
                         
                     )) 
                     } 
@@ -256,8 +318,8 @@ function RespuestaBeneficiario (props) {
 
         }
        
-    
         
+   
     return (
         <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
@@ -265,7 +327,7 @@ function RespuestaBeneficiario (props) {
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
                         
-                                <Typography variant="h2" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
                                      {titulo}                                     
                                 </Typography> 
                                 {/* Para leer lo que traigo de beneficiario */}                           
@@ -279,25 +341,28 @@ function RespuestaBeneficiario (props) {
             <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                                {/* <Link to="/prueba"> 
-                                <button>       Prueba      </button>
-                                </Link> */}                                
-                                {/* <h1 style={{color: 'black', margin: 0,padding: 30}}>Información</h1>  */}
-                                
+                        <Grid container item xs={12} justify="center">                       
                                 <Typography variant="h5"  gutterBottom justify="center" >
                                      { respuesta } 
                                 </Typography>     
                         </Grid>          
                     </Grid>
                     <Grid container direction="row" justify="center">
-                        <Grid container item md={2} justify="center">
-                            <Link to='/' style={{textDecoration:"none"}}>
-                                <Button variant="contained" size="small" color="secondary" >
+                        <Grid container item md={3} xs={4} justify="center" style={{textDecoration:"none", paddingTop:"20px"}}>
+                                <Button variant="contained" onClick={imprimir} size="medium" color="primary" >
+                                    Imprimir
+                                </Button>
+                           
+                        </Grid>   
+                        <Grid container item md={3} xs={4} justify="center">
+                            <Link to='/' style={{textDecoration:"none", paddingTop:"20px"}}>
+                                <Button variant="contained" size="medium" color="secondary" >
                                     Salir
                                 </Button>
-                            </Link>
-                        </Grid>                    
+                            </Link>  
+                           
+                        </Grid> 
+                                       
                     </Grid>
                 </Container>             
             </Grid>

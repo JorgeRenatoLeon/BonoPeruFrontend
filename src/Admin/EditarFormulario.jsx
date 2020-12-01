@@ -134,7 +134,7 @@ export default function FormDialog(props) {
             handleClose();
         }
 
-        setOpenConfirmacion(true);
+        //setOpenConfirmacion(true);
     };
 
     return (

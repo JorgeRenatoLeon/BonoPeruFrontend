@@ -138,9 +138,9 @@ const BusquedaLugares = (props) => {
   const [provincia,setSelectedProv] = useState(" ");
   const [distrito,setSelectedDis] = useState(" ");
 
-  /* function apiProvincias(){
-    ProvinciasService.mostrarProvincias(departamento).then(response =>{
-      console.log(departamento);
+  const apiProvincias=(valor)=>{
+    ProvinciasService.mostrarProvincias(valor).then(response =>{
+      console.log(valor,"dentro de la funcion api");
       let provAux=[];
       response.data.map(prov => {
         provAux.push({
@@ -156,12 +156,12 @@ const BusquedaLugares = (props) => {
         console.log('Error al pedir las provincias');
         console.log(props);
     }); 
-  } */
+  } 
 
   const handleComboboxDep=(valor)=>{
     setSelectedDep(valor);
-    console.log(valor,"id depa"); 
-    //apiProvincias();
+    console.log(departamento,"id depa"); 
+    apiProvincias(valor);
   }
 
   const handleComboboxProv=(valor)=>{
@@ -181,6 +181,7 @@ const BusquedaLugares = (props) => {
   let depa= 1;
   let provinciaA =1;
   useEffect(() => {
+    console.log('use');
     LugaresService.obtenerLugares().then(response =>{
       let rowsAux = [];
       response.data.map(lug => {
@@ -214,7 +215,7 @@ const BusquedaLugares = (props) => {
         console.log('Error al pedir los departamentos')
       });
 
-    ProvinciasService.mostrarProvincias(depa).then(response =>{
+    /* ProvinciasService.mostrarProvincias(departamento).then(response =>{
       let provAux=[];
       response.data.map(prov => {
         provAux.push({
@@ -229,7 +230,7 @@ const BusquedaLugares = (props) => {
     .catch(() => {
         console.log('Error al pedir las provincias');
         console.log(props);
-    });
+    }); */
 
     DistritosService.mostrarDistritos(provinciaA).then(response =>{
       let disAux=[];
