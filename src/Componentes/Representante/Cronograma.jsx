@@ -155,6 +155,16 @@ const useStyles = makeStyles({
 
 
 const Cronograma = (props) => {
+  //Para Kaytlin de Johana
+  var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
+  console.log('joh: ',cronogramaGestionBonos) ; //Borralo cuando ya no lo uses, pero aquí está el api que me manda Caro,
+  /* Incluye estos datos, siempre te los pasaré una vez se haya generado el cronograma
+    beneficiarios: 3
+    fechafin: "2020-12-08"
+    fechaini: "2020-11-23"
+    idcronograma: 2
+    lugares: 3
+  */
   let data = useLocation();
   const cronogramaInicial={
     idcronograma: data.state.id,

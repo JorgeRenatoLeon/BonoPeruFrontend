@@ -110,6 +110,7 @@ function GestionBonos (props) {
                  axios.post(API_URL)
                  .then(response =>{
                      console.log("API OBT : ",response.data);
+                     localStorage.setItem("cronogramaKaytlin", JSON.stringify(response.data)); //apenas lo recibo te lo envío
                      let apiCronograma = [];
                      apiCronograma.push(response.data)
                      if(apiCronograma){
