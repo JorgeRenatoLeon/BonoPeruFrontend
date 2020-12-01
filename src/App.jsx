@@ -39,7 +39,7 @@ const App = () => {
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
           <Route exact path="/formulario" component={Formulario}/>
-          <RutaProtegida path="/bonos" component={GestionBonos}         
+          <Route path="/bonos" component={GestionBonos}         
           />
           <Route exact path="/consulta" >  {/* pantalla de Johana :D */}
             <BarraInicial/>

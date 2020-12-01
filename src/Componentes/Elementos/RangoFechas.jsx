@@ -16,15 +16,26 @@ class RangoFechas extends Component{
             hideKeyboardShortcutsPanel: true,
             minimumNights: 0,
         }
+        console.log(this.state);
+    }
+
+    capturarFecha(startDate,endDate){
+        //({ startDate, endDate }) => this.setState({ startDate, endDate })
+        //({startDate,endDate}) => this.capturarFecha(startDate,endDate)
+        this.setState({ startDate, endDate });
+        console.log(startDate.toDate(), "fecha ini");
+        console.log(endDate, "fecha fin");
+        this.props.onCambio(startDate,endDate);
     }
     render(){
+
         return(
             <DateRangePicker
                 startDate={this.state.startDate} // momentPropTypes.momentObj or null,
                 startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
                 endDate={this.state.endDate} // momentPropTypes.momentObj or null,
                 endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-                onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+                onDatesChange={({startDate,endDate}) => this.capturarFecha(startDate,endDate)} // PropTypes.func.isRequired,
                 focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
                 onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
                 startDatePlaceholderText= "Fecha inicio"
@@ -32,7 +43,9 @@ class RangoFechas extends Component{
                 hideKeyboardShortcutsPanel={this.state.hideKeyboardShortcutsPanel}
                 minimumNights={this.state.minimumNights}
             />
+            
         )
+        
     }
 }
 

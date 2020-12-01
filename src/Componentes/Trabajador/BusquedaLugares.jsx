@@ -134,55 +134,15 @@ const useStyles = makeStyles({
 
 const BusquedaLugares = (props) => {
 
-  const [departamento,setSelectedDep] = useState(" ");
-  const [provincia,setSelectedProv] = useState(" ");
-  const [distrito,setSelectedDis] = useState(" ");
-
-  const apiProvincias=(valor)=>{
-    ProvinciasService.mostrarProvincias(valor).then(response =>{
-      console.log(valor,"dentro de la funcion api");
-      let provAux=[];
-      response.data.map(prov => {
-        provAux.push({
-              value: prov.idprovincia,
-              label: prov.nombre,
-          });
-      });
-      setProv(provAux);
-      console.log(provincias);
-
-    })
-    .catch(() => {
-        console.log('Error al pedir las provincias');
-        console.log(props);
-    }); 
-  } 
-
-  const handleComboboxDep=(valor)=>{
-    setSelectedDep(valor);
-    console.log(departamento,"id depa"); 
-    apiProvincias(valor);
+  const datosInicio ={
+    iddepartamento: null,
+    idprovincia:null,
+    iddistrito: null,
+    nombre: ""
   }
 
-  const handleComboboxProv=(valor)=>{
-    setSelectedProv(valor);
-    console.log(valor,"id prov");
-  }
-
-  const handleComboboxDis=(valor)=>{
-    setSelectedDis(valor);
-    console.log(valor,"id dis");
-  }
-
-  const [departamentos, setDep] = useState([]);
-  const [rows, setRows] = useState([]);
-  const [provincias, setProv] =useState([]);
-  const [distritos, setDis] =useState([]);
-  let depa= 1;
-  let provinciaA =1;
-  useEffect(() => {
-    console.log('use');
-    LugaresService.obtenerLugares().then(response =>{
+  const apiLugares=(valor)=>{
+    LugaresService.obtenerLugares(valor).then(response =>{
       let rowsAux = [];
       response.data.map(lug => {
         rowsAux.push({
@@ -199,24 +159,26 @@ const BusquedaLugares = (props) => {
     .catch(() => {
       console.log('Error al obtener Lugares')
     });
+  }
 
-    DepartamentosService.mostrarDepartamentos().then(response =>{
-      let depAux=[];
-      response.data.map(dep => {
-        depAux.push({
-              value: dep.iddepartamento,
-              label: dep.nombre,
-          });
-      });
-      setDep(depAux);
-      console.log(departamentos);
-      })
-      .catch(() => {
-        console.log('Error al pedir los departamentos')
-      });
+  const [departamento,setSelectedDep] = useState(null);
+  const [provincia,setSelectedProv] = useState(null);
+  const [distrito,setSelectedDis] = useState(null);
 
-    /* ProvinciasService.mostrarProvincias(departamento).then(response =>{
+  const [cbxProv, setStateCbxProv] = useState(true);
+  const [cbxDis,setStateCbxDis] = useState(true);
+
+  const apiProvincias=(valor)=>{
+    setStateCbxProv(false);
+    console.log(cbxProv);
+    ProvinciasService.mostrarProvincias(valor).then(response =>{
+      console.log(valor,"dentro de la funcion api");
       let provAux=[];
+      if(response.data.length> 0)
+        provAux.push({
+          value: 0,
+          label: "Provincia",
+        });   
       response.data.map(prov => {
         provAux.push({
               value: prov.idprovincia,
@@ -230,10 +192,18 @@ const BusquedaLugares = (props) => {
     .catch(() => {
         console.log('Error al pedir las provincias');
         console.log(props);
-    }); */
+    }); 
+  } 
 
-    DistritosService.mostrarDistritos(provinciaA).then(response =>{
+  const apiDistritos=(valor)=>{
+    setStateCbxDis(false);
+    DistritosService.mostrarDistritos(valor).then(response =>{
       let disAux=[];
+      if(response.data.length> 0)
+      disAux.push({
+        value: 0,
+        label: "Distrito",
+      });
       response.data.map(prov => {
         disAux.push({
               value: prov.iddistrito,
@@ -248,6 +218,98 @@ const BusquedaLugares = (props) => {
         console.log('Error al pedir los distritos');
         console.log(props);
     });
+  }
+
+  const handleComboboxDep=(valor)=>{
+    setSelectedDep(valor);
+    
+    if(valor === 0) {
+      handleComboboxProv(0);
+      handleComboboxDis(0);
+      setStateCbxProv(true);
+      setStateCbxDis(true);
+    }else{
+      console.log(departamento,"id depa"); 
+      apiProvincias(valor);
+      const filtroLugar ={
+        iddepartamento: valor,
+        idprovincia: null,
+        iddistrito: null,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
+    }
+  }
+
+  const handleComboboxProv=(valor)=>{
+    setSelectedProv(valor);
+    console.log(valor, "valor dentro de prov combo");
+    if(valor === 0){
+      setStateCbxDis(true);
+      handleComboboxDis(0);
+    }else{
+      console.log(valor,"id prov");
+      apiDistritos(valor);
+      const filtroLugar ={
+        iddepartamento: departamento,
+        idprovincia: valor,
+        iddistrito: null,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
+    }
+  }
+
+  const handleComboboxDis=(valor)=>{
+    setSelectedDis(valor);
+    console.log(valor,"id dis");
+    const filtroLugar ={
+      iddepartamento: departamento,
+      idprovincia: provincia,
+      iddistrito: valor,
+      nombre: ""
+    }
+    apiLugares(filtroLugar);
+  }
+
+  const buscarLugar=(nombre)=>{
+    const nombreLugar ={
+      iddepartamento: departamento,
+      idprovincia: provincia,
+      iddistrito: distrito,
+      nombre: nombre
+    }
+    apiLugares(nombreLugar);
+  }
+
+  const [departamentos, setDep] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [provincias, setProv] =useState([]);
+  const [distritos, setDis] =useState([]);
+ 
+  useEffect(() => {
+    console.log('use');
+    apiLugares(datosInicio);
+
+    DepartamentosService.mostrarDepartamentos().then(response =>{
+      let depAux=[];
+      if(response.data.length> 0)
+      depAux.push({
+        value: 0,
+        label: "Departamento",
+      });
+      response.data.map(dep => {
+        depAux.push({
+              value: dep.iddepartamento,
+              label: dep.nombre,
+          });
+      });
+      setDep(depAux);
+      console.log(departamentos);
+      })
+      .catch(() => {
+        console.log('Error al pedir los departamentos')
+      });
   
   },[]);
     
@@ -319,10 +381,13 @@ const BusquedaLugares = (props) => {
         setSelectedLug(lug);
         setSelectedDir(dir);
     }
-    
+
+
+    const [nomLug, setLug] = useState("");
     return ( 
         <Grid>
-            <BarraInicial/>              
+            <BarraInicial/>  
+            <Grid style={{minHeight: "83vh"}}>            
             <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <Grid container direction="row" justify="center">
@@ -340,36 +405,35 @@ const BusquedaLugares = (props) => {
                         <Typography variant="subtitle1" color="inherit">
                             Departamento:
                         </Typography>
-                        <Combobox options={departamentos} onSeleccion={handleComboboxDep} value={departamento}/>
+                        <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
+                        value={departamento} placeholder="Departamento"/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>
-                        <Combobox options={provincias} onSeleccion={handleComboboxProv} value={provincia}/>
+                        <Combobox options={provincias} onSeleccion={handleComboboxProv} 
+                        value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
-                        <Combobox options={distritos} onSeleccion={handleComboboxDis} value={distrito}/>
+                        <Combobox options={distritos} onSeleccion={handleComboboxDis} 
+                        value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
                     </Grid>
                     <Grid container direction="row"  item xs={6} justify="space-evenly" alignItems="center">
                         <Typography variant="subtitle1" color="inherit">
                             Buscar:
                         </Typography>
-                        <BuscadorLugares mensaje = " "></BuscadorLugares> 
+                        <BuscadorLugares mensaje = "Ingrese el nombre del lugar" buscar={buscarLugar} nombre={nomLug}></BuscadorLugares> 
                     </Grid>
                 </Grid>
             </Paper> 
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>
+                {rows.length > 0?
                 <Grid className={classes.paper}>                      
                     <TableContainer>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         aria-label="enhanced table"
-                        //handleRemove={this.handleRemove}
-                        //startEditing={this.startEditing}
-                        //editIdx={this.state.editIdx}
-                        //stopEditing={this.stopEditing}
-                        //handleSave={this.handleSave}
                     >
                         <EnhancedTableHead
                         classes={classes}
@@ -397,7 +461,6 @@ const BusquedaLugares = (props) => {
                                 </TableRow>
                             );
                             })}
-                        
                         </TableBody>
                         
                     </Table>
@@ -409,9 +472,19 @@ const BusquedaLugares = (props) => {
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}                    
                     />
-                </Grid>                  
+                </Grid>:<AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
+                <Toolbar>
+                    <Grid container direction="row" justify="center">
+                        <Grid container item xs={12} justify="center">
+                            <Typography variant="h3"  gutterBottom justify="center" >
+                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
+                            </Typography> 
+                        </Grid>                                                  
+                    </Grid>
+                </Toolbar>
+            </AppBar>}                 
             </Paper> 
             <Grid container direction="column" justify="flex-start" alignItems="center" >
                 <Link 
@@ -429,7 +502,7 @@ const BusquedaLugares = (props) => {
                     </Button> 
                 </Link> 
             </Grid>    
-                
+            </Grid>    
             <BarraFinal/>
  
         </Grid>

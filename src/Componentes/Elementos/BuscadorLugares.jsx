@@ -25,23 +25,36 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function Buscador(props) {
+const BuscadorLugares=(props)=> {
   const classes = useStyles();
-  const mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
+  const mensaje = props.mensaje ? props.mensaje : "";
+
+  const [searchText,setSearchText] =React.useState("");
+  const handleSearchText = event =>{
+      setSearchText(event.target.value);
+      console.log(searchText);
+  } 
+
+  const handleBuscar = () =>{
+    props.buscar(searchText);
+  }
 
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
+        value={searchText}
         className={classes.input}
+        onChange={handleSearchText}
         placeholder= {mensaje}
         style={{padding:6}}
         inputProps={{ "aria-label": "search google maps" }}
       />
       <IconButton
-        type="submit"
+        //type="submit"
         className={classes.iconButton}
         aria-label="search"
         size="medium"
+        onClick={handleBuscar}
       >
         <SearchIcon
           style={{
@@ -58,3 +71,5 @@ export default function Buscador(props) {
     </Paper>
   );
 }
+
+export default BuscadorLugares;
