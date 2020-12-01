@@ -94,6 +94,7 @@ function formato(texto){
 function GestionBonos (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
         //  const classes = useStyles();
+        var respuesta;
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
 
             useEffect((cronograma) => {
@@ -113,7 +114,9 @@ function GestionBonos (props) {
                      //setCronograma(Arrcronograma);
                  })
                  .catch(() => {
-                     console.log('Error al obtener Monitoreo')
+                     console.log('Error al obtener Monitoreo');
+                     respuesta="No se ha podido cargar el cronograma. Vuelva a intentarlo en unos minutos";
+                     
                  });
                 // */
 
@@ -124,7 +127,7 @@ function GestionBonos (props) {
        // console.log('cronograma:',cronograma);
 
         var titulo="Gestión de Bonos";
-        var respuesta;
+       
         var botones;
         if(updateCronograma===true){
              let apiCronograma = [];
@@ -209,6 +212,10 @@ function GestionBonos (props) {
                       </Grid>
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
+                            {/* Manejo de input TEXT FIELD para que pongamos un cronograma -
+                               enviar por params la fecha de inicio, el id mio
+                            */}
+                            {/* <TextField className="inputRounded" id="outlined-basic" label={null} variant="outlined" /> */}
                             <Typography variant="subtitle2" color="inherit">
                                     {opcion.fechaini?opcion.fechaini:"Por definir"}
                             </Typography>
