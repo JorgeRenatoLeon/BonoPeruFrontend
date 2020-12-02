@@ -451,7 +451,7 @@ function GestionBonos (props) {
                         <Grid container direction="row" item md={4} >
                             <Typography variant="subtitle2" color="inherit">
                                     {/* Cambiaría y sería por el nombre */}
-                                    {opcion.fechaini?opcion.fechaini:"Por definir"}
+                                    {opcion.nombre}
                             </Typography>
                         </Grid>
 
