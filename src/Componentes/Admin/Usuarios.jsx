@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import BarraInicial from '../Componentes/Barras/BarraInicial'
-import BarraFinal from '../Componentes/Barras/BarraFinal'
+import BarraInicial from '../Barras/BarraInicial'
+import BarraFinal from '../Barras/BarraFinal'
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,16 +13,22 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { AppBar, Container, Grid } from "@material-ui/core"
 import Buscador from './BuscadorUsuarios'
 import Formulario from './Formulario'
 import VerFormulario from './VerFormulario'
 import EditarFormulario from './EditarFormulario'
 import EliminarUsuario from "./EliminarUsuario";
-import UsuariosService from "../Servicios/user.service";
+import UsuariosService from "../../Servicios/user.service";
 
-function createData(id, nombre, apellido, correo) {
-  return { id, nombre, apellido, correo };
+function createData(id, nombre, apellido, usuario, correo) {
+  return { id, nombre, apellido, usuario, correo };
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 /*
@@ -79,7 +85,8 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido' },
-  { id: 'correo', numeric: false, disablePadding: false, label: 'Nombre de usuario' },
+  { id: 'usuario', numeric: false, disablePadding: false, label: 'Nombre de usuario' },
+  { id: 'correo', numeric: false, disablePadding: false, label: 'Correo' },
   { id: 'editar', numeric: false, disablePadding: false, label: ' ' }
 ];
 
@@ -201,6 +208,19 @@ export default function EnhancedTable() {
     setUsuario(usuarios.filter((row, j) => j !== i));
   };
 
+  const [openConfirmacion, setOpenConfirmacion] = useState(false);
+
+  const handleOpenConfirmacion = (event, reason) => {
+    setOpenConfirmacion(true);
+  };
+
+  const handleCloseConfirmacion = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenConfirmacion(false);
+  };
+
   const startEditing = i => {
     state.editIdx = i;
   };
@@ -218,11 +238,28 @@ export default function EnhancedTable() {
     UsuariosService.listarUsuariosFiltrado(valores).then(response => {
       let userAux = [];
       response.data.map(user => {
-        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username));
+        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
       });
 
       setUsuario(userAux);
       console.log(userAux);
+    })
+      .catch(() => {
+        console.log('Error al actualizar la tabla')
+      });
+  }
+
+  const listarTabla = () => {
+    UsuariosService.listarUsuarios().then(response => {
+
+      let userAux = [];
+      response.data.map(user => {
+        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
+      });
+
+      setUsuario(userAux);
+      console.log(userAux);
+      handleOpenConfirmacion();
     })
       .catch(() => {
         console.log('Error al listar usuarios')
@@ -236,7 +273,7 @@ export default function EnhancedTable() {
 
       let userAux = [];
       response.data.map(user => {
-        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username));
+        userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
       });
 
       setUsuario(userAux);
@@ -258,7 +295,7 @@ export default function EnhancedTable() {
               <Grid container direction="row" justify="center">
                 <Grid container item xs={10} justify="center">
                   <Typography variant="h3" gutterBottom justify="center" >
-                    <h3 style={{ color: 'black', margin: 20, justify: "center" }}>Listado de Usuarios</h3>
+                    <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Usuarios</h1>
                   </Typography>
                 </Grid>
               </Grid>
@@ -270,7 +307,7 @@ export default function EnhancedTable() {
           <Grid container direction="row" justify="left">
             <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="center" >
               <Buscador names={usuarios} onBuscar={actualizarTabla}></Buscador>
-              <Formulario></Formulario>
+              <Formulario onActualizar={listarTabla} />
             </Grid>
           </Grid>
 
@@ -302,13 +339,14 @@ export default function EnhancedTable() {
                           <TableRow hover tabIndex={-1} key={row.id}>
                             <TableCell align="left">{row.nombre}</TableCell>
                             <TableCell align="left">{row.apellido}</TableCell>
+                            <TableCell align="left">{row.usuario}</TableCell>
                             <TableCell align="left">{row.correo}</TableCell>
 
                             {<TableCell>
                               <Grid container item xs={10} justify="center">
                                 <VerFormulario usuario={row} />
-                                <EditarFormulario usuario={row} />
-                                <EliminarUsuario usuario={row} />
+                                <EditarFormulario usuario={row} onActualizar={listarTabla} />
+                                <EliminarUsuario usuario={row} onActualizar={listarTabla} />
                               </Grid>
                             </TableCell>}
                           </TableRow>
@@ -329,6 +367,11 @@ export default function EnhancedTable() {
                 onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Grid>
+            <Snackbar open={openConfirmacion} autoHideDuration={3000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
+              <Alert open={openConfirmacion} onClose={handleCloseConfirmacion} severity="success">
+                Actualización exitosa
+                </Alert>
+            </Snackbar>
           </div>
         </div>
       </Container>
