@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 
 const Queja=()=>{
-    
+    const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt"))[0];    //RespuestaBeneficiario.jsx            
+    console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega          
     return ( 
         <Grid>    
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginBottom: 20,  boxShadow: 'none'}}>

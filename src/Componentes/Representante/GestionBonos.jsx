@@ -58,9 +58,7 @@ function formato(texto){
    
        // useEffect((cronograma) => {
          //   if(cronograma===undefined || cronograma.length===0){
-
-                 //   setCronograma(Arrcronograma);
-            const escribePantalla = JSON.parse(localStorage.getItem("escribePantalla")) ;    //La hemos obtenido 
+                  //   setCronograma(Arrcronograma);
             const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
             const soloNombre = JSON.parse(localStorage.getItem("soloNombre")) ;    //La hemos obtenido 
 
@@ -69,7 +67,7 @@ function formato(texto){
                     // nombre:"BonoSoloJoh", //<3
                     nombre:soloNombre, 
                     // fechaini:"2020-12-3", //AAAA-MM-DD
-                     fechaini:formatoInverso(escribePantalla.FechaInicio), //AAAA-MM-DD
+                     fechaini:formatoInverso(soloFecha), //AAAA-MM-DD
                     fechafin:"",
                     usuariocreacion:1
             }
@@ -82,7 +80,7 @@ function formato(texto){
                  apiCronograma.push(response.data)
                  if(apiCronograma){
                      //setCronograma(apiCronograma);
-                     localStorage.setItem("Gcronograma", JSON.stringify(apiCronograma));
+                     localStorage.setItem("Gcronograma", JSON.stringify(response.data));
                      history.push('/bonos');
                  }
                 updateCronograma=true;
@@ -113,12 +111,12 @@ function formato(texto){
 
 function guardarFecha(event){
     
-    localStorage.setItem("soloFecha",event); 
+    localStorage.setItem("soloFecha",JSON.stringify(event)); 
     console.log('e: ',event);
 }
 function guardarNombre(event){
     
-    localStorage.setItem("soloNombre",event); 
+    localStorage.setItem("soloNombre",JSON.stringify(event)); 
     console.log('e: ',event);
 }
 

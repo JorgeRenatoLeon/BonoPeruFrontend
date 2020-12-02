@@ -32,7 +32,8 @@ function Quejas() {
         { value: 'tipo2', label: 'TIPO 2' },
         { value: 'tipo3', label: 'TIPO 3' }
     ];
-    
+    const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt")) ;   //RespuestaBeneficiario.jsx            
+    console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega 
     return ( 
         <Grid>
             <BarraInicial/>             
