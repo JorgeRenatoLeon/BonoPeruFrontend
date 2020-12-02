@@ -167,12 +167,12 @@ const Cronograma = (props) => {
   */
   let data = useLocation();
   const cronogramaInicial={
-    idcronograma: data.state.id,
+    idcronograma: cronogramaGestionBonos.idcronograma,
     iddepartamento:null,
     idprovincia:null,
     iddistrito:null,
-    fechaini: data.state.fechaini,
-    fechafin: data.state.fechafin,
+    fechaini: cronogramaGestionBonos.fechaini,
+    fechafin: cronogramaGestionBonos.fechafin,
     nombre:""
   }
   console.log(cronogramaInicial.fechaini);
