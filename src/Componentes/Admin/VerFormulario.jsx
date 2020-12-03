@@ -62,6 +62,18 @@ export default function FormDialog(props) {
                             label="Nombre de usuario"
                             id="username"
                             hintText="Nombre de usuario"
+                            value={props.usuario.usuario}
+                            InputProps={{ readOnly: true, }}
+                        />
+                    </div>
+                    <br />
+                    <div sytle="padding: 15px">
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            label="Correo"
+                            id="correo"
+                            hintText="Nombre de usuario"
                             value={props.usuario.correo}
                             InputProps={{ readOnly: true, }}
                         />

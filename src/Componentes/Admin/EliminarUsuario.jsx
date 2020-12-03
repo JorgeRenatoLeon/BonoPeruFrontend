@@ -10,7 +10,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
 
-import UsuariosService from "../Servicios/user.service";
+import UsuariosService from "../../Servicios/user.service";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -31,12 +31,14 @@ export default function AlertDialogSlide(props) {
         console.log(props.usuario.id);
         UsuariosService.eliminarUsuarios(props.usuario.id).then(response => {
             console.log(props.usuario.id);
+            props.onActualizar();
+            //window.location.reload();
         })
             .catch(() => {
                 console.log('Error al eliminar el usuario')
             });
 
-        window.location.reload();
+
     };
 
     return (
@@ -67,7 +69,7 @@ export default function AlertDialogSlide(props) {
                     </Link>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="secondary" onClick={handleClose}>
-                    npm        Cancelar
+                            npm        Cancelar
             </Button>
                     </Link>
                 </DialogActions>
