@@ -21,6 +21,7 @@ import Monitoreo from "./Componentes/Representante/Monitoreo";
 import Informacion from './Componentes/Beneficiario/Informacion';
 
 import Usuarios from './Componentes/Admin/Usuarios'
+import Formulario from './Componentes/Admin/Formulario'
 
 const App = () => {
 
