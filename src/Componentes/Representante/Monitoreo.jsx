@@ -3,6 +3,9 @@ import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
 //  import { Link } from "react-router-dom"
  import Chart from "../../Componentes/Graficos/Chart.js"
+ import Line from "../../Componentes/Graficos/Line.js"
+ import Bar from "../../Componentes/Graficos/Bar.js"
+ import Pie from "../../Componentes/Graficos/Pie.js"
  import { makeStyles } from '@material-ui/core/styles';
  import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
@@ -53,63 +56,52 @@ function formato(texto){
 //Para el chart reporte
 
  
-  
-  var     chartData={
+  var labels=['15/12/2020', '16/12/2020', '17/12/2020', '18/12/2020', '19/12/2020', '20/12/2020'];
+  var data=[    5,        2,        3,      9  ,        10,        2  ];
+  var backgroundColor=[    'rgba(179, 229, 252, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',     'rgba(255, 159, 64, 1)',     'rgba(255, 99, 132, 1)'   ];
+
+  var     chartDataEntregados={
         //fila de nombre
         //Líne: Arreglo de Dias
-         labels: ['15/12/2020', '16/12/2020', '17/12/2020', '18/12/2020', '19/12/2020', '20/12/2020'],
+         labels: labels,
          datasets:[
            {
-             label:'xd',
-             data:[
-               5,        2,        3,      9  ,        10,        2
-             ],
-             backgroundColor:[
-               'rgba(255, 102, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)',
-               'rgba(153, 102, 255, 0.6)',     'rgba(255, 159, 64, 0.6)',     'rgba(255, 99, 132, 0.6)'   ]
-           },
-           
+             label:'Bonos Entregados',
+             data:data,
+             backgroundColor:backgroundColor,
+           }
          ]
        }
 
 
 //fin del chart reporte  
-  const API_URL = "http://localhost:8084/api/encuesta/";
+  const ENTREGADOS = "http://localhost:8084/api//";
   //  path: /monitoreo
 
 function Monitoreo (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-      
+         
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
-       
-            useEffect((cronograma) => {
-                //Para que se actualice y mande a la pantalla principal
-                if(cronograma===undefined || cronograma.length===0){                   
-                //     else{
-                         setCronograma(Arrcronograma);
-                 }
-
-                 /*     API API API API API
-                 axios
-                 .get('https://pokeapi.co/api/v2/pokemon')
-                 // .post(API_URL)
+        const [datosEntregados,setdatosEntregados]=useState([chartDataEntregados]); //Set cronograma, creando y un estado de toda la función
+     /*
+                    //  API API API API API
+                 axios.post(ENTREGADOS)
                  .then(response =>{
-                     console.log("API OBT pokemon: ",response.data);
-                     let apiCronograma = []
-                     apiCronograma.push(response.data)
-                     if(apiCronograma){
-                         setCronograma(apiCronograma);
+                     console.log("API entregado: ",response.data);
+                     let apiArray = []
+                     apiArray.push(response.data)
+                     if(apiArray){
+                         setCronograma(apiArray);
                      }
-                     //setCronograma(Arrcronograma);
+                     
                  })
                  .catch(() => {
-                     console.log('Error al obtener Monitoreo')
+                     console.log('Error al obtener Entregados');
                  });
-                 */
-
-            },  [])
-
-       // console.log('cronograma:',cronograma);
+                 
+        */
+       //if(Arrcronograma)       setCronograma(Arrcronograma);
         var titulo="Monitoreo";
             var respuesta;
             const classes = useStyles();
@@ -121,7 +113,11 @@ function Monitoreo (props) {
             <Grid key={rpta.id} container direction="col" justify="center">
                 {/* <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}> */}
                    
-                <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/>
+                <Pie chartData={chartDataEntregados}  md="6" nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                <Bar chartData={chartDataEntregados} md="6" nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                <Line chartData={chartDataEntregados} md="10" nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                
+                {/* <Chart chartData={chartDataEntregados} location="JohanaLand" legendPosition="bottom"/> */}
                {/* Reporte de Beneficiarios */}
 
                <Card className={classes.root} variant="outlined">

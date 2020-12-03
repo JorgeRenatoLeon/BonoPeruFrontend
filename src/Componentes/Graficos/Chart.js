@@ -24,7 +24,7 @@
            options={{
              title:{
                display:this.props.displayTitle,
-               text:'Día a día del Cronograma '+this.props.location,
+               text:'Cronogramas entregados',
                fontSize:25
              },
              legend:{
