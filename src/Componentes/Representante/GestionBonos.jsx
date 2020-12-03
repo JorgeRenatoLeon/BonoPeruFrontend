@@ -19,9 +19,11 @@ function formato(texto){
     console.log(texto);
     var i=texto.indexOf('/',1); //Comienza desde 0
     console.log(i);
-    var dia=texto.substring(0,i);
+    var dia=texto.substring(0,i); 
+        if(dia<10) dia="0"+dia;
     var j=(texto.substring(i+1,texto.length)).indexOf('/',1); //Comienza desde 0
-    var mes=(texto.substring(i+1,texto.length)).substring(0,j);
+    var mes=(texto.substring(i+1,texto.length)).substring(0,j); 
+        if(mes<10) mes="0"+mes;
     var anio=(texto.substring(i+1,texto.length)).substring(j+1,texto.length);
 
     return anio +"-"+mes+"-"+dia;
@@ -53,37 +55,31 @@ function formato(texto){
 
 
   var updateCronograma=false;
+  var yaSeGeneroCronograma=false;
  function GenerarCronograma(){
+     //Desactivo el botón de Generar Cronograma
         updateCronograma=true; 
-   
-       // useEffect((cronograma) => {
-         //   if(cronograma===undefined || cronograma.length===0){
-                  //   setCronograma(Arrcronograma);
             const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
             const soloNombre = JSON.parse(localStorage.getItem("soloNombre")) ;    //La hemos obtenido 
 
-            console.log('pantalla',soloFecha);
+            console.log('soloNombre',soloNombre);
             const params=     {
-                    // nombre:"BonoSoloJoh", //<3
                     nombre:soloNombre, 
-                    // fechaini:"2020-12-3", //AAAA-MM-DD
-                     fechaini:formatoInverso(soloFecha), //AAAA-MM-DD
+                    fechaini:formatoInverso(soloFecha), //AAAA-MM-DD
                     fechafin:"",
                     usuariocreacion:1
             }
-
+            console.log('params',params);
               //   API de Ari
             axios.post(ARI_URL,params)
             .then(response =>{
                 console.log("ARI url ",response.data);
-                 let apiCronograma = [];
-                 apiCronograma.push(response.data)
-                 if(apiCronograma){
-                     //setCronograma(apiCronograma);
-                     localStorage.setItem("Gcronograma", JSON.stringify(response.data));
-                     history.push('/bonos');
-                 }
-                updateCronograma=true;
+                let apiCronograma = [];
+                apiCronograma.push(response.data);
+                localStorage.setItem("Gcronograma", JSON.stringify(response.data));
+                history.push('/bonos'); //No hace push :(
+                yaSeGeneroCronograma=true;
+               
             })
             .catch(() => {
                 console.log('Error al obtener Cronograma generado')
@@ -221,10 +217,13 @@ function GestionBonos (props) {
             
         }
         var f = new Date();
+        var dd = f.getDate()+1;//Mañana
+        var mm = f.getMonth()+1; 
+        if(dd<10)           dd='0'+dd;
+        if(mm<10)           mm='0'+mm;
         var escribePantalla=     {
             nombre:"Bono", //<3
-            // FechaInicio:"2020-12-3", //AAAA-MM-DD
-            FechaInicio:(f.getDate() +1)+ "/" + (f.getMonth() +1) + "/" + f.getFullYear(), //AAAA-MM-DD
+            FechaInicio:dd+ "/" + mm+ "/" + f.getFullYear(), //AAAA-MM-DD
         }
         if( cronograma[0].idcronograma==="" ){//entra por el api-no hay cronograma
           respuesta=  "Cargando Cronograma...";
@@ -372,7 +371,7 @@ function GestionBonos (props) {
           
         }
         
-        else if (cronograma[0].idcronograma!==""  && cronograma[0].idcronograma!=="inicial" ){
+        else if (cronograma[0].idcronograma!==""  && cronograma[0].idcronograma!=="inicial" ){//Existe un id
 
             //cambio de formato de Fecha-super no eficiente :(
             var formatoFecha;

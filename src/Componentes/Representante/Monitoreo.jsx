@@ -2,7 +2,7 @@ import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
 //  import { Link } from "react-router-dom"
-//  import Chart from "../../Componentes/Graficos/Chart.js"
+ import Chart from "../../Componentes/Graficos/Chart.js"
  import { makeStyles } from '@material-ui/core/styles';
  import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
@@ -50,7 +50,30 @@ function formato(texto){
     },
   });
 
+//Para el chart reporte
+
+ 
   
+  var     chartData={
+        //fila de nombre
+        //Líne: Arreglo de Dias
+         labels: ['15/12/2020', '16/12/2020', '17/12/2020', '18/12/2020', '19/12/2020', '20/12/2020'],
+         datasets:[
+           {
+             label:'xd',
+             data:[
+               5,        2,        3,      9  ,        10,        2
+             ],
+             backgroundColor:[
+               'rgba(255, 102, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)',
+               'rgba(153, 102, 255, 0.6)',     'rgba(255, 159, 64, 0.6)',     'rgba(255, 99, 132, 0.6)'   ]
+           },
+           
+         ]
+       }
+
+
+//fin del chart reporte  
   const API_URL = "http://localhost:8084/api/encuesta/";
   //  path: /monitoreo
 
@@ -98,7 +121,7 @@ function Monitoreo (props) {
             <Grid key={rpta.id} container direction="col" justify="center">
                 {/* <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}> */}
                    
-                {/* <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/> */}
+                <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/>
                {/* Reporte de Beneficiarios */}
 
                <Card className={classes.root} variant="outlined">
