@@ -5,53 +5,56 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
+import UsuariosService from "../../Servicios/user.service";
 
-import UsuariosService from "../Servicios/user.service";
 
-export default function FormDialog() {
+export default function FormDialog(props) {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [nombre, setNombre] = useState(props.usuario.nombre);
+    const [apellido, setApellido] = useState(props.usuario.apellido);
+    const [usuario, setUsuario] = useState(props.usuario.usuario);
+    const [correo, setCorreo] = useState(props.usuario.correo);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
-        setUsuario("");
-        setApellido("");
-        setNombre("");
+        //setUsuario("");
+        //setApellido("");
+        //setNombre("");
         setUsuarioErr("");
         setNombreErr("");
         setApellidoErr("");
-
+        setCorreo("");
         setOpen(false);
     };
 
-    const [nombre, setNombre] = useState("");
-    const [apellido, setApellido] = useState("");
-    const [usuario, setUsuario] = useState("");
-
     const changeNombre = e => {
         setNombre(e.target.value);
-        setNombreErr("");
     };
 
     const changeApellido = e => {
         setApellido(e.target.value);
-        setApellidoErr("");
     };
 
     const changeUsuario = e => {
         setUsuario(e.target.value);
-        setUsuarioErr("");
+    };
+
+    const changeCorreo = e => {
+        setCorreo(e.target.value);
+        setCorreoErr("");
     };
 
     const [nombreErr, setNombreErr] = useState("");
     const [apellidoErr, setApellidoErr] = useState("");
     const [usuarioErr, setUsuarioErr] = useState("");
+    const [correoErr, setCorreoErr] = useState("");
 
     const validate = () => {
         let isError = false;
@@ -69,7 +72,6 @@ export default function FormDialog() {
         if (apellido.length > 200) {
             isError = true;
             setApellidoErr("La longitud del apellido no puede exceder a 200 caracteres");
-
         }
 
         if (apellido.length < 2) {
@@ -87,6 +89,11 @@ export default function FormDialog() {
             setUsuarioErr("La longitud del apellido no puede exceder a 50 caracteres");
         }
 
+        if (correo.indexOf("@") === -1) {
+            isError = true;
+            setCorreoErr("Es necesario un correo válido");
+        }
+
         return isError;
     };
 
@@ -96,43 +103,45 @@ export default function FormDialog() {
 
         if (!err) {
             const user = {
-                username: usuario,
+                id: props.usuario.id,
+                usuario: usuario,
                 nombres: nombre,
                 apellidos: apellido,
-                password: "1234",
+                correo: correo,
             };
 
             console.log(user);
+            console.log(props.usuario);
 
-            UsuariosService.insertarUsuarios(user).then(response => {
+            UsuariosService.modificarUsuarios(user).then(response => {
+                //setUsuario("");
+                //setApellido("");
+                //setNombre("");
+                //setCorreo("");
+                setUsuarioErr("");
+                setNombreErr("");
+                setApellidoErr("");
+                setCorreoErr("");
                 console.log(response);
+                props.onActualizar();
+                handleClose();
             })
                 .catch(() => {
                     console.log('Error al editar el usuario')
                 });
-
-            setUsuario("");
-            setApellido("");
-            setNombre("");
-            setUsuarioErr("");
-            setNombreErr("");
-            setApellidoErr("");
-            window.location.reload();
-            handleClose();
         }
     };
 
     return (
         <div>
             <IconButton aria-label="edit" onClick={handleClickOpen}>
-                <AddIcon />
+                <EditOutlinedIcon />
             </IconButton>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth={true}>
-                <DialogTitle id="form-dialog-title">Agregar usuario</DialogTitle>
+                <DialogTitle id="form-dialog-title">Editar usuario</DialogTitle>
                 <DialogContent>
                     <div sytle="padding: 15px">
                         <TextField
-                            error={nombreErr === "" ? null : true}
                             autoFocus
                             fullWidth
                             variant="outlined"
@@ -141,13 +150,12 @@ export default function FormDialog() {
                             hintText="Nombres"
                             value={nombre}
                             onChange={e => changeNombre(e)}
-                            helperText={nombreErr === "" ? null : nombreErr}
+                            errorText={nombreErr}
                         />
                     </div>
                     <br />
                     <div sytle="padding: 15px">
                         <TextField
-                            error={apellidoErr === "" ? null : true}
                             fullWidth
                             variant="outlined"
                             id="lastname"
@@ -155,13 +163,12 @@ export default function FormDialog() {
                             hintText="Apellidos"
                             value={apellido}
                             onChange={e => changeApellido(e)}
-                            helperText={apellidoErr === "" ? null : apellidoErr}
+                            errorText={apellidoErr}
                         />
                     </div>
                     <br />
                     <div sytle="padding: 15px">
                         <TextField
-                            error={usuarioErr === "" ? null : true}
                             fullWidth
                             variant="outlined"
                             id="username"
@@ -169,7 +176,21 @@ export default function FormDialog() {
                             hintText="Nombre de usuario"
                             value={usuario}
                             onChange={e => changeUsuario(e)}
-                            helperText={usuarioErr === "" ? null : usuarioErr}
+                            errorText={usuarioErr}
+                        />
+                    </div>
+                    <br />
+                    <div sytle="padding: 15px">
+                        <TextField
+                            error={correoErr === "" ? null : true}
+                            fullWidth
+                            variant="outlined"
+                            id="email"
+                            label="Correo"
+                            hintText="Correo"
+                            value={correo}
+                            onChange={e => changeCorreo(e)}
+                            helperText={correoErr === "" ? null : correoErr}
                         />
                     </div>
                     <br />
@@ -190,3 +211,5 @@ export default function FormDialog() {
         </div>
     );
 }
+
+
