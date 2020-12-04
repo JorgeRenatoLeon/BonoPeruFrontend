@@ -14,15 +14,15 @@
      displayLegend: true,
      legendPosition:'right',
      nameTitle:'City',
-     sm:'12',
-     md:'12',
-     xs:'12',
+     sm:12,
+     md:12,
+     xs:12,
 
    }
 
    render(){
      return (
-       <Grid  container direction="col" xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
+       <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
            <Bar
            data={this.state.chartData}
            options={{
