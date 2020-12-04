@@ -64,7 +64,7 @@ function formato(texto){
 
 
     const ENTREGADOS = "http://localhost:8084/api/cronograma/monitoreoentregabono";
-    const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiario";
+    const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiarios";
 //fin del chart reporte  
   //  path: /monitoreo
 
@@ -75,25 +75,26 @@ function formato(texto){
  
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
         const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
+        const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
        // useEffect((datosEntregados) => {   
  
-            if(datosEntregados===undefined || datosEntregados.length===0){
-                console.log('if: ',datosEntregados);
+            if(datosIndicadores===undefined || datosIndicadores.length===0){
+                console.log('if: ',datosIndicadores);
                 //  const DataEntregados = JSON.parse(localStorage.getItem("DataEntregados")) ;
                 //   labels=DataEntregados.listaFechas;
                 //   data=DataEntregados.listaCantidades;
-             /*
+            
                 axios.post(TOTALES)
                 .then(response =>{
-                    console.log("API entregado: ",response.data);
-         
-                       } ;  
-                   setdatosEntregados(response.data);
+                    console.log("API entregado: ",response.data);   
+                    let api=[];
+                    api.push(response.data)   ;               
+                    setdatosIndicadores(api);
                     
                 })
                 .catch(() => {
                     console.log('Error al obtener Entregados');
-                });*/
+                });
                 //console.log(apiData.DataEntregadosApi());
                 //const a= DataEntregadosApi();
                 //setdatosEntregados(a);
@@ -134,13 +135,13 @@ function formato(texto){
               
                  <Pie chartData={chartDataEntregados}  md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
                 <Bar chartData={chartDataEntregados} md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
-                  {/* <Card className={classes.root} variant="outlined">
+              <Card className={classes.root} variant="outlined">
                     <CardContent>
                      <Typography className={classes.title} color="textSecondary" gutterBottom>
                         Beneficiarios
                         </Typography>                
               
-                                {cronograma.map(opcion=> (
+                                {/* {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalBeneficiarios}
@@ -149,11 +150,11 @@ function formato(texto){
                                          Total
                                     </Typography>                           
                                 </Grid>                                
-                            ))}
-                            {cronograma.map(opcion=> (
+                            ))} */}
+                            {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalMujeres}
+                                    {opcion.cantmujeres}
                                     </Typography>                                     
                                     <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
                                          Mujeres
@@ -161,10 +162,10 @@ function formato(texto){
                                 </Grid>                                
                             ))
                             } 
-                             {cronograma.map(opcion=> (
+                             {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalHombres}
+                                    {opcion.canthombres}
                                     </Typography>                                     
                                     <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
                                          Hombres
@@ -172,22 +173,44 @@ function formato(texto){
                                 </Grid>                                
                             ))
                             } 
+                                {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantdisc}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Discapacitados
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                               {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantquejas}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                    Quejas
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
 
 
                         
-                    </CardContent> */}
+                    </CardContent>
                     {/* <CardActions>
                         <Button size="small"> Total de Beneficiarios</Button>
                     </CardActions> */}
-                 {/* </Card>
+                 </Card>
                     {/* Card de Lugares de Entrega */}
-                {/*    <Card className={classes.root} variant="outlined">
+                {/* <Card className={classes.root} variant="outlined">
                     <CardContent>
                      <Typography className={classes.title} color="textSecondary" gutterBottom>
                         Lugares de entrega
                         </Typography>                
                                       
-                                {cronograma.map(opcion=> (
+                                {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalLugares}
@@ -197,7 +220,7 @@ function formato(texto){
                                     </Typography>                           
                                 </Grid>                                
                             ))}
-                            {cronograma.map(opcion=> (
+                            {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalActivo}
@@ -208,7 +231,7 @@ function formato(texto){
                                 </Grid>                                
                             ))
                             } 
-                             {cronograma.map(opcion=> (
+                             {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalQuejas}
@@ -222,11 +245,9 @@ function formato(texto){
 
 
                         
-                    </CardContent> */}
-                    {/* <CardActions>
-                        <Button size="small"> Total de Beneficiarios</Button>
-                    </CardActions> */}
-                {/* </Card> */}
+                    </CardContent> 
+                   
+               </Card> */}
 
 
             </Grid>
