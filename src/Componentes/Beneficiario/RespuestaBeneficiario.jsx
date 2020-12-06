@@ -119,7 +119,10 @@ function RespuestaBeneficiario (props) {
             useEffect((cronograma) => {
                
                 // console.log('apiBeneficiario',JSON.parse(localStorage.getItem("beneficiario")) );    //La hemos obtenido             
-                const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiario")) ;    //La hemos obtenido             
+                const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiario")) ;
+                localStorage.setItem("beneficiarioKayt",JSON.stringify(apiBeneficiario)); //Guardar la rpta del apibeneficiario
+            
+                    //La hemos obtenido             
                 if(cronograma===undefined || cronograma.length===0){
                     if (apiBeneficiario ===undefined || apiBeneficiario===null) {
                         history.push('/'); //si no tengo pokemones ni item en beneficiario,lo mando a consutla

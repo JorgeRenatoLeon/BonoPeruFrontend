@@ -37,8 +37,6 @@ export default function AlertDialogSlide(props) {
             .catch(() => {
                 console.log('Error al eliminar el usuario')
             });
-
-
     };
 
     return (

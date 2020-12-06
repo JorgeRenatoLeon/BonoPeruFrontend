@@ -21,6 +21,7 @@ import Monitoreo from "./Componentes/Representante/Monitoreo";
 import Informacion from './Componentes/Beneficiario/Informacion';
 
 import Usuarios from './Componentes/Admin/Usuarios'
+import Formulario from './Componentes/Admin/Formulario'
 
 const App = () => {
 
@@ -38,7 +39,9 @@ const App = () => {
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
-          <RutaProtegida path="/bonos" component={GestionBonos}   />
+          <Route exact path="/formulario" component={Formulario}/>
+          <RutaProtegida path="/bonos" component={GestionBonos}         
+          />
           <Route exact path="/consulta" >  {/* pantalla de Johana :D */}
             <BarraInicial />
             <Container>

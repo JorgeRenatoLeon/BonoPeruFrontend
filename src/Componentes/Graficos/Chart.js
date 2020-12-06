@@ -19,6 +19,20 @@
    render(){
      return (
        <Grid className="chart">
+            <Line
+           data={this.state.chartData}
+           options={{
+             title:{
+               display:this.props.displayTitle,
+               text:'Cronogramas entregados',
+               fontSize:25
+             },
+             legend:{
+               display:this.props.displayLegend,
+               position:this.props.legendPosition
+             }
+           }}
+         />
           <Bar
            data={this.state.chartData}
            options={{
@@ -34,20 +48,7 @@
            }} 
          />
 
-         {/* <Line
-           data={this.state.chartData}
-           options={{
-             title:{
-               display:this.props.displayTitle,
-               text:'Largest Cities In '+this.props.location,
-               fontSize:25
-             },
-             legend:{
-               display:this.props.displayLegend,
-               position:this.props.legendPosition
-             }
-           }}
-         /> */}
+      
 
           <Pie
            data={this.state.chartData}
@@ -65,37 +66,7 @@
            
          /> 
          
-         <Pie
-           data={this.state.chartData}
-           options={{
-             title:{
-               display:this.props.displayTitle,
-               text:'Largest Cities In '+this.props.location,
-               fontSize:25
-             },
-             legend:{
-               display:this.props.displayLegend,
-               position:this.props.legendPosition
-             }
-           }}
-           
-         /> 
-         
-         <Pie
-           data={this.state.chartData}
-           options={{
-             title:{
-               display:this.props.displayTitle,
-               text:'Largest Cities In '+this.props.location,
-               fontSize:25
-             },
-             legend:{
-               display:this.props.displayLegend,
-               position:this.props.legendPosition
-             }
-           }}
-           
-         /> 
+   
          
        </Grid>
      )
