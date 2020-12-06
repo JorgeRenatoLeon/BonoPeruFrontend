@@ -69,7 +69,7 @@ export default function AlertDialogSlide(props) {
                     </Link>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="secondary" onClick={handleClose}>
-                            npm        Cancelar
+                             Cancelar
             </Button>
                     </Link>
                 </DialogActions>

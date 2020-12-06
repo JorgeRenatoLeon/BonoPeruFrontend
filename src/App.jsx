@@ -30,7 +30,6 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={PantallaInicial}/> {/* pantalla de Johana */}
           <Route exact path="/usuarios" component={Usuarios}/>
-          <Route exact path="/formulario" component={Formulario}/>
           <Route exact path="/lugares" component={BusquedaLugares}/>
           <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
           <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
