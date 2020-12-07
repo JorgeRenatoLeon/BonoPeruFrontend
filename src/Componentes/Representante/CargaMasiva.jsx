@@ -1,7 +1,8 @@
-import { Button, Dialog, DialogActions, DialogTitle, Grid, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Tabs, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogTitle, Grid, Tab, Tabs, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import Tabla from './Tabla'
 import axios from "axios";
 
 const API_URL = "http://localhost:8084/api/";
@@ -11,62 +12,24 @@ const CargaMasiva = (props) => {
     const [open, setOpen] = useState(false)
     const [mensaje, setMensaje] = useState('')
     const [value, setValue] = React.useState(0)
+    //Registros Exitosos
     const [registros, setRegistros] = React.useState([])
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    //Errores de Carga
+    const [errores, setErrores] = React.useState([])
+    const [datosErrores, setDatosErrores] = React.useState([
+        {especial: false, valor: '0',compuesto: false},
+        {especial: false, valor: '1',compuesto: false},
+    ])
   
     const handleClose = () => {
-      setOpen(false);
+      setOpen(false)
     }
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-        setRegistros([]);
-    }
-
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-        console.log(property);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-        console.log(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    function stableSort(array, comparator) {
-        const stabilizedThis = array.map((el, index) => [el, index]);
-        stabilizedThis.sort((a, b) => {
-            const order = comparator(a[0], b[0]);
-            if (order !== 0) return order;
-            return a[1] - b[1];
-        });
-        return stabilizedThis.map((el) => el[0]);
-    }
-
-    function descendingComparator(a, b, orderByAux) {
-        if (b[orderByAux] < a[orderByAux]) {
-          return -1;
-        }
-        if (b[orderByAux] > a[orderByAux]) {
-          return 1;
-        }
-        return 0;
-    }
-
-    function getComparator(orderAux, orderByAux) {
-        return orderAux === 'desc'
-          ? (a, b) => descendingComparator(a, b, orderByAux)
-          : (a, b) => -descendingComparator(a, b, orderByAux);
+        setValue(newValue)
+        setRegistros([])
+        setErrores([])
     }
 
     const headCellsLugares = [
@@ -85,51 +48,28 @@ const CargaMasiva = (props) => {
         { id: 'ubigeo', numeric: false, disablePadding: false, label: 'Discapacitado' },
         { id: 'direccion', numeric: false, disablePadding: false, label: 'Sexo'},
     ];
-    const StyledTableCell = withStyles((theme) => ({
-        head: {
-          backgroundColor: "5AB9EA",
-          color: theme.palette.common.black,
-        },
-        body: {
-          fontSize: 18,
-        },
-    }))(TableCell);
+    
+    const headCellsErrores = [
+        { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
+        { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
+    ];
 
-    function EnhancedTableHead(propsAux) {
-        const {  orderAux, orderByAux, onRequestSort } = propsAux;
-        const createSortHandler = (property) => (event) => {
-          onRequestSort(event, property);
-        };
-        const headCellsAux = value===1?headCellsLugares:headCellsBeneficiarios
-        return (
-          <TableHead>
-            <TableRow>
-              {headCellsAux.map((headCell) => (
-                <StyledTableCell
-                  key={headCell.id}
-                  align={headCell.numeric ? 'right' : 'left'}
-                  padding={headCell.disablePadding ? 'none' : 'default'}
-                  sortDirection={orderByAux === headCell.id ? orderAux : false}
-                  style={{ background: '#5AB9EA' }}
-                >
-                  <TableSortLabel
-                    active={orderByAux === headCell.id}
-                    direction={orderByAux === headCell.id ? orderAux : 'asc'}
-                    onClick={createSortHandler(headCell.id)}
-                  >
-                    {headCell.label}
-                    {orderByAux === headCell.id ? (
-                      <span>
-                        {orderAux === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                      </span>
-                    ) : null}
-                  </TableSortLabel>
-                </StyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-        );
-    }
+    const datosBeneficiarios = [
+        {especial: false, valor: 'codigofamilia',compuesto: false},
+        {especial: false, valor: 'fiddistrito',compuesto: false},
+        {especial: true, valor: 'esdiscapacitado',verdadero: 'Si', falso:'No'},
+        {especial: true, valor: 'masculino',verdadero: 'Masculino', falso:'Femenino'}
+    ]
+    
+    const datosLugares = [
+        {especial: false, valor: 'codigo',compuesto: false},
+        {especial: false, valor: 'nombre',compuesto: false},
+        {especial: false, valor: 'distrito',compuesto: true, segundo:'nombre'},
+        {especial: false, valor: 'distrito',compuesto: true, segundo:'ubigeo'},
+        {especial: false, valor: 'direccion',compuesto: false},
+        {especial: false, valor: 'tipo',compuesto: false},
+        {especial: false, valor: 'ratioAtencion',compuesto: false}
+    ]
 
     const cargarLugaresEntrega = event => { 
 
@@ -158,6 +98,16 @@ const CargaMasiva = (props) => {
             setMensaje('Carga Exitosa')
             setOpen(true)
             setRegistros(response.data.lugares)
+            setErrores(response.data.errores)
+            let max = 0;
+            let datos = []
+            for (let index = 0; index < response.data.errores.length; index++) {
+                if(response.data.errores[index].length>max) max = response.data.errores[index].length;
+            }
+            for (let index = 0; index < max; index++) {
+                datos.push({especial: false, valor: index.toString(),compuesto: false})
+            }
+            setDatosErrores(datos)
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
@@ -193,6 +143,16 @@ const CargaMasiva = (props) => {
             setMensaje('Carga Exitosa')
             setOpen(true)
             setRegistros(response.data.beneficiarios)
+            setErrores(response.data.errores)
+            let max = 0;
+            let datos = []
+            for (let index = 0; index < response.data.errores.length; index++) {
+                if(response.data.errores[index].length>max) max = response.data.errores[index].length;
+            }
+            for (let index = 0; index < max; index++) {
+                datos.push({especial: false, valor: index.toString(),compuesto: false})
+            }
+            setDatosErrores(datos)
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
@@ -228,6 +188,8 @@ const CargaMasiva = (props) => {
             },
         },
     }))((propsAux) => <Tab disableRipple {...propsAux} />);
+
+
 
     return ( 
         <Grid>
@@ -326,7 +288,7 @@ const CargaMasiva = (props) => {
                 </Grid>
                 }
                 {registros.length>0?
-                    <Grid>
+                    <Grid className='Contenedor'>
                         {value===1?
                         <Grid container style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
                             <Typography variant="h4" color="inherit">
@@ -341,74 +303,22 @@ const CargaMasiva = (props) => {
                         </Grid>
                         }
                         {value===1?
-                        <TableContainer>
-                            <Table
-                                aria-labelledby="tableTitle"
-                                aria-label="enhanced table"
-                            >
-                                <EnhancedTableHead
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                />
-                                <TableBody>
-                                    {stableSort(registros, getComparator(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row, index) => {
-                
-                                        return (
-                                            <TableRow hover tabIndex={-1} key={index}>
-                                                <TableCell align="left">{row.codigo}</TableCell>
-                                                <TableCell align="left">{row.nombre}</TableCell>
-                                                <TableCell align="left">{row.distrito.nombre}</TableCell>
-                                                <TableCell align="left">{row.distrito.ubigeo}</TableCell>
-                                                <TableCell align="left">{row.direccion}</TableCell>
-                                                <TableCell align="left">{row.tipo}</TableCell>
-                                                <TableCell align="left">{row.ratioAtencion}</TableCell>
-                                            </TableRow>
-                                        );
-                                        })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <Tabla columnas={registros} headCell={headCellsLugares} cabeceras={datosLugares}/>
                         :
-                        <TableContainer>
-                            <Table
-                                aria-labelledby="tableTitle"
-                                aria-label="enhanced table"
-                            >
-                                <EnhancedTableHead
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                />
-                                <TableBody>
-                                    {stableSort(registros, getComparator(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row, index) => {
-                
-                                        return (
-                                            <TableRow hover tabIndex={-1} key={index}>
-                                            <TableCell align="left">{row.codigofamilia}</TableCell>
-                                            <TableCell align="left">{row.fiddistrito}</TableCell>
-                                            <TableCell align="left">{row.esdiscapacitado?'Si':'No'}</TableCell>
-                                            <TableCell align="left">{row.esdiscapacitado?'Femenino':'Masculino'}</TableCell>
-                                            </TableRow>
-                                        );
-                                        })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <Tabla columnas={registros} headCell={headCellsBeneficiarios} cabeceras={datosBeneficiarios}/>
                         }
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
-                            component="div"
-                            count={registros.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                        />
+                    </Grid>
+                :
+                    null
+                }
+                {errores.length>0?
+                    <Grid className='Contenedor'>
+                        <Grid container style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                            <Typography variant="h4" color="inherit">
+                                Lista de Errores en la Carga
+                            </Typography>
+                        </Grid>
+                        <Tabla columnas={errores} headCell={headCellsErrores} cabeceras={datosErrores}/>
                     </Grid>
                 :
                     null
