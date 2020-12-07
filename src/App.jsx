@@ -40,7 +40,7 @@ const App = () => {
           <Route exact path="/informacion" component={Informacion}/>
           <Route exact path='/quejas' component={Quejas}/>
           <Route path="/acceso" component={AccesoSistema}/>
-          <Route path="/recuperarcontrasena" component={OlvidarContrasena}/>
+          <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <RutaProtegida path="/carga" component={CargaMasiva}/>
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}

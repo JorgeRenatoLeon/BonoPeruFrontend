@@ -134,13 +134,13 @@ const AccesoSistema = (props) => {
                             <Alert severity="error">{message}</Alert>
                         </Grid>
                     )}
-                    <Grid container item md={12} justify="center" style={{paddingBottom: '3vh'}}>
+                    {/* <Grid container item md={12} justify="center" style={{paddingBottom: '3vh'}}>
                         <Link to="/recuperarcontrasena">
                             <Typography variant="subtitle2" color="inherit">
                                 ¿Olvidó su contraseña?
                             </Typography>
                         </Link>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
                 <Grid container direction="row" justify="center">
                     <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
