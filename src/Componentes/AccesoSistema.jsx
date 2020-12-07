@@ -135,9 +135,11 @@ const AccesoSistema = (props) => {
                         </Grid>
                     )}
                     <Grid container item md={12} justify="center" style={{paddingBottom: '3vh'}}>
-                        <Typography variant="subtitle2" color="inherit">
-                            ¿Olvidó su contraseña?
-                        </Typography>
+                        <Link to="/recuperarcontrasena">
+                            <Typography variant="subtitle2" color="inherit">
+                                ¿Olvidó su contraseña?
+                            </Typography>
+                        </Link>
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="center">

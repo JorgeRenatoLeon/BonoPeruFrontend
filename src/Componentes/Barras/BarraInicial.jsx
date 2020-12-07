@@ -54,22 +54,22 @@ function BarraInicial () {
 
     const tabsRepresentante = [
                             // {nombre: 'Cargar Datos', path: '/cargar'},
-                            {nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
-                            {nombre: 'Gestión de Bonos', path: '/bonos'},
-                            {nombre: 'Monitoreo', path: '/monitoreo'},
-                            {nombre: 'Reportes', path: '/reportes'},
-                            {nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
+                            {id: 0, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
+                            {id: 1, nombre: 'Gestión de Bonos', path: '/bonos'},
+                            {id: 2, nombre: 'Monitoreo', path: '/monitoreo'},
+                            {id: 3, nombre: 'Reportes', path: '/reportes'},
+                            {id: 4, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
     const tabsAdmin = [
-                        {nombre: 'Gestión de Bonos', path: '/bonos'},
+                        {id: 0, nombre: 'Gestión de Bonos', path: '/bonos'},
                         // {nombre: 'Reportes', path: '/reportes'},
-                        {nombre: 'Monitoreo', path: '/monitoreo'},
-                        {nombre: 'Encuestas', path: '/encuesta'},
-                        {nombre: 'Usuarios', path: '/usuarios'}]
+                        {id: 1, nombre: 'Monitoreo', path: '/monitoreo'},
+                        {id: 2, nombre: 'Encuestas', path: '/encuesta'},
+                        {id: 3, nombre: 'Usuarios', path: '/usuarios'}]
 
     const AdminTabs = 
         admin ? 
             (tabsAdmin.map(tab =>
-                    <Grid item style={{paddingLeft: 10}} align="center">
+                    <Grid key={tab.id} item style={{paddingLeft: 10}} align="center">
                         <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
