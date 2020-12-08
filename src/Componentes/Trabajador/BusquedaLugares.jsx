@@ -22,8 +22,9 @@ import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
 import LugaresService from "../../Servicios/lugares.service";
 import { render } from '@testing-library/react';
-
-
+import { Alert, AlertTitle } from '@material-ui/lab';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -45,6 +46,7 @@ const headCells = [
   { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
   { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
+  { id: 'tipo', numeric: false, disablePadding: false, label: 'Tipo'},
   { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar' },
   { id: 'direccion', numeric: false, disablePadding: false, label: 'Direccion' },
 ];
@@ -148,7 +150,8 @@ const BusquedaLugares = (props) => {
         rowsAux.push({
           id: lug.idlugarentrega, 
           codigo: lug.codigo, 
-          nombre: lug.nombre, 
+          nombre: lug.nombre,
+          tipo: lug.tipo,
           lugar: lug.depprodis, 
           direccion: lug.direccion
           });
@@ -228,6 +231,14 @@ const BusquedaLugares = (props) => {
       handleComboboxDis(0);
       setStateCbxProv(true);
       setStateCbxDis(true);
+      setSelectedDep(null);
+      const filtroLugar ={
+        iddepartamento: null,
+        idprovincia: null,
+        iddistrito: null,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
     }else{
       console.log(departamento,"id depa"); 
       apiProvincias(valor);
@@ -247,6 +258,14 @@ const BusquedaLugares = (props) => {
     if(valor === 0){
       setStateCbxDis(true);
       handleComboboxDis(0);
+      setSelectedProv(null);
+      const filtroLugar ={
+        iddepartamento: departamento,
+        idprovincia: null,
+        iddistrito: null,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
     }else{
       console.log(valor,"id prov");
       apiDistritos(valor);
@@ -261,25 +280,45 @@ const BusquedaLugares = (props) => {
   }
 
   const handleComboboxDis=(valor)=>{
-    setSelectedDis(valor);
+    
     console.log(valor,"id dis");
-    const filtroLugar ={
-      iddepartamento: departamento,
-      idprovincia: provincia,
-      iddistrito: valor,
-      nombre: ""
+    if(valor === 0){
+      setSelectedDis(null);
+      const filtroLugar ={
+        iddepartamento: departamento,
+        idprovincia: provincia,
+        iddistrito: null,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
+    }else{
+      setSelectedDis(valor);
+      const filtroLugar ={
+        iddepartamento: departamento,
+        idprovincia: provincia,
+        iddistrito: valor,
+        nombre: ""
+      }
+      apiLugares(filtroLugar);
     }
-    apiLugares(filtroLugar);
   }
 
+  const [mostrarErrorBusqueda, setErrorBusqueda]= useState(false);
   const buscarLugar=(nombre)=>{
-    const nombreLugar ={
-      iddepartamento: departamento,
-      idprovincia: provincia,
-      iddistrito: distrito,
-      nombre: nombre
+    var letters = /^\d*[a-zA-Z][a-zA-Z\d\s]*$/;
+    if(letters.test(nombre)){
+      setErrorBusqueda(false);
+      const nombreLugar ={
+        iddepartamento: departamento,
+        idprovincia: provincia,
+        iddistrito: distrito,
+        nombre: nombre
+      }
+      apiLugares(nombreLugar);
+    }else{
+      setErrorBusqueda(true);
     }
-    apiLugares(nombreLugar);
+    
   }
 
   const [departamentos, setDep] = useState([]);
@@ -352,17 +391,18 @@ const BusquedaLugares = (props) => {
       return { checkedId: action.id }
     }
     const [state, dispatch] = useReducer(reducer, {})
-    const RadioButton = ({id,cod,nom,lug,dir}) => (
+    const RadioButton = ({id,cod,nom,tipo,lug,dir}) => (
         <Radio
           id={id}
           cod={cod}
           nom={nom}
+          tipo={tipo}
           lug={lug}
           dir={dir}
           onClick={() => dispatch({ id})}
           checked={state.checkedId === id}
           type="radio"
-          onChange={() => handleChange(id,cod,nom,lug,dir)}
+          onChange={() => handleChange(id,cod,nom,tipo,lug,dir)}
         />
     )
 
@@ -370,18 +410,27 @@ const BusquedaLugares = (props) => {
     const [identificador, setSelectedId] = useState("");
     const [codigo,setSelectedCod] = useState(" ");
     const [nombre, setSelectedNom] = useState("");
+    const [tipo, setSelectedTipo] = useState("");
     const [lugar,setSelectedLug] = useState(" ");
     const [direccion,setSelectedDir] = useState(" ");
-    function handleChange(id,cod,nom,lug,dir) {
+    
+    const [mensajeConsulta, setMsgConsulta] = useState(true);
+    const [botonDeshabilitar, setDeshabilitar] = useState(true);
+    function handleChange(id,cod,nom,tipo,lug,dir) {
+        //setError(true);  
+        setMsgConsulta(false);
+        setDeshabilitar(false);    
         setSelectedId(id);
         console.log(identificador);
         setSelectedCod(cod);
         console.log(codigo);
         setSelectedNom(nom);
+        setSelectedTipo(tipo);
         setSelectedLug(lug);
         setSelectedDir(dir);
     }
 
+  
 
     const [nomLug, setLug] = useState("");
     return ( 
@@ -418,11 +467,40 @@ const BusquedaLugares = (props) => {
                         <Combobox options={distritos} onSeleccion={handleComboboxDis} 
                         value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
                     </Grid>
-                    <Grid container direction="row"  item xs={6} justify="space-evenly" alignItems="center">
+                    <Grid container direction="row" justify="space-evenly" alignItems="center">
+                      <Grid container direction="row" justify="space-evenly" alignItems="center" item xs={6}>
                         <Typography variant="subtitle1" color="inherit">
                             Buscar:
                         </Typography>
                         <BuscadorLugares mensaje = "Ingrese el nombre del lugar" buscar={buscarLugar} nombre={nomLug}></BuscadorLugares> 
+                      </Grid>
+                      <Grid container direction="row" justify="space-evenly" alignItems="center" item xs={6}>
+                      {mensajeConsulta?
+                        <Grid>
+                          <Typography variant="subtitle1" color="inherit">
+                            Debe seleccionar un lugar para poder Consultar 
+                          </Typography>
+                        </Grid>
+                        :<Grid></Grid>}
+                      <Link 
+                          to={{
+                            pathname: "/consultasBeneficiarios",
+                            state: { id: identificador,
+                              codigo: codigo,
+                              nombre: nombre,
+                              tipo: tipo,
+                              lugar: lugar,
+                              direccion: direccion}
+                          }}
+                          style={{textDecoration:"none"}}>
+                          <Button variant="contained" size="medium" color="primary" style={{margin: 10}} disabled={botonDeshabilitar}>
+                              Consultar
+                          </Button> 
+                      </Link>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row" justify="center" alignItems="flex-start" item xs={6}>
+                      {mostrarErrorBusqueda?<FormLabel  error={true}>Búsqueda inválida</FormLabel>:<Grid></Grid>}
                     </Grid>
                 </Grid>
             </Paper> 
@@ -451,11 +529,12 @@ const BusquedaLugares = (props) => {
                                 <TableRow hover tabIndex={-1} key={row.id} >
                                 <TableCell padding="checkbox">
                                   <RadioButton  id={row.id} cod={row.codigo}
-                                    nom={row.nombre} lug={row.lugar}
+                                    nom={row.nombre} tipo={row.tipo} lug={row.lugar}
                                     dir={row.direccion}/>
                                 </TableCell> 
                                 <TableCell align="left">{row.codigo}</TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
+                                <TableCell align="left">{row.tipo}</TableCell>
                                 <TableCell align="left">{row.lugar}</TableCell>
                                 <TableCell align="left">{row.direccion}</TableCell>
                                 </TableRow>
@@ -474,34 +553,15 @@ const BusquedaLugares = (props) => {
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}                    
                     />
-                </Grid>:<AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
+                </Grid>:
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
                             <Typography variant="h3"  gutterBottom justify="center" >
                                     <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
                             </Typography> 
                         </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>}                 
-            </Paper> 
-            <Grid container direction="column" justify="flex-start" alignItems="center" >
-                <Link 
-                    to={{
-                      pathname: "/consultasBeneficiarios",
-                      state: { id: identificador,
-                        codigo: codigo,
-                        nombre: nombre,
-                        lugar: lugar,
-                        direccion: direccion}
-                    }}
-                    style={{textDecoration:"none"}}>
-                    <Button variant="contained" size="medium" color="primary" style={{margin: 10}}>
-                        Consultar
-                    </Button> 
-                </Link> 
-            </Grid>    
+                    </Grid>}                 
+            </Paper>    
             </Grid>    
             <BarraFinal/>
  

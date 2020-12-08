@@ -52,7 +52,7 @@ const BuscadorConsulta = (props) =>{
         className={classes.input}
         placeholder= {mensaje}
         style={{padding:6}}
-        inputProps={{ "aria-label": "search google maps" }}
+        inputProps={{ "aria-label": "search google maps",  maxLength: 10}}
       />
       <IconButton
         //type="submit"

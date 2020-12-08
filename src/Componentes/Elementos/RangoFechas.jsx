@@ -15,6 +15,9 @@ class RangoFechas extends Component{
             endDate: null,
             hideKeyboardShortcutsPanel: true,
             minimumNights: 0,
+            //showDefaultInputIcon: true,
+            readOnly: true,
+            showClearDates: true,
         }
         console.log(this.state);
     }
@@ -23,8 +26,6 @@ class RangoFechas extends Component{
         //({ startDate, endDate }) => this.setState({ startDate, endDate })
         //({startDate,endDate}) => this.capturarFecha(startDate,endDate)
         this.setState({ startDate, endDate });
-        console.log(startDate.toDate(), "fecha ini");
-        console.log(endDate, "fecha fin");
         this.props.onCambio(startDate,endDate);
     }
     render(){
@@ -42,6 +43,9 @@ class RangoFechas extends Component{
                 endDatePlaceholderText= "Fecha fin"
                 hideKeyboardShortcutsPanel={this.state.hideKeyboardShortcutsPanel}
                 minimumNights={this.state.minimumNights}
+                //showDefaultInputIcon={this.state.showDefaultInputIcon}
+                readOnly={this.state.readOnly}
+                showClearDates={this.state.showClearDates}
             />
             
         )

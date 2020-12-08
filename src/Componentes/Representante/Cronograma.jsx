@@ -17,6 +17,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 import '../../assets/css/Cronograma.css';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -25,6 +32,7 @@ import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
+
 
 const reducer = (state, action) => {
     return { checkedId: action.id }
@@ -89,7 +97,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <StyledTableCell padding="checkbox" style={{background: '#5AB9EA'}}>
-          <Checkbox
+          <Checkbox color="default" 
           />
         </StyledTableCell>
         {headCells.map((headCell) => (
@@ -271,15 +279,25 @@ const Cronograma = (props) => {
     setSelectedDis(valor);
   }
 
-  const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaIni);
+  const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaini);
   const [fechaFin, setSelectedFechaFin]=useState(cronogramaInicial.fechafin);
   const cambiar=(fechaIni,fechaFin)=>{
-    if(fechaFin !== null){
+    if((fechaFin !== null) && (fechaIni!== null)){
       console.log("estoy dentro de cronograma",fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2),
       fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
       setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
       setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
+    }else if(fechaIni === null && fechaFin !== null){
+      setSelectedFechaIni(cronogramaInicial.fechaIni);
+      setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
+    }else if(fechaIni !== null && fechaFin === null){
+      setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
+      setSelectedFechaFin(cronogramaInicial.fechafin);
+    }else if(fechaIni === null && fechaFin === null){
+      setSelectedFechaIni(cronogramaInicial.fechaIni);
+      setSelectedFechaFin(cronogramaInicial.fechafin);
     }
+
   }
 
   const [searchText,setSearchText] =React.useState("");
@@ -292,7 +310,7 @@ const Cronograma = (props) => {
   const buscarCronogramas=()=>{
     console.log("en buscar",fechaInicio,fechaFin);
     const cronogramaBusqueda={
-      idcronograma: 2,
+      idcronograma: cronogramaGestionBonos.idcronograma,
       iddepartamento: departamento,
       idprovincia: provincia,
       iddistrito: distrito,
@@ -356,17 +374,41 @@ const Cronograma = (props) => {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     const [state, dispatch] = useReducer(reducer, {})
-    
+ 
+    var arrayNumSelected = [];
+    const selectCheckBox= event =>{
+      if(event.target.checked) {
+        arrayNumSelected.push(parseInt(event.target.id));
+      } else{
+        for (var i = arrayNumSelected.length - 1; i >= 0; i--) {
+          if (arrayNumSelected[i] === parseInt(event.target.id)) {
+            arrayNumSelected.splice(i, 1);
+            break;
+          }
+        }
+      }
+      console.log(event, "checkbox");
+      console.log(arrayNumSelected);
+    }
+
+    const [errorDescarga, setError] = useState(false);
     const descargaCronograma=()=>{
+      if(arrayNumSelected.length === 0){
+        console.log("No mi amor");
+        //alert("Debe seleccionar al menos un lugar para poder descargar");
+        setError(true);
+        return
+      }
+      setError(false);
       const cronogramaParaDescarga ={
-        idcronograma: 1,
-        iddepartamento:1,
-        idprovincia:1,
-        iddistrito:1,
-        fechaini:"2020-11-20",
-        fechafin: "2020-12-10",
-        nombre:"",
-        numeros: [1,7],
+        idcronograma: cronogramaGestionBonos.idcronograma,
+        iddepartamento: departamento,
+        idprovincia: provincia,
+        iddistrito: distrito,
+        fechaini: fechaInicio,
+        fechafin: fechaFin,
+        nombre: searchText,
+        numeros: arrayNumSelected,
       }
       DescargaService.descargarCronograma(cronogramaParaDescarga);
     }
@@ -384,6 +426,14 @@ const Cronograma = (props) => {
                     </Grid>
                 </Toolbar>
             </AppBar>
+            {errorDescarga?
+            <Grid container justify="center" style={{marginLeft: 40, marginRight: 40, marginBottom: 20, boxShadow: 'none'}}>
+              <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+               Debe seleccionar <strong>al menos un </strong>lugar para poder descargar 
+              </Alert>
+            </Grid>
+            :<Grid></Grid>}
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -422,8 +472,8 @@ const Cronograma = (props) => {
                 </Grid>
             </Paper> 
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10, marginBottom:20,  boxShadow: 'none'}}>
+                {rows.length > 0?
                 <Grid className={classes.paper}>                      
-                  {rows.length > 0?
                     <TableContainer>
                     <Table
                         className={classes.table}
@@ -446,12 +496,12 @@ const Cronograma = (props) => {
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
                                 <TableCell padding="checkbox">
-                                  <Checkbox/>                                 
+                                  <Checkbox color="default" id={row.id} onChange={selectCheckBox}/>                                 
                                 </TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
                                 <TableCell align="left">{row.locacion}</TableCell>
-                                <TableCell align="left">{row.fecha}</TableCell>
-                                <TableCell align="left">{row.turno}</TableCell>
+                                <TableCell align="left">{row.fecha.substring(8)+row.fecha.substring(4,8)+row.fecha.substring(0,4)}</TableCell>
+                                <TableCell align="left">{row.turno.substring(0,5)+"-"+row.turno.substring(9,14)}</TableCell>
                                 <TableCell align="center">{row.aforo}</TableCell>
                                 <TableCell align="center">{row.mujeres}</TableCell>
                                 <TableCell align="center">{row.discapacitados}</TableCell>
@@ -463,46 +513,7 @@ const Cronograma = (props) => {
                         </TableBody>
                         
                     </Table>
-                    </TableContainer>:<Grid><TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        aria-label="enhanced table"
-                    >
-                        <EnhancedTableHead
-                        classes={classes}
-                        order={order}
-                        orderBy={orderBy}
-                        onRequestSort={handleRequestSort}
-                        />
-                        
-                        
-                        <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {                            
-                            
-                            return (
-                                <TableRow hover tabIndex={-1} key={row.id} >
-                                <TableCell padding="checkbox">
-                                  <Checkbox/>                                 
-                                </TableCell>
-                                <TableCell align="left">{row.nombre}</TableCell>
-                                <TableCell align="left">{row.locacion}</TableCell>
-                                <TableCell align="left">{row.fecha}</TableCell>
-                                <TableCell align="left">{row.turno}</TableCell>
-                                <TableCell align="center">{row.aforo}</TableCell>
-                                <TableCell align="center">{row.mujeres}</TableCell>
-                                <TableCell align="center">{row.discapacitados}</TableCell>
-                                <TableCell align="center">{row.riesgo}</TableCell>
-                                </TableRow>
-                            );
-                            })}
-                        
-                        </TableBody>
-                    </Table>
-                    <Grid container direction="row" justify="space-evenly" alignItems="center" >No hay ningún lugar de entrega que coincida con la búsqueda</Grid>
-                    </TableContainer></Grid>}
+                    </TableContainer>
                     <TablePagination
                     //rowsPerPageOptions={[5, 10, 25]}
                     rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
@@ -513,7 +524,13 @@ const Cronograma = (props) => {
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
-                </Grid> 
+                </Grid>:<Grid container direction="row" justify="center">
+                        <Grid container item xs={12} justify="center">
+                            <Typography variant="h3"  gutterBottom justify="center" >
+                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
+                            </Typography> 
+                        </Grid>                                                  
+                    </Grid>}
                 <Grid container direction="row" justify="space-evenly" alignItems="center" >
                     <Button variant="contained" size="medium" color="primary" style={{margin: 10}} onClick={descargaCronograma}>
                         Descargar
@@ -523,7 +540,7 @@ const Cronograma = (props) => {
                             Regresar
                         </Button>
                     </Link> 
-                </Grid>                  
+                </Grid>                         
             </Paper>  
             <BarraFinal/>
         </Grid>
