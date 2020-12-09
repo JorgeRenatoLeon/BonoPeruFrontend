@@ -29,7 +29,7 @@ function RespuestaPositiva (props) {
               <Paper elevation={1} style={{ marginBottom:76}} >
                 <br></br>
                 <br></br>
-                <h>{props.mensaje}</h><br></br>
+                {props.mensaje}
                 <br></br>
                 <br></br>
               </Paper> 

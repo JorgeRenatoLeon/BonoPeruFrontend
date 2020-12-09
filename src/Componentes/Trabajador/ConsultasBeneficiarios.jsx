@@ -180,37 +180,54 @@ const ConsultasBeneficiarios = (params) => {
     const [mensaje, setMensaje] = useState(null);
 
     const buscarBeneficiario=(texto) =>{
-      console.log(texto,mensaje,"ayuda");
-      ConsultaService.consultarCodigoFamilia().then(response =>{
+      setMensaje("Cargando...");
+      var dia = ("0" + (new Date()).getDate()).slice(-2);
+      var mes = ("0" + ((new Date()).getMonth() + 1)).slice(-2);
+      var anho = (new Date()).getFullYear();
+      var dia = anho+'-'+mes+'-'+dia;
+      var horas = ("0" + (new Date()).getHours()).slice(-2);
+      var minutos = ("0" + (new Date()).getMinutes()).slice(-2);
+      var segundos = ("0" + (new Date()).getSeconds()).slice(-2);
+      var hora = horas+':'+minutos+':'+segundos;
+      console.log(rows[0].id);
+      console.log(dia);
+      console.log(hora);
+      const datos ={
+        idlugarentrega: rows[0].id,
+        codigofamilia: texto,
+        hora: hora,
+        dia: dia,
+      }
+      ConsultaService.consultarCodigoFamilia(datos).then(response =>{
         console.log(response.data);
         let respuesta= response.data;
         switch (respuesta) {
           case 'bono':
-            setMensaje("bono");
+            setMensaje("Si le corresponde recibir bono al beneficiario");
             break;
           case 'no bono':
-            setMensaje("no bono");
+            setMensaje("Este código de familia no tiene un bono asignado");
             break;
           case 'lugar':
-            setMensaje("lugar");
+            setMensaje("Este no es el lugar de entrega que le corresponde al beneficiario");
             break;
           case 'horario':
-            setMensaje("horario");
+            setMensaje("Este no es el horario de entrega que le corresponde al beneficiario");
             break;
           case 'dia':
-            setMensaje("dia");
+            setMensaje("Este no es el día de entrega que le corresponde al beneficiario");
             break;
           case 'lugar dia horario':
-            setMensaje("lugar dia horario");
+            setMensaje("Este no es el lugar ni el dia ni el horario que le corresponde al beneficiario");
             break;
           case 'lugar horario':
-            setMensaje("lugar horario");
+            setMensaje("Este no es el lugar ni el horario que le corresponde al beneficiario");
             break;
           case 'lugar dia':
-            setMensaje("lugar dia");
+            setMensaje("Este no es el lugar ni el dia que le corresponde al beneficiario");
             break;
-          case ' dia horario':
-            setMensaje("dia horario");
+          case 'dia horario':
+            setMensaje("Este no es el lugar ni el dia que le corresponde al beneficiario");
             break;
           default:
             setMensaje("Ups! Algo salió mal");

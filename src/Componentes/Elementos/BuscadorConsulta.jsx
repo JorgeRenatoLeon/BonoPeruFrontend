@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   
 }));
-let respuesta = "";
 
-const ConsultasBeneficiarios = (props) =>{
+
+const BuscadorConsulta = (props) =>{
 
   const classes = useStyles();
   const mensaje = props.mensaje ? props.mensaje : "Ingrese el Código de familia. Ejemplo: 1234";
@@ -77,4 +77,4 @@ const ConsultasBeneficiarios = (props) =>{
   );
 }
 
-export default ConsultasBeneficiarios;
+export default BuscadorConsulta;

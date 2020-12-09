@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/listarhorariocronograma";
+const API_URL = "http://127.0.0.1:8084/api/cronograma/listarhorariocronograma";
 
 const cronograma ={
     idcronograma: 2,
@@ -14,7 +14,7 @@ const cronograma ={
 
 const obtenerHorarios=(props)=>{
     return axios
-      .post(API_URL, {cronograma})
+      .post(API_URL, props)
   };
   
   const exportar = {

@@ -2,7 +2,11 @@ import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
 //  import { Link } from "react-router-dom"
-//  import Chart from "../../Componentes/Graficos/Chart.js"
+ import Chart from "../../Componentes/Graficos/Chart.js"
+ import Line from "../../Componentes/Graficos/Line.js"
+ import Bar from "../../Componentes/Graficos/Bar.js"
+ import Pie from "../../Componentes/Graficos/Pie.js"
+ import apiData from "./apiData.js"
  import { makeStyles } from '@material-ui/core/styles';
  import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
@@ -50,87 +54,94 @@ function formato(texto){
     },
   });
 
-  
-  const API_URL = "http://localhost:8084/api/encuesta/";
+//Para el chart reporte
+
+ 
+
+  var backgroundColor=[    'rgba(179, 229, 252, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',     'rgba(255, 159, 64, 1)',     'rgba(255, 99, 132, 1)'   ];
+
+
+
+    const ENTREGADOS = "http://localhost:8084/api/cronograma/monitoreoentregabono";
+    const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiarios";
+//fin del chart reporte  
   //  path: /monitoreo
 
-function Monitoreo (props) {
+ function Monitoreo (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
-      
+  var labels= ["23-11-2020", "25-11-2020", "08-12-2020"];
+  var data=[2, 1, 0];
+ 
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
-       
-            useEffect((cronograma) => {
-                //Para que se actualice y mande a la pantalla principal
-                if(cronograma===undefined || cronograma.length===0){                   
-                //     else{
-                         setCronograma(Arrcronograma);
-                 }
+        const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
+        const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
+       // useEffect((datosEntregados) => {   
+ 
+            if(datosIndicadores===undefined || datosIndicadores.length===0){
+                console.log('if: ',datosIndicadores);
+                //  const DataEntregados = JSON.parse(localStorage.getItem("DataEntregados")) ;
+                //   labels=DataEntregados.listaFechas;
+                //   data=DataEntregados.listaCantidades;
+            
+                axios.post(TOTALES)
+                .then(response =>{
+                    console.log("API entregado: ",response.data);   
+                    let api=[];
+                    api.push(response.data)   ;               
+                    setdatosIndicadores(api);
+                    
+                })
+                .catch(() => {
+                    console.log('Error al obtener Entregados');
+                });
+                //console.log(apiData.DataEntregadosApi());
+                //const a= DataEntregadosApi();
+                //setdatosEntregados(a);
+            }        
+            console.log('fuera del api',datosEntregados);
+            
 
-                 /*     API API API API API
-                 axios
-                 .get('https://pokeapi.co/api/v2/pokemon')
-                 // .post(API_URL)
-                 .then(response =>{
-                     console.log("API OBT pokemon: ",response.data);
-                     let apiCronograma = []
-                     apiCronograma.push(response.data)
-                     if(apiCronograma){
-                         setCronograma(apiCronograma);
-                     }
-                     //setCronograma(Arrcronograma);
-                 })
-                 .catch(() => {
-                     console.log('Error al obtener Monitoreo')
-                 });
-                 */
-
-            },  [])
-
-       // console.log('cronograma:',cronograma);
-        var titulo="Monitoreo";
+             var titulo="Monitoreo";
             var respuesta;
             const classes = useStyles();
            
         
-              //Todoooo la muestra del cronograma está manejado por respuesta
-          
+     
+              if(datosEntregados.length!==0 && datosEntregados!==undefined ) {
+                labels=datosEntregados.listaFechas;
+                data=datosEntregados.listaCantidades;
+              } 
+             
+              console.log('labels',labels);
+              var chartDataEntregados={
+                //fila de nombre
+                //Líne: Arreglo de Dias
+                 labels: labels,
+                 datasets:[
+                   {
+                     label:'Bonos Entregados',
+                     data:data,
+                     backgroundColor:backgroundColor,
+                   }
+                 ]
+               }    
+               console.log('chartDataEntregados',chartDataEntregados);    
+       
+               
             respuesta= rpta.map((rpta,index)   =>
-            <Grid key={rpta.id} container direction="col" justify="center">
-                {/* <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}> */}
-                   
-                {/* <Chart chartData={chartData} location="JohanaLand" legendPosition="bottom"/> */}
-               {/* Reporte de Beneficiarios */}
-
-               <Card className={classes.root} variant="outlined">
+            <Grid key={rpta.id} container  justify="center">
+               <Line chartData={chartDataEntregados} md={10} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+              
+                 <Pie chartData={chartDataEntregados}  md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                <Bar chartData={chartDataEntregados} md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+              <Card className={classes.root} variant="outlined">
                     <CardContent>
                      <Typography className={classes.title} color="textSecondary" gutterBottom>
                         Beneficiarios
                         </Typography>                
-                        {/* total de beneficiarios */}
-                                {/* <Grid container direction="col" style={{ textAlign:"center"}}>
-                                    {cronograma.map(opcion=> (
-                                        <Grid container direction="col" >
-                                            <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                            {opcion.totalBeneficiarios}
-                                            </Typography>
-                                            <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                            {opcion.totalBeneficiarios}
-                                            </Typography>     
-                                            <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                                Total2
-                                            </Typography>                           
-                                        </Grid>                                
-                                    ))
-                                     } 
-                               
-                                    <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Total
-                                    </Typography>  
-                                    <Typography variant="h5" style={{color: 'black', margin: 20,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Mujeres
-                                    </Typography>            
-                                </Grid>                        */}
-                                {cronograma.map(opcion=> (
+              
+                                {/* {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalBeneficiarios}
@@ -139,11 +150,11 @@ function Monitoreo (props) {
                                          Total
                                     </Typography>                           
                                 </Grid>                                
-                            ))}
-                            {cronograma.map(opcion=> (
+                            ))} */}
+                            {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalMujeres}
+                                    {opcion.cantmujeres}
                                     </Typography>                                     
                                     <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
                                          Mujeres
@@ -151,13 +162,35 @@ function Monitoreo (props) {
                                 </Grid>                                
                             ))
                             } 
-                             {cronograma.map(opcion=> (
+                             {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalHombres}
+                                    {opcion.canthombres}
                                     </Typography>                                     
                                     <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
                                          Hombres
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                                {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantdisc}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Discapacitados
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                               {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantquejas}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                    Quejas
                                     </Typography>                           
                                 </Grid>                                
                             ))
@@ -169,15 +202,15 @@ function Monitoreo (props) {
                     {/* <CardActions>
                         <Button size="small"> Total de Beneficiarios</Button>
                     </CardActions> */}
-                </Card>
+                 </Card>
                     {/* Card de Lugares de Entrega */}
-                    <Card className={classes.root} variant="outlined">
+                {/* <Card className={classes.root} variant="outlined">
                     <CardContent>
                      <Typography className={classes.title} color="textSecondary" gutterBottom>
                         Lugares de entrega
                         </Typography>                
                                       
-                                {cronograma.map(opcion=> (
+                                {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalLugares}
@@ -187,7 +220,7 @@ function Monitoreo (props) {
                                     </Typography>                           
                                 </Grid>                                
                             ))}
-                            {cronograma.map(opcion=> (
+                            {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalActivo}
@@ -198,7 +231,7 @@ function Monitoreo (props) {
                                 </Grid>                                
                             ))
                             } 
-                             {cronograma.map(opcion=> (
+                             {datosIndicadores.map(opcion=> (
                                 <Grid container direction="row" >
                                     <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
                                     {opcion.totalQuejas}
@@ -212,12 +245,10 @@ function Monitoreo (props) {
 
 
                         
-                    </CardContent>
-                    {/* <CardActions>
-                        <Button size="small"> Total de Beneficiarios</Button>
-                    </CardActions> */}
-                </Card>
- 
+                    </CardContent> 
+                   
+               </Card> */}
+
 
             </Grid>
 
@@ -245,7 +276,11 @@ function Monitoreo (props) {
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">                            
                             <Typography variant="h5"  gutterBottom justify="center" >
-                                { respuesta }
+                                    {/* <Pie chartData={chartDataEntregados}  md={6} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                                    <Bar chartData={chartDataEntregados}  md={6} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                                    <Line chartData={chartDataEntregados} md={10} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                         */}
+                         {respuesta}
                             </Typography>
                         </Grid>
                     </Grid>
