@@ -295,11 +295,3 @@ function formato(texto){
 
 }
 export default Monitoreo;
-
-
-
-  
-/*
-
-
-*/
