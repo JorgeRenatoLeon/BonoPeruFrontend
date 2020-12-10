@@ -3,15 +3,23 @@ import {  AppBar, Toolbar,Typography,  Container,TextField , InputBase, Paper} f
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
  import axios from "axios";
+//Para el mensaje de confirmacion
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 //Para el api
  import { useEffect,useState } from "react";
 import Cronograma from './Cronograma';
 import { history } from "../../helpers/history";
+import  ModalPublicar  from "./ModalPublicar";
+import  ModalGenerar  from "./ModalGenerar";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { textSpanContainsPosition } from 'typescript';
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 function formato(texto){
     return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
   }
@@ -28,6 +36,7 @@ function formato(texto){
 
     return anio +"-"+mes+"-"+dia;
   }
+//   Rpta se utiliza para escribir  html en javascript
   const rpta = [
     { id: 'Respuesta',  label: 'Respuesta' },
    
@@ -48,78 +57,92 @@ function formato(texto){
  
     
   }));
-  const ARI_URL = "http://localhost:8084/api/cronograma/generarcronograma";//Ari
-  const API_URL = "http://localhost:8084/api/cronograma/resumencronograma";//Caro  
-  const PUB_URL = "http://localhost:8084/api/cronograma/publicar";//Ari
-
+   const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+  const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
+  
+  //const ARI_URL = "http://localhost:8084/api/cronograma/generarcronograma";//Ari
+  //const API_URL = "http://localhost:8084/api/cronograma/resumencronograma";//Caro  
+  
 
 
   var updateCronograma=false;
   var yaSeGeneroCronograma=false;
+
  function GenerarCronograma(){
      //Desactivo el botón de Generar Cronograma
         updateCronograma=true; 
             const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
             const soloNombre = JSON.parse(localStorage.getItem("soloNombre")) ;    //La hemos obtenido 
+            const idUsuario= JSON.parse(localStorage.getItem("user")).id;
 
-            console.log('soloNombre',soloNombre);
-            const params=     {
+            console.log('idUsuario: ',idUsuario);
+            
+            if(soloNombre!=="" && soloFecha!=="" ){
+                const params=     {
                     nombre:soloNombre, 
                     fechaini:formatoInverso(soloFecha), //AAAA-MM-DD
                     fechafin:"",
-                    usuariocreacion:1
+                    usuariocreacion:idUsuario,
             }
-            console.log('params',params);
-              //   API de Ari
-            axios.post(ARI_URL,params)
-            .then(response =>{
-                console.log("ARI url ",response.data);
-                let apiCronograma = [];
-                apiCronograma.push(response.data);
-                localStorage.setItem("Gcronograma", JSON.stringify(response.data));
-                history.push('/bonos'); //No hace push :(
-                yaSeGeneroCronograma=true;
+                console.log('params',params);
+                //   API de Ari
+              axios.post(ARI_URL,params)
+              .then(response =>{
+                  console.log("ARI url ",response.data);
+                  let apiCronograma = [];
+                  apiCronograma.push(response.data);
+                  localStorage.setItem("Gcronograma", JSON.stringify(response.data));
+                  history.push('/bonos'); //No hace push :(
+                  yaSeGeneroCronograma=true;
+                  localStorage.setItem("openConf", JSON.stringify(true));
+                 
+              })
+              .catch(() => {
+                localStorage.setItem("openConf", JSON.stringify(true));
+                  console.log('Error al obtener Cronograma generado')
+              });
+            }
+            else {
+                localStorage.setItem("openConf", JSON.stringify(true));
+                console.log('else: ');
                
-            })
-            .catch(() => {
-                console.log('Error al obtener Cronograma generado')
-            });
+            }
+           
  }    
- function PublicarCronograma(){
-        const cronGuardado = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
-
-            //Sorry 
-        const params=     {
-                idcronograma:cronGuardado.idcronograma
-        }
-          //   API de Ari
-        axios.post(PUB_URL+"/"+cronGuardado.idcronograma)
-        .then(response =>{
-            console.log("ARI Pub url ",response);
-          
-        })
-        .catch(() => {
-            console.log('Error al obtener Publicar cronograma')
-        });
-}  
- 
 
 
 function guardarFecha(event){
-    
+    //Guarda la fecha cuando hay un cambio
     localStorage.setItem("soloFecha",JSON.stringify(event)); 
-    console.log('e: ',event);
+    // console.log('e: ',event);
 }
 function guardarNombre(event){
-    
+    //Guarda el nombre cuando hay un cambio
     localStorage.setItem("soloNombre",JSON.stringify(event)); 
-    console.log('e: ',event);
+    // console.log('e: ',event);
 }
+const handleOpenConfirmacion = (event, reason) => {
+    // setOpenConfirmacion(true);
+    localStorage.setItem("openConf", JSON.stringify(true));
+};
 
+const handleCloseConfirmacion = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    // setOpenConfirmacion(false);
+    localStorage.setItem("openConf", JSON.stringify(false));
+};
 //  path: /bonos
 function GestionBonos (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
           const classes = useStyles();
+
+          //Manejo de mensajes de confirmacion
+        const [openConfirmacion, setOpenConfirmacion] = useState(false);
+        localStorage.setItem("openConf", JSON.stringify(openConfirmacion));
+                 
+        //Fin de manejo de mensajes
         var respuesta;
         const [fechaInicioAux,setFechaIni] = useState("2020-11-20");
         const [fechaFinAux, setFechaFin] = useState("2020-12-10");
@@ -132,38 +155,29 @@ function GestionBonos (props) {
                                 "fechafin": ""
 
         }]); //Set cronograma, creando y un estado de toda la función
+        
         updateCronograma=false;
-    
+        localStorage.setItem("soloNombre",JSON.stringify("Bono")); 
        
             useEffect((cronograma) => {
-
                 //Para que se actualice y mande a la pantalla principal
-                if(cronograma===undefined || cronograma.length===0){
-                 
+                if(cronograma===undefined || cronograma.length===0){                 
                 // /*     API API API API API
                  axios.post(API_URL)
                  .then(response =>{
                      console.log("API OBT : ",response.data);
-                     if(response){
-                        
+                     if(response){                        
                         localStorage.setItem("cronogramaKaytlin", JSON.stringify(response.data)); //apenas lo recibo te lo envío
                         let apiCronograma = [];
-                        apiCronograma.push(response.data);
-                        
+                        apiCronograma.push(response.data);                        
                         if(apiCronograma){
                             setCronograma(apiCronograma);
-                            console.log("API OBT cro: ",apiCronograma);
-                            
+                            console.log("API OBT cro: ",apiCronograma);                            
                             if(apiCronograma[0].idcronograma===""){
-                                updateCronograma=true;
-                               
-                            }
-                            
-                        }
-                        
-                     }
-                     
-                     //setCronograma(Arrcronograma);
+                                updateCronograma=true;                               
+                            }                            
+                        }                        
+                     }                     
                  })
                  .catch((e) => {
                      console.log('Error al obtener Monitoreo',e);
@@ -181,30 +195,34 @@ function GestionBonos (props) {
                         setCronograma(ArrcronogramaNulo);
                         
                     }
-                 });                 }
+                 });                 
+                }
             },  [])
            
        
        // console.log('cronograma:',cronograma);
 
         var titulo="Gestión de Bonos";
-       
+        
         var botones;
         console.log("API OBT cro2: ",cronograma);
         if(updateCronograma===true){
-            //  let apiCronograma = [];
-            //  const cronGuardado = JSON.parse(localStorage.getItem("Gcronograma")) ;    //La hemos obtenido 
-            //  apiCronograma.push(cronGuardado)
-            //  if(apiCronograma){
-            //      setCronograma(apiCronograma);
-            //  }
+            const confirmacion = JSON.parse(localStorage.getItem("openConf")) ;    //La hemos obtenido 
+            setOpenConfirmacion(confirmacion);
+            console.log(confirmacion);
              botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">
-                            <Grid container item md={3} justify="center">                                
+                          <Grid container item md={3} justify="center">                                
                                     <Button variant="contained" size="medium" color="primary" onClick={GenerarCronograma} >
                                         Generar Cronograma 
-                                    </Button>                             
-                            </Grid>
+                                    </Button>
+                              
+                                  <Snackbar open={confirmacion} autoHideDuration={3000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
+                                    <Alert open={confirmacion} onClose={handleCloseConfirmacion} severity="success">
+                                        Generación exitosa
+                                        </Alert>
+                                    </Snackbar>
+                            </Grid> 
                             <Grid container item md={3} justify="center">                                
                                     <Button variant="contained" size="medium" color="secondary" >
                                         Regresar
@@ -225,6 +243,7 @@ function GestionBonos (props) {
             nombre:"Bono", //<3
             FechaInicio:dd+ "/" + mm+ "/" + f.getFullYear(), //AAAA-MM-DD
         }
+        localStorage.setItem("soloFecha",JSON.stringify(escribePantalla.FechaInicio)); 
         if( cronograma[0].idcronograma==="" ){//entra por el api-no hay cronograma
           respuesta=  "Cargando Cronograma...";
             
@@ -349,13 +368,21 @@ function GestionBonos (props) {
             </Grid>
 
             )
+            // const confirmacion = JSON.parse(localStorage.getItem("openConf")) ;    //La hemos obtenido 
+            // setOpenConfirmacion(confirmacion);
+            // console.log(confirmacion);
             // botones de cuando no hay un cronograma generado
                 botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">
                             <Grid container item md={3} justify="center">                                
                                     <Button variant="contained" size="medium" color="primary" onClick={GenerarCronograma} >
                                         Generar Cronograma 
-                                    </Button>                             
+                                    </Button>   
+                                    <Snackbar open={openConfirmacion} autoHideDuration={3000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
+                                    <Alert open={openConfirmacion} onClose={handleCloseConfirmacion} severity="success">
+                                        Generación exitosa
+                                        </Alert>
+                                    </Snackbar>                    
                             </Grid>
                             <Grid container item md={3} justify="center">                                
                                     <Button variant="contained" size="medium" color="secondary" >
@@ -372,7 +399,7 @@ function GestionBonos (props) {
         }
         
         else if (cronograma[0].idcronograma!==""  && cronograma[0].idcronograma!=="inicial" ){//Existe un id
-
+            
             //cambio de formato de Fecha-super no eficiente :(
             var formatoFecha;
             if(cronograma.length===1 && cronograma[0].fechaini !==null && cronograma[0].fechafin !==null){
@@ -397,20 +424,16 @@ function GestionBonos (props) {
                                     </Button>
                                 </Link>
                             </Grid>
-                            <Grid container item md={3} justify="center">                                
-                                    <Button variant="contained" size="medium" color="secondary" >
-                                        Regresar
-                                    </Button>                             
-                            </Grid>
-                            <Grid container item md={3} justify="center">                            
-                                <Button variant="contained" size="medium" color="primary" onClick={PublicarCronograma}>
-                                    Publicar Cronograma 
-                                </Button>
+                            <Grid container item md={3} justify="center">  
+                                <ModalPublicar></ModalPublicar>
                             </Grid>
                         </Grid>
                     );
             }
             else{
+                const confirmacion = JSON.parse(localStorage.getItem("openConf")) ;    //La hemos obtenido 
+                setOpenConfirmacion(confirmacion);
+                console.log(confirmacion);
                 botones=rpta.map((boton) =>   
                         <Grid key={boton.index}  container direction="row" justify="center">
                             <Grid container item md={3} justify="center">                                
@@ -537,8 +560,10 @@ function GestionBonos (props) {
         else  if ( cronograma[0].idcronograma==="inicial" ){           
          respuesta="Cargando..."
      }
-
-
+    
+    //     if(confirmacion==="true")   setOpenConfirmacion(true)
+    //     else setOpenConfirmacion(false);
+  
     return (
         <Grid style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>

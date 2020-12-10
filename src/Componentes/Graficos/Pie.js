@@ -4,10 +4,9 @@
  class Chart extends Component{
    constructor(props){
      super(props);
-     this.state = {
-       chartData:props.chartData
-     }
+     this.state = { data: { datasets:[], labels:[] } }
    }
+   
 
    static defaultProps = {
      displayTitle:true,
@@ -20,10 +19,11 @@
    }
 
    render(){
+      console.log('PIE.js: ',this.props.chartData);
      return (
        <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
         <Pie
-           data={this.state.chartData}
+           data={this.props.chartData}
            options={{
              title:{
                display:this.props.displayTitle,

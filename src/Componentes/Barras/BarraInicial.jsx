@@ -53,16 +53,16 @@ function BarraInicial () {
     const classes = useStyles();
 
     const tabsRepresentante = [
-                            // {nombre: 'Cargar Datos', path: '/cargar'},
-                            {id: 0, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
-                            {id: 1, nombre: 'Gestión de Bonos', path: '/bonos'},
-                            {id: 2, nombre: 'Monitoreo', path: '/monitoreo'},
-                            {id: 3, nombre: 'Reportes', path: '/reportes'},
-                            {id: 4, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
+                            {id: 0, nombre: 'Cargar Datos', path: '/cargar'},
+                            // {id: 1, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
+                            {id: 2, nombre: 'Gestión de Bonos', path: '/bonos'},
+                            {id: 3, nombre: 'Monitoreo', path: '/monitoreo'},
+                            {id: 4, nombre: 'Reportes', path: '/reportes'},
+                            {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
     const tabsAdmin = [
                         {id: 0, nombre: 'Gestión de Bonos', path: '/bonos'},
                         // {nombre: 'Reportes', path: '/reportes'},
-                        {id: 1, nombre: 'Monitoreo', path: '/monitoreo'},
+                       
                         {id: 2, nombre: 'Encuestas', path: '/encuesta'},
                         {id: 3, nombre: 'Usuarios', path: '/usuarios'}]
 
