@@ -32,6 +32,7 @@ const App = () => {
     <Router history={history}>
       <div className="App">
         <Switch>
+<<<<<<< HEAD
           <Route exact path="/" component={PantallaInicial}/> {/* pantalla de Johana */}
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route exact path="/lugares" component={BusquedaLugares}/>
@@ -48,6 +49,25 @@ const App = () => {
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
           <Route exact path="/formulario" component={Formulario}/>
           <RutaProtegida path="/bonos" component={GestionBonos}         
+=======
+          <Route exact path="/" component={PantallaInicial} /> {/* pantalla de Johana */}
+          <Route exact path="/usuarios" component={Usuarios} />
+          <Route exact path="/formulario" component={Formulario} />
+          <Route exact path="/lugares" component={BusquedaLugares} />
+          <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios} />
+          <Route exact path="/cronogramaParaRepresentante" component={Cronograma} />
+          <Route exact path="/informacion" component={Informacion} />
+          <Route exact path='/quejas' component={Quejas} />
+          <Route path="/acceso" component={AccesoSistema} />
+          <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena} />
+          <RutaProtegida path="/encuesta" component={Encuesta} />
+          <RutaProtegida path="/carga" component={CargaMasiva} />
+          <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />
+          <Route path="/editarpreguntasfrecuentes" component={EditarPreguntasFrecuentes} />
+          <Route path="/prueba" component={PruebaC} />            {/* pantalla de Johana para todos :D */}
+          <Route exact path="/formulario" component={Formulario} />
+          <RutaProtegida path="/bonos" component={GestionBonos}
+>>>>>>> origin/Johana
           />
           <Route exact path="/consulta" >  {/* pantalla de Johana :D */}
             <BarraInicial />

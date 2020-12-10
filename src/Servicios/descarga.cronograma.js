@@ -1,7 +1,7 @@
 import axios from "axios";
 const FileDownload = require('js-file-download');
 
-const API_URL = "http://127.0.0.1:8084/api/cronograma/descargar";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/descargar";
 
 const descargarCronograma=(props)=>{
     console.log("lo que le paso", props);

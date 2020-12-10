@@ -6,7 +6,7 @@ import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
  import Line from "../../Componentes/Graficos/Line.js"
  import Bar from "../../Componentes/Graficos/Bar.js"
  import Pie from "../../Componentes/Graficos/Pie.js"
- import apiData from "./apiData.js"
+
  import { makeStyles } from '@material-ui/core/styles';
  import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
@@ -63,30 +63,70 @@ function formato(texto){
 
 
 
-    const ENTREGADOS = "http://localhost:8084/api/cronograma/monitoreoentregabono";
-    const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiarios";
-//fin del chart reporte  
-  //  path: /monitoreo
+    const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
+   //const ENTREGADOS = "http://localhost:8084/api/cronograma/monitoreoentregabono";
+    //const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiarios";
 
+    //fin del chart reporte  
+  //  path: /monitoreo
+  var isResponse=false;
  function Monitoreo (props) {
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
   var labels= ["23-11-2020", "25-11-2020", "08-12-2020"];
-  var data=[2, 1, 0];
- 
+  var data=[0, 1, 2];
+  var pie;
+  // apiEntregados();
         const [cronograma,setCronograma]=useState([]); //Set cronograma, creando y un estado de toda la función
         const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
         const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
+        // const [isResponse,setisResponse]=useState([]); //Set cronograma, creando y un estado de toda la función
        // useEffect((datosEntregados) => {   
- 
-            if(datosIndicadores===undefined || datosIndicadores.length===0){
-                console.log('if: ',datosIndicadores);
-                //  const DataEntregados = JSON.parse(localStorage.getItem("DataEntregados")) ;
-                //   labels=DataEntregados.listaFechas;
-                //   data=DataEntregados.listaCantidades;
-            
+         
+        //  setisResponse(false);
+        useEffect((datosEntregados)=>{
+
+              const apiEntregados=async () => {   
+                const response = await axios.post(ENTREGADOS).then();
+                // console.log('rpta api.data: ',response.data);
+                if(response!==undefined && isResponse===false ){
+                  isResponse=true;
+                  const chartDataEntregadosASYNC={
+                    //labels: response.data.listaFechas,
+                    labels: labels,
+                    datasets:[
+                      {
+                        label:'Bonos Entregados',
+                        // data:response.data.listaCantidades,
+                        data:data, //Valor truncado
+                        backgroundColor:backgroundColor,
+                      }
+                    ]};
+                    
+                  
+                  console.log('chartDataEntregadosASYNC',chartDataEntregadosASYNC);
+                  let api=[];
+                  api.push(chartDataEntregadosASYNC);
+                  
+                  if(api!==undefined){
+                    console.log('datosEntregados antes set',datosEntregados);
+                    setdatosEntregados(api);
+                    console.log('api',api);
+                    console.log('datosEntregados deps set',datosEntregados);
+                  }
+                 
+                }
+              
+                
+                // console.log(this.state.chartData);
+              }
+        apiEntregados();
+        },[]);
+
+        console.log('datosEntregados async dsps api',datosEntregados);
+            if(datosIndicadores===undefined || datosIndicadores.length===0)            
                 axios.post(TOTALES)
-                .then(response =>{
-                    console.log("API entregado: ",response.data);   
+                .then(response =>{                    
                     let api=[];
                     api.push(response.data)   ;               
                     setdatosIndicadores(api);
@@ -95,25 +135,9 @@ function formato(texto){
                 .catch(() => {
                     console.log('Error al obtener Entregados');
                 });
-                //console.log(apiData.DataEntregadosApi());
-                //const a= DataEntregadosApi();
-                //setdatosEntregados(a);
-            }        
-            console.log('fuera del api',datosEntregados);
-            
-
              var titulo="Monitoreo";
             var respuesta;
             const classes = useStyles();
-           
-        
-     
-              if(datosEntregados.length!==0 && datosEntregados!==undefined ) {
-                labels=datosEntregados.listaFechas;
-                data=datosEntregados.listaCantidades;
-              } 
-             
-              console.log('labels',labels);
               var chartDataEntregados={
                 //fila de nombre
                 //Líne: Arreglo de Dias
@@ -126,14 +150,12 @@ function formato(texto){
                    }
                  ]
                }    
-               console.log('chartDataEntregados',chartDataEntregados);    
-       
-               
             respuesta= rpta.map((rpta,index)   =>
             <Grid key={rpta.id} container  justify="center">
-               <Line chartData={chartDataEntregados} md={10} nameTitle="Bonos Entregados" legendPosition="bottom"/>
-              
-                 <Pie chartData={chartDataEntregados}  md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+               <Line chartData={datosEntregados} md={10} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+               {/* <apiData></apiData> */}
+               <Pie chartData={datosEntregados}  md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+                 {/* { datosEntregados===undefined? "a": ":("} */}
                 <Bar chartData={chartDataEntregados} md={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
               <Card className={classes.root} variant="outlined">
                     <CardContent>
