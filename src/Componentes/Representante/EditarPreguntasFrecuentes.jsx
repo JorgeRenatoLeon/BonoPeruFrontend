@@ -68,27 +68,29 @@ export default function EditarPreguntasFrecuentes(props) {
     };
 
     const changePregunta = e => {
-        setPregunta(e.target.value);
+        //setPregunta(e.target.value);
     };
 
     const changeRespuesta = e => {
-        setRespuesta(e.target.value);
+        //setRespuesta(e.target.value);
     };
 
     const validate = () => {
         let isError = false;
 
+        /*
         if (pregunta.length < 5) {
             isError = true;
-            preguntaErr("Ingresar una pregunta válida");
+            setPreguntaErr("Ingresar una pregunta válida");
         }
 
         if (respuesta.length < 1) {
             isError = true;
-            respuestaErr("Ingresar una respuesta válida");
+            setRespuestaErr("Ingresar una respuesta válida");
         }
 
         return isError;
+        */
     };
 
     const listarPreguntas = () => {
