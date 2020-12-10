@@ -20,7 +20,7 @@
  import TableSortLabel from '@material-ui/core/TableSortLabel';
  import {useLocation} from "react-router-dom";
  import ConsultaService from "../../Servicios/consultacod.service";
-
+ import FormLabel from '@material-ui/core/FormLabel';
 //Para el título grandote
 function createData(id, codigo, nombre, lugar, direccion) {
     return { id, codigo, nombre, lugar, direccion};
@@ -60,6 +60,7 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
+  { id: 'tipo', numeric: false, disablePadding: false, label: 'Tipo' },
   { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar' },
   { id: 'direccion', numeric: false, disablePadding: false, label: 'Direccion' },
 ];
@@ -151,6 +152,7 @@ const ConsultasBeneficiarios = (params) => {
       id:  data.state.id,
       codigo: data.state.codigo,
       nombre: data.state.nombre,
+      tipo: data.state.tipo,
       lugar: data.state.lugar,
       direccion: data.state.direccion,   
     }];
@@ -178,8 +180,16 @@ const ConsultasBeneficiarios = (params) => {
     };
 
     const [mensaje, setMensaje] = useState(null);
+    const [mostrarErrorBusqueda, setErrorBusqueda]= useState(false);
 
     const buscarBeneficiario=(texto) =>{
+      var letters = /^\d*[a-zA-Z][a-zA-Z\d]*$/;
+      setBusq(texto);
+      if(!letters.test(texto)){
+        setErrorBusqueda(true);
+        return;
+      }
+      setErrorBusqueda(false);
       setMensaje("Cargando...");
       var dia = ("0" + (new Date()).getDate()).slice(-2);
       var mes = ("0" + ((new Date()).getMonth() + 1)).slice(-2);
@@ -243,6 +253,7 @@ const ConsultasBeneficiarios = (params) => {
 
     return (
         <Grid>
+          <Grid style={{minHeight: "92vh"}}>
             <BarraInicial/>                
             <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
@@ -280,6 +291,7 @@ const ConsultasBeneficiarios = (params) => {
                                     <TableRow hover tabIndex={-1} key={row.id} >
                                     <TableCell align="left">{row.codigo}</TableCell>
                                     <TableCell align="left">{row.nombre}</TableCell>
+                                    <TableCell align="left">{row.tipo}</TableCell>
                                     <TableCell align="left">{row.lugar}</TableCell>
                                     <TableCell align="left">{row.direccion}</TableCell>
                                     </TableRow>
@@ -293,9 +305,17 @@ const ConsultasBeneficiarios = (params) => {
                 <Grid container direction="row" justify="center" alignItems="center">
                     <BuscadorConsulta mensaje = "Ingrese el Código de familia" buscar={buscarBeneficiario} texto={busqueda}></BuscadorConsulta> 
                 </Grid>
+                <Grid container direction="row" justify="center" alignItems="center">
+                      {mostrarErrorBusqueda?
+                        busqueda===""?
+                        <FormLabel error={true}>Debe ingresar un código de familia</FormLabel>:
+                        <FormLabel error={true}>Búsqueda inválida</FormLabel>
+                      :<Grid></Grid>}
+                    </Grid>
             </Paper> 
             {mensaje?
             <Respuesta mensaje={mensaje}></Respuesta>:<Grid></Grid>}
+            </Grid>
             <BarraFinal/>
         </Grid>
     );
