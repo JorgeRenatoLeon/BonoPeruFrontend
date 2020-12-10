@@ -30,13 +30,13 @@ export default function FormDialog(props) {
     };
 
     const changePregunta = e => {
-        setNombre(e.target.value);
-        setNombreErr("");
+        setPregunta(e.target.value);
+        setPreguntaErr("");
     };
 
     const changeRespuesta = e => {
-        setApellido(e.target.value);
-        setApellidoErr("");
+        setRespuesta(e.target.value);
+        setRespuestaErr("");
     };
 
     const validate = () => {
