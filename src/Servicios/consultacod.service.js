@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8084/api/horario/consultarCodigoFamilia";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/horario/consultarCodigoFamilia";
 
 const datos ={
     idlugarentrega: 7,

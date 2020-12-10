@@ -53,7 +53,7 @@ function BarraInicial () {
     const classes = useStyles();
 
     const tabsRepresentante = [
-                            {id: 0, nombre: 'Cargar Datos', path: '/cargar'},
+                            {id: 0, nombre: 'Cargar Datos', path: '/carga'},
                             // {id: 1, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
                             {id: 2, nombre: 'Gestión de Bonos', path: '/bonos'},
                             {id: 3, nombre: 'Monitoreo', path: '/monitoreo'},
