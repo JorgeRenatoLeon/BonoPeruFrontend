@@ -181,10 +181,10 @@ export default function EditarPreguntasFrecuentes(props) {
                             <List className={classes.root}>
                                 {preguntas.map((pregunta, index) =>
                                     <ListItem alignItems="flex-start">
-                                        <Grid>
+                                        <Grid container item md={12} style={{width: 'auto'}}>
                                             <TextField
-                                                style={{ padding: "15px" }}
-                                                fullWidth
+                                                style={{ padding: "15px" , width: '100%'}}
+                                                fullWidth={true}
                                                 variant="outlined"
                                                 id="pregunta"
                                                 //label="Pregunta"
@@ -196,13 +196,14 @@ export default function EditarPreguntasFrecuentes(props) {
                                                     startAdornment: <InputAdornment position="start">{"Pregunta " + (index + 1) + ": "}</InputAdornment>,
                                                 }}
                                             />
-                                            <br />
                                             <TextField
-                                                style={{ padding: "15px" }}
-                                                fullWidth
+                                                style={{ padding: "15px" , width: '100%'}}
+                                                fullWidth={true}
                                                 variant="outlined"
                                                 id="respuesta"
                                                 //label="Respuesta"
+                                                type='text'
+                                                size="medium"
                                                 hintText="Respuesta"
                                                 value={pregunta.respuesta}
                                                 onChange={r => changeRespuesta(r)}
@@ -213,7 +214,6 @@ export default function EditarPreguntasFrecuentes(props) {
                                                 }}
                                             />
                                             <EliminarPregunta preg={pregunta} onActualizar={listarPreguntas} />
-                                            <br />
                                         </Grid>
                                         <Divider variant="inset" component="li" />
                                     </ListItem>
