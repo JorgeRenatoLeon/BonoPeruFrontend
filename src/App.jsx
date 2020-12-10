@@ -20,7 +20,8 @@ import GestionBonos from './Componentes/Representante/GestionBonos'
 import Monitoreo from "./Componentes/Representante/Monitoreo";
 import Informacion from './Componentes/Beneficiario/Informacion';
 import CargaMasiva from "./Componentes/Representante/CargaMasiva";
-
+import PreguntasFrecuentes from "./Componentes/Representante/PreguntasFrecuentes";
+import EditarPreguntasFrecuentes from "./Componentes/Representante/EditarPreguntasFrecuentes";
 import Usuarios from './Componentes/Admin/Usuarios'
 import Formulario from './Componentes/Admin/Formulario'
 import OlvidarContrasena from "./Componentes/OlvidarContrasena";
@@ -42,6 +43,8 @@ const App = () => {
           <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <RutaProtegida path="/carga" component={CargaMasiva}/>
+          <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />
+          <Route path="/editarpreguntasfrecuentes" component={EditarPreguntasFrecuentes} />
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
           <Route exact path="/formulario" component={Formulario}/>
           <RutaProtegida path="/bonos" component={GestionBonos}         
