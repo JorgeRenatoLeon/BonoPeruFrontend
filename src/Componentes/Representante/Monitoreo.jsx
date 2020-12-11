@@ -65,8 +65,7 @@ function formato(texto){
 
     const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
-   //const ENTREGADOS = "http://localhost:8084/api/cronograma/monitoreoentregabono";
-    //const TOTALES = "http://localhost:8084/api/cronograma/reportebeneficiarios";
+ 
 
     //fin del chart reporte  
   //  path: /monitoreo
