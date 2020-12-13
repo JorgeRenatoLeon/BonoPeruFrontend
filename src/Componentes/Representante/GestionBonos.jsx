@@ -110,8 +110,8 @@ export default function GestionBonos (){
             useEffect((cronograma) => {
                 //Para que se actualice y mande a la pantalla principal
                 if(cronograma===undefined || cronograma.length===0){                 
-                // /*     API API API API API
-                CronogramaActual();
+                     // /*     API API API API API
+                    CronogramaActual();
                        
                 }
             },  [])

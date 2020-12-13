@@ -7,7 +7,7 @@ import {  Grid, InputLabel} from '@material-ui/core';
 const DropdownIndicator = props => {
     return (
         <components.DropdownIndicator {...props}>
-          <ArrowDropDownIcon  fontSize="medium" />    
+          <ArrowDropDownIcon  fontSize="default" />    
         </components.DropdownIndicator>
       );
 };

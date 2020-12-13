@@ -19,7 +19,7 @@
    }
 
    render(){
-      console.log('PIE.js: ',this.props.chartData);
+     
      return (
        <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
         <Pie
