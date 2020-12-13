@@ -42,13 +42,13 @@ const OlvidarContrasena = (props) => {
         return <div>Loading...</div>;
     }
 
-    // function onKeyPress(event) {
-    //     const keyCode = event.keyCode || event.which;
-    //     const keyValue = String.fromCharCode(keyCode);
-    //     const regex = /^[a-zA-Z]+$/
-    //     if(!regex.test(keyValue))
-    //         event.preventDefault();
-    // }
+    function onKeyPress(event) {
+        const keyCode = event.keyCode || event.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const regex = /^[a-zA-Z0-9]+$/
+        if(!regex.test(keyValue))
+            event.preventDefault();
+    }
 
     function cambiarContrasena(){
         // if(usuario!==''){
@@ -124,6 +124,7 @@ const OlvidarContrasena = (props) => {
                                 size="small"
                                 autoComplete="current-password"
                                 fullWidth={true}
+                                onKeyPress={onKeyPress.bind(this)}
                                 inputProps={{maxLength: 20}}
                                 InputProps={{
                                 endAdornment: (
@@ -157,6 +158,7 @@ const OlvidarContrasena = (props) => {
                                 size="small"
                                 autoComplete="current-password"
                                 fullWidth={true}
+                                onKeyPress={onKeyPress.bind(this)}
                                 helperText={confirmarContrasena!=='' && confirmarContrasena!==nuevaContrasena ? "Las contraseñas no coinciden": null}
                                 inputProps={{maxLength: 20}}
                                 InputProps={{
