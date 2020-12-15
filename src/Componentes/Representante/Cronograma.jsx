@@ -460,7 +460,7 @@ const Cronograma = (props) => {
                         </Typography>
                           <RangoFechas onCambio={cambiar}/>
                         <Typography variant="subtitle1" color="inherit">
-                            Nombre lugar de entrega:
+                            Lugar de entrega:
                         </Typography>
                         <TextField className="inputRounded" id="outlined-basic" 
                         label={null} variant="outlined" value={searchText}

@@ -34,6 +34,8 @@ function Quejas() {
     ];
     const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt")) ;   //RespuestaBeneficiario.jsx            
     console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega 
+
+    let cant = 0;
     return ( 
         <Grid>
             <BarraInicial/>             
@@ -48,8 +50,18 @@ function Quejas() {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <Queja></Queja>
-            <Queja></Queja>
+            {cant = cant + 1}
+            {apiBeneficiario.map(opcion=> (
+/*                         <Grid container direction="row" item md={4} xs={4}>  
+                            <Typography variant="subtitle2" color="inherit">
+                            {opcion.horariolugarentrega.lugarentrega.nombre} 
+                            </Typography> 
+                        </Grid>  */
+                    <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={cant} 
+                        idHorario={opcion.horariolugarentrega.idHorariolugarentrega}
+                        idLugar={opcion.horariolugarentrega.lugarentrega.idLugarentrega}></Queja>      
+                )) 
+            } 
             <BarraFinal/>
         </Grid>
     );
