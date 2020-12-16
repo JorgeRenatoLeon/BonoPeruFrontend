@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import QuejasService from '../Servicios/quejas.service';
 
 var descripcion1 = [];
 var descripcion2 = [];
@@ -19,18 +20,26 @@ const Queja=(props)=>{
     const [tipoQueja1,setTipoQueja1]= useState("");
     const [respuesta1,setRespuesta1] = useState(false);
     const [razones1,setRazones1] = useState(true);
-
+    const [colorPreg1,setColorP1]=useState("secondary");
+    const [colorAst1,setColorA1] = useState("secondary");
     const [tipoQueja2,setTipoQueja2]= useState("");
     const [respuesta2,setRespuesta2] = useState(false);
     const [razones2,setRazones2] = useState(true);
+    const [colorPreg2,setColorP2] = useState("secondary");
+    const [colorAst2,setColorA2] = useState("secondary");
 
     function handleChangeRadio1(valor){
         setRespuesta1(true);
         setTipoQueja1(valor);
+        console.log(valor);       
         if(valor === "lugar"){
             setRazones1(false);
+            setColorP1("inherit");
+            setColorA1("error");
         }else{
-            setRazones1(true);
+            setRazones1(true)
+            setColorP1("secondary");
+            setColorA1("secondary");
         }
     }
     
@@ -39,8 +48,12 @@ const Queja=(props)=>{
         setTipoQueja2(valor);
         if(valor === "horario"){
             setRazones2(false);
+            setColorP2("inherit");
+            setColorA2("error");
         }else{
             setRazones2(true);
+            setColorP2("secondary");
+            setColorA2("secondary");
         }
     }
 
@@ -91,56 +104,53 @@ const Queja=(props)=>{
     } 
 
     const ponerValorOtro1=()=>{
-        for (var i = descripcion1.length - 1; i >= 0; i--) {
-            if (descripcion1[i] === "Otro" ) {
-              descripcion1.splice(i, 1);
-              descripcion1.push(answerText1);
-              console.log("donde se hace el cambio",descripcion1);
-              break;
+        if(answerText1 !=""){
+            for (var i = descripcion1.length - 1; i >= 0; i--) {
+                if (descripcion1[i] === "Otro" ) {
+                  descripcion1.splice(i, 1);
+                  descripcion1.push(answerText1);
+                  console.log("donde se hace el cambio",descripcion1);
+                  break;
+                }
             }
-        }
+        } 
     }
 
     const ponerValorOtro2=()=>{
-        for (var i = descripcion2.length - 1; i >= 0; i--) {
-            if (descripcion2[i] === "Otro" ) {
-              descripcion2.splice(i, 1);
-              descripcion2.push(answerText2);
-              console.log("donde se hace el cambio",descripcion2);
-              break;
+        if(answerText2 !=""){
+            for (var i = descripcion2.length - 1; i >= 0; i--) {
+                if (descripcion2[i] === "Otro" ) {
+                descripcion2.splice(i, 1);
+                descripcion2.push(answerText2);
+                console.log("donde se hace el cambio",descripcion2);
+                break;
+                }
             }
         }
     }
 
     const [deshabilitar,setDeshabilitar] = useState(false);
     const [error,setError] = useState(false);
-   /*  const enviarInfo=()=>{
-        if(respuesta1 && respuesta2){
-            setError(false);
-            ponerValorOtro1();
-            ponerValorOtro2();
-            console.log("fidbeneficiario", apiBeneficiario.beneficiario.idbeneficiario);
-            console.log("fidhorario", props.idHorario);
-            console.log("fidlugarentrega", props.idLugar);
-            console.log("tipoqueja1", tipoQueja1);
-            console.log("descripción1", descripcion1);
-            console.log("tipoqueja2",tipoQueja2);
-            console.log("descripción2", descripcion2);
-            //setDeshabilitar(true);
-        }else{
-            setError(true);
-        }
-       
-    } */
-    var isResponse=false;
-    const [open, setOpen] = React.useState(false);
+    const [mensajeError,setMensajeError] = useState("");
+    const [open, setOpen] = useState(false);
     const [mensaje,setMensaje] =useState('¿Está seguro que desea enviar sus respuestas?');
 
     const enviarInfo = () => {
-        if(respuesta1 && respuesta2){
-            setOpen(true);
+        if(respuesta1 && respuesta2 ){
+            if((tipoQueja1 === "") || (tipoQueja1==="lugar" && descripcion1.length>=1)){
+                if((tipoQueja2 === "") || (tipoQueja2==="horario" && descripcion2.length>=1)){
+                    setOpen(true);
+                }else{
+                    setError(true);
+                    setMensajeError("Debe seleccionar al menos un incoveniente que tuvo sobre el turno");
+                }
+            }else{
+                setError(true);
+                setMensajeError("Debe seleccionar al menos un incoveniente que tuvo incoveniente que tuvo en el lugar de entrega");
+            }  
         }else{
             setError(true);
+            setMensajeError("Debe responder las preguntas obligatorias, las cuales tienen(*)");
         }
     };
 
@@ -156,6 +166,16 @@ const Queja=(props)=>{
         console.log("descripción1", descripcion1);
         console.log("tipoqueja2",tipoQueja2);
         console.log("descripción2", descripcion2);
+        const datos ={
+            fidbeneficiario: apiBeneficiario.beneficiario.idbeneficiario,
+            fidhorario: props.idHorario,
+            fidlugarentrega: props.idLugar,
+            tipoqueja1: tipoQueja1,
+            descripcion1: descripcion1,
+            tipoqueja2: tipoQueja2,
+            descripcion2: descripcion2,
+        }
+        QuejasService.enviarQuejas(datos);
         setDeshabilitar(true);
     }; 
     const handleCancelar = () => {
@@ -191,9 +211,14 @@ const Queja=(props)=>{
                         </RadioGroup>
                     </Grid>
                     <Grid container direction="column" justify="space-evenly" alignItems="center" >
-                            <Typography variant="subtitle1" color="inherit">
+                        <Grid container direction="row" justify="center" alignItems="center" >
+                            <Typography variant="subtitle1" color={colorPreg1}>
                                 2. Seleccione el incoveniente que tuvo en el lugar de entrega
-                            </Typography>                           
+                            </Typography>  
+                            <Typography variant="h4" color={colorAst1}>
+                                *
+                            </Typography>
+                        </Grid>                         
                         <FormGroup>
                         {labelsPregunta2.map(opcion=> (
                             opcion === "Otro" ?
@@ -230,9 +255,14 @@ const Queja=(props)=>{
                         </RadioGroup>
                     </Grid>
                     <Grid container direction="column" justify="space-evenly" alignItems="center" >
-                        <Typography variant="subtitle1" color="inherit">
-                            4. Seleccione el incoveniente que tuvo sobre el turno
-                        </Typography>
+                        <Grid container direction="row" justify="center" alignItems="center" >
+                            <Typography variant="subtitle1" color={colorPreg2}>
+                                4. Seleccione el incoveniente que tuvo sobre el turno
+                            </Typography>  
+                            <Typography variant="h4" color={colorAst2}>
+                                *
+                            </Typography>
+                        </Grid> 
                         <FormGroup>
                         {labelsPregunta4.map(opcion=> (
                             opcion === "Otro" ?
@@ -257,7 +287,7 @@ const Queja=(props)=>{
                     <Grid container justify="center" style={{marginLeft: 40, marginRight: 40, marginBottom: 20, boxShadow: 'none'}}>
                     <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
-                    Debe responder las preguntas obligatorias, las cuales tienen <strong>(*)</strong>
+                    {mensajeError}
                     </Alert>
                     </Grid>
                     :<Grid></Grid>}
@@ -266,7 +296,7 @@ const Queja=(props)=>{
                         Enviar
                     </Button> 
                     <Dialog open={open} onClose={handleCancelar} aria-labelledby="form-dialog-title" fullWidth={true}>
-                        <DialogTitle id="form-dialog-title">Aviso</DialogTitle>
+                        <DialogTitle id="form-dialog-title">Confirmación</DialogTitle>
                         <DialogContent>
                             < Grid container direction="row" item md={10} style={{paddingTop: '7px'}}>
                                     <Typography variant="subtitle2" color="inherit" >
