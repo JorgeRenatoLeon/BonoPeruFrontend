@@ -28,6 +28,9 @@ const Queja=(props)=>{
     const [colorPreg2,setColorP2] = useState("secondary");
     const [colorAst2,setColorA2] = useState("secondary");
 
+    const [colorPreg, setColorPreg] = useState("inherit");
+    const [colorAst,setColorAst] = useState("error");
+    const [radiosDisabled,setRadiosDisabled] = useState(false);
     function handleChangeRadio1(valor){
         setRespuesta1(true);
         setTipoQueja1(valor);
@@ -104,7 +107,7 @@ const Queja=(props)=>{
     } 
 
     const ponerValorOtro1=()=>{
-        if(answerText1 !=""){
+        if(answerText1 != ""){
             for (var i = descripcion1.length - 1; i >= 0; i--) {
                 if (descripcion1[i] === "Otro" ) {
                   descripcion1.splice(i, 1);
@@ -173,10 +176,19 @@ const Queja=(props)=>{
             tipoqueja1: tipoQueja1,
             descripcion1: descripcion1,
             tipoqueja2: tipoQueja2,
-            descripcion2: descripcion2,
+            descripcion2: descripcion2
         }
         QuejasService.enviarQuejas(datos);
         setDeshabilitar(true);
+        setColorPreg("secondary");
+        setColorAst("secondary");
+        setRadiosDisabled(true);
+        setRazones1(true)
+        setColorP1("secondary");
+        setColorA1("secondary");
+        setRazones2(true)
+        setColorP2("secondary");
+        setColorA2("secondary");
     }; 
     const handleCancelar = () => {
         setOpen(false);
@@ -196,17 +208,17 @@ const Queja=(props)=>{
                 <Grid>
                     <Grid container direction="column" justify="space-evenly" alignItems="center" >
                         <Grid container direction="row" justify="center" alignItems="center" >
-                            <Typography variant="subtitle1" color="inherit">
+                            <Typography variant="subtitle1" color={colorPreg}>
                                 1. ¿Tuvo algún inconventiente con su lugar de entrega asignado?
                             </Typography>
-                            <Typography variant="h4" color="error">
+                            <Typography variant="h4" color={colorAst}>
                                 *
                             </Typography>
                         </Grid>
                         <RadioGroup row variant="subtitle1"  color="inherit">
-                        <FormControlLabel value="Si" control={<Radio color='primary'/>} 
+                        <FormControlLabel value="Si" control={<Radio color='primary' disabled={radiosDisabled}/>} 
                             label="Si" onClick={() => handleChangeRadio1("lugar")}/>
-                        <FormControlLabel value="No" control={<Radio color='primary'/>} 
+                        <FormControlLabel value="No" control={<Radio color='primary' disabled={radiosDisabled} />} 
                             label="No" onClick={() => handleChangeRadio1("")}/>
                         </RadioGroup>
                     </Grid>
@@ -240,17 +252,17 @@ const Queja=(props)=>{
                     </Grid>
                     <Grid container direction="column" justify="space-evenly" alignItems="center" >
                         <Grid container direction="row" justify="center" alignItems="center" >
-                            <Typography variant="subtitle1" color="inherit">
+                            <Typography variant="subtitle1" color={colorPreg}>
                                 3. ¿Tuvo algún inconventiente con su turno asignado?
                             </Typography>
-                            <Typography variant="h4" color="error">
+                            <Typography variant="h4" color={colorAst}>
                                 *
                             </Typography>
                         </Grid>
                         <RadioGroup row variant="subtitle1"  color="inherit">
-                            <FormControlLabel value="Si" control={<Radio color='primary'/>} 
+                            <FormControlLabel value="Si" control={<Radio color='primary' disabled={radiosDisabled}/>} 
                                 label="Si" onClick={() => handleChangeRadio2("horario")}/>
-                            <FormControlLabel value="No" control={<Radio color='primary'/>} 
+                            <FormControlLabel value="No" control={<Radio color='primary' disabled={radiosDisabled}/>} 
                                 label="No" onClick={() => handleChangeRadio2("")}/>
                         </RadioGroup>
                     </Grid>
@@ -315,9 +327,11 @@ const Queja=(props)=>{
                                 </Button>
                         </DialogActions>
                     </Dialog>
-                    <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
-                        Cancelar 
-                    </Button>
+                    <Link to='/consulta' style={{textDecoration:"none"}}>
+                        <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
+                            Regresar
+                        </Button>
+                    </Link> 
                 </Grid>                  
             </Paper>  
         </Grid>

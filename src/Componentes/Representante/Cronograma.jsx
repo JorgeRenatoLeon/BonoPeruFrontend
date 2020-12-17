@@ -32,7 +32,8 @@ import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
-
+import { SelectAll } from '@material-ui/icons';
+import CronogramaA from "./Cronograma";
 
 const reducer = (state, action) => {
     return { checkedId: action.id }
@@ -75,6 +76,7 @@ const headCells = [
   { id: 'riesgo', numeric: false, disablePadding: false, label: 'Riesgo' },
 ];
 
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: "5AB9EA",
@@ -88,9 +90,9 @@ const StyledTableCell = withStyles((theme) => ({
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort} = props;
-  const createSortHandler = (property) => (event) => {
+  /*const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
-  };
+  };*/
 
 
   return (
@@ -109,16 +111,16 @@ function EnhancedTableHead(props) {
             style={{background: '#5AB9EA'}}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              //active={orderBy === headCell.id}
+              //direction={orderBy === headCell.id ? order : 'asc'}
+              // onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
+              {/* {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
-              ) : null}
+              ) : null} */}
             </TableSortLabel>
           </StyledTableCell>
         ))}
@@ -376,7 +378,9 @@ const Cronograma = (props) => {
     const [state, dispatch] = useReducer(reducer, {})
  
     var arrayNumSelected = [];
-    const selectCheckBox= event =>{
+
+    const selectCheckBox= (event) =>{
+      console.log(event);
       if(event.target.checked) {
         arrayNumSelected.push(parseInt(event.target.id));
       } else{
@@ -394,7 +398,6 @@ const Cronograma = (props) => {
     const [errorDescarga, setError] = useState(false);
     const descargaCronograma=()=>{
       if(arrayNumSelected.length === 0){
-        console.log("No mi amor");
         //alert("Debe seleccionar al menos un lugar para poder descargar");
         setError(true);
         return
@@ -486,8 +489,7 @@ const Cronograma = (props) => {
                         orderBy={orderBy}
                         onRequestSort={handleRequestSort}
                         />
-                        
-                        
+                      
                         <TableBody>
                         {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
