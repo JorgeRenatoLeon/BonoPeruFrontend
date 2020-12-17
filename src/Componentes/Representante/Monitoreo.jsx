@@ -21,7 +21,7 @@ import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
 import Combobox from '../Elementos/Combobox';
 import RangoFechas from '../Elementos/RangoFechas';
-
+import  Cargando  from "../ModalCargando";
 export default function GestionBonos (){
     function formato(texto){
       return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
@@ -229,7 +229,8 @@ export default function GestionBonos (){
         apiTotales(cronogramaInicial);
     },[]);
 
-    //fin del chart reporte  
+    //fin del chart reporte 
+     
     //  path: /monitoreo
     const classes = useStyles();
     var titulo="Monitoreo";
@@ -349,6 +350,17 @@ export default function GestionBonos (){
 
             )
           }
+    //PARA MODAL CARGANDO
+    const useStyles2 = makeStyles((theme) => ({
+      root: {
+        display: 'flex',
+        '& > * + *': {
+          marginLeft: theme.spacing(2),
+        },
+      },
+    }));
+  const classes2 = useStyles2();
+  //FIN DE MODAL CARGANDO
     return (
         <div style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
@@ -398,7 +410,12 @@ export default function GestionBonos (){
                         <Grid container item xs={12} justify="center">                            
                             <Typography variant="h5"  gutterBottom justify="center" >
                                    
-                             {respuesta}
+                             {datosEntregados?
+                             respuesta:
+                              <Grid container direction="row" justify="center">
+                                  <Cargando/>
+                              </Grid>       
+                             }
                             </Typography>
                         </Grid>
                     </Grid>

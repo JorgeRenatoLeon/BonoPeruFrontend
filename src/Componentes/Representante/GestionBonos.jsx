@@ -13,15 +13,13 @@ import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider} from
  import TableRow from '@material-ui/core/TableRow';
  import TableSortLabel from '@material-ui/core/TableSortLabel';
  import HistoricoService from "../../Servicios/historico.service";
-
- //Para el mensaje de confirmacion
+  //Para el mensaje de confirmacion
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
 //Para el api
 import { history } from "../../helpers/history";
 import  ModalPublicar  from "./ModalPublicar";
-
+import  Cargando  from "../ModalCargando";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 function descendingComparator(a, b, orderBy) {
@@ -160,6 +158,7 @@ function formato(texto){
         width: 1,
     },
   }));
+
    const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
   const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
 
@@ -666,7 +665,11 @@ const GestionBonos = (props)=>{
 
         }
         else  if ( cronograma[0].idcronograma==="inicial" ){           
-         respuesta="Cargando..."
+        //  respuesta="Cargando..."
+         respuesta=rpta.map((boton) => 
+            <Cargando/>
+         );
+
      }
 
      const [rows, setRows] = useState([]);
@@ -722,6 +725,20 @@ const GestionBonos = (props)=>{
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    //PARA MODAL CARGANDO
+    const useStyles2 = makeStyles((theme) => ({
+        root: {
+          display: 'flex',
+          '& > * + *': {
+            marginLeft: theme.spacing(2),
+          },
+        },
+      }));
+    const classes2 = useStyles2();
+    //FIN DE MODAL CARGANDO
+
+
+
     return (
         <StrictMode >
         <Grid style={{minHeight:"88vh"}}>
@@ -756,7 +773,8 @@ const GestionBonos = (props)=>{
                 </Container>
 
             </Grid>
-            <Divider style={{ height:"2px", backgroundColor:"black"}}/>
+            {/* <Divider style={{ height:"2px", backgroundColor:"black"}}/> */}
+            {/* Historico de Bonos */}
             <Grid> 
                 <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>
                     {rows.length > 0?
@@ -803,13 +821,18 @@ const GestionBonos = (props)=>{
                         onChangeRowsPerPage={handleChangeRowsPerPage}                    
                         />
                     </Grid>:
+                        // <Grid container direction="row" justify="center">
+                        //     <Grid container item xs={12} justify="center">
+                        //         <Typography variant="h3"  gutterBottom justify="center" >
+                        //                 <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
+                        //         </Typography> 
+                        //     </Grid>                                                  
+                        // </Grid>
                         <Grid container direction="row" justify="center">
-                            <Grid container item xs={12} justify="center">
-                                <Typography variant="h3"  gutterBottom justify="center" >
-                                        <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
-                                </Typography> 
-                            </Grid>                                                  
-                        </Grid>}                 
+                            <Cargando/>
+                        </Grid>                        
+                        }       
+                        {/* CARGANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}          
                 </Paper>      
             </Grid>
         </Grid>
