@@ -65,8 +65,8 @@ export default function FormDialog(props) {
                 pregunta: pregunta,
                 respuesta: respuesta,
                 estado: "ACT",
-                //usuariocreacion: JSON.parse(localStorage.getItem("user")).id,
-                usuariocreacion: 1,
+                usuariocreacion: JSON.parse(localStorage.getItem("user")).id,
+                //usuariocreacion: 1,
             };
 
             PreguntasService.insertarPregunta(preg).then(response => {

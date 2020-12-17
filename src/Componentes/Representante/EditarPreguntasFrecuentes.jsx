@@ -127,8 +127,8 @@ export default function EditarPreguntasFrecuentes() {
                     idpreguntasfrecuentes: preg.id,
                     pregunta: preg.pregunta,
                     respuesta: newr.target.value,
-                    usuarioactualizacion: 1,
-                    //usuarioactualizacion: JSON.parse(localStorage.getItem("user")).id,
+                    //usuarioactualizacion: 1,
+                    usuarioactualizacion: JSON.parse(localStorage.getItem("user")).id,
                 };
                 pregModifAux.push(p);
             }
