@@ -53,34 +53,34 @@ const Informacion = (props) => {
                     alignItems="center">
                     <Grid item xs={6} sm={3}></Grid>
                     <Grid item xs={6} sm={3}>
-                        <Typography variant="h4"  >
-                            <h3 style={{color: 'black', margin: 20,justify:"left" }}>Departamento</h3>
+                        <Typography variant="h6" style={{color: 'blue', margin: 20,justify:"left" }} >
+                           Departamento
                         </Typography> 
-                        <Typography variant="h4"  >
-                            <h3 style={{color: 'black', margin: 20,justify:"right" }}>Provincia</h3>
+                        <Typography variant="h6" style={{color: 'black', margin: 20,justify:"right" }} >
+                            Provincia
                         </Typography> 
-                        <Typography variant="h4"  >
-                            <h3 style={{color: 'black', margin: 20,justify:"right" }}>Distrito</h3>
+                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"right" }} >
+                            Distrito
                         </Typography>
-                        <Typography variant="h4"  >
-                            <h3 style={{color: 'black', margin: 20,justify:"right" }}>Sexo</h3>
+                        <Typography variant="h4"  style={{color: 'black', margin: 20,justify:"right" }} >
+                            Sexo
                         </Typography>
-                        <Typography variant="h4"  >
-                            <h3 style={{color: 'black', margin: 20,justify:"right" }}>Discapacitado</h3>
+                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"right" }} >
+                            Discapacitado
                         </Typography>
                     </Grid>
                     <Grid item xs={6} sm={3}>
-                        <Typography variant="h4"   >
-                            <h3 style={{color: 'black', margin: 20,justify:"center" }}>{depa}</h3>
+                        <Typography variant="body1" style={{color: 'black', margin: 20,justify:"center" }}  >
+                            {depa}
                         </Typography> 
-                        <Typography variant="h4"   >
-                            <h3 style={{color: 'black', margin: 20,justify:"center" }}>{prov}</h3>
+                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }} >
+                            {prov}
                         </Typography>
-                        <Typography variant="h4"   >
-                            <h3 style={{color: 'black', margin: 20,justify:"center" }}>{dist}</h3>
+                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }}>
+                            {dist}
                         </Typography> 
-                        <Typography variant="h4"   >
-                                <h3 style={{color: 'black', margin: 20,justify:"center" }}>{sexo}</h3>
+                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }} >
+                            {sexo}
                         </Typography> 
                         <Typography variant="h4"   >
                             <h3 style={{color: 'black', margin: 20,justify:"center" }}>{discapacitado}</h3>
