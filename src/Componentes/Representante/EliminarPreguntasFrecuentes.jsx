@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
+import PreguntasService from "../../Servicios/preguntasfrecuentes.service";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -27,16 +28,13 @@ export default function AlertDialogSlide(props) {
     };
 
     const handleRemove = () => {
-        /*
-        console.log(props.usuario.id);
-        UsuariosService.eliminarUsuarios(props.usuario.id).then(response => {
-            console.log(props.usuario.id);
+        PreguntasService.eliminarPregunta(props.pregunta.id).then(response => {
+            //console.log(props.pregunta.id);
             props.onActualizar();
         })
             .catch(() => {
-                console.log('Error al eliminar el usuario')
+                console.log('Error al eliminar pregunta')
             });
-        */
     };
 
     return (
@@ -60,12 +58,12 @@ export default function AlertDialogSlide(props) {
           </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Link to='/usuarios' style={{ textDecoration: "none" }}>
+                    <Link to='/editarpreguntasfrecuentes' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="primary" onClick={() => handleRemove()}>
                             Aceptar
                         </Button>
                     </Link>
-                    <Link to='/usuarios' style={{ textDecoration: "none" }}>
+                    <Link to='/editarpreguntasfrecuentes' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="secondary" onClick={handleClose}>
                             Cancelar
             </Button>

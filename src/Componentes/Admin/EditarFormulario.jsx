@@ -108,6 +108,7 @@ export default function FormDialog(props) {
                 nombres: nombre,
                 apellidos: apellido,
                 correo: correo,
+                usuarioactualizacion: JSON.parse(localStorage.getItem("user")).id,
             };
 
             console.log(user);
@@ -150,7 +151,8 @@ export default function FormDialog(props) {
                             hintText="Nombres"
                             value={nombre}
                             onChange={e => changeNombre(e)}
-                            errorText={nombreErr}
+                            error={nombreErr === "" ? null : true}
+                            helperText={nombreErr === "" ? null : nombreErr}
                         />
                     </div>
                     <br />
@@ -163,7 +165,8 @@ export default function FormDialog(props) {
                             hintText="Apellidos"
                             value={apellido}
                             onChange={e => changeApellido(e)}
-                            errorText={apellidoErr}
+                            error={apellidoErr === "" ? null : true}
+                            helperText={apellidoErr === "" ? null : apellidoErr}
                         />
                     </div>
                     <br />
@@ -176,13 +179,13 @@ export default function FormDialog(props) {
                             hintText="Nombre de usuario"
                             value={usuario}
                             onChange={e => changeUsuario(e)}
-                            errorText={usuarioErr}
+                            error={usuarioErr === "" ? null : true}
+                            helperText={usuarioErr === "" ? null : usuarioErr}
                         />
                     </div>
                     <br />
                     <div sytle="padding: 15px">
                         <TextField
-                            error={correoErr === "" ? null : true}
                             fullWidth
                             variant="outlined"
                             id="email"
@@ -190,6 +193,7 @@ export default function FormDialog(props) {
                             hintText="Correo"
                             value={correo}
                             onChange={e => changeCorreo(e)}
+                            error={correoErr === "" ? null : true}
                             helperText={correoErr === "" ? null : correoErr}
                         />
                     </div>
@@ -199,7 +203,7 @@ export default function FormDialog(props) {
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="primary" onClick={e => onSubmit(e)}>
                             Guardar
-                </Button>
+                        </Button>
                     </Link>
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="secondary" onClick={handleClose}>
