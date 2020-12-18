@@ -27,6 +27,7 @@ import Formulario from './Componentes/Admin/Formulario'
 import OlvidarContrasena from "./Componentes/OlvidarContrasena";
 import ReporteQuejas from "./Componentes/Reportes/Quejas";
 
+import ReporteIncidentes from "./Componentes/Reportes/Incidentes";
 const App = () => {
 
   return (
@@ -37,9 +38,10 @@ const App = () => {
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route exact path="/lugares" component={BusquedaLugares}/>
           <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
-          <Route exact path="/cronogramaParaRepresentante" component={Cronograma}/>
+          <Route exact path="/cronogramapararepresentante" component={Cronograma}/>
           <Route exact path="/informacion" component={Informacion}/>
           <Route exact path='/quejas' component={Quejas}/>
+          <Route exact path='/reporteincidentes' component={ReporteIncidentes}/>
           <Route path="/acceso" component={AccesoSistema}/>
           <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>

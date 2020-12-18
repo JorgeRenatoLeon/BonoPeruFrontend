@@ -541,7 +541,7 @@ const GestionBonos = (props)=>{
                             <Grid container item md={3} justify="center">
                                 <Link 
                                     to={{
-                                        pathname: "/cronogramaParaRepresentante"
+                                        pathname: "/cronogramapararepresentante"
                                        
                                       }}
                                     style={{textDecoration:"none"}}>
