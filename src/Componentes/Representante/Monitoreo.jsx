@@ -406,17 +406,17 @@ export default function GestionBonos (){
                                 Departamento:
                             </Typography>
                             <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                              value={departamento} placeholder="Departamento"/>
+                              value={departamento} placeholder="Todos"/>
                             <Typography variant="subtitle1" color="inherit">
                                 Provincia:
                             </Typography>
                             <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                            value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                            value={provincia} isDisabled={cbxProv} placeholder="Todos"/>
                             <Typography variant="subtitle1" color="inherit">
                                 Distrito:
                             </Typography>
                             <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                            value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                            value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                         </Grid>
                         <br></br>
                         <Grid container direction="row" item md={6} justify="space-evenly" alignItems="center">

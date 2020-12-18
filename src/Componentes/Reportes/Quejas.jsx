@@ -20,7 +20,9 @@ import DescargaService from "../../Servicios/descarga.cronograma";
 import Combobox from '../Elementos/Combobox';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
+import CronogramaListado from "../../Servicios/historico.service";
 export default function GestionBonos (){
+    
     function formato(texto){
       return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
     }
@@ -38,15 +40,7 @@ export default function GestionBonos (){
      //fin manejo de fecha inicial
 
 
-    const reporteInicial={
-      cronogramas: [1,2,98,99],
-      iddepartamento:null,
-      idprovincia:null,
-      iddistrito:null,
-      fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-      //fechaini: "2020-11-01",//AAAA-MM-DD
-      fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-    }
+  
 
     const [departamento,setSelectedDep] = useState(null);
     const [provincia,setSelectedProv] = useState(null);
@@ -56,6 +50,16 @@ export default function GestionBonos (){
     const [departamentos, setDep] = useState([]);
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
+    const [cronogramass,setSelectedCro] = useState(null);  
+    const reporteInicial={
+        cronogramas: [1,2,98,99],        
+        iddepartamento:null,
+        idprovincia:null,
+        iddistrito:null,
+       // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+        fechaini: "2020-11-01",//AAAA-MM-DD
+        fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+      }
     useEffect(() => {
       // console.log("dentro del use effect",reporteInicial);
       DepartamentosService.mostrarDepartamentos().then(response =>{
@@ -96,6 +100,11 @@ export default function GestionBonos (){
       setStateCbxDis(false);
       DistritosService.mostrarDistritos(valor).then(response =>{
         let disAux=[];
+        if(response.data.length> 0)
+        disAux.push({
+          value: 0,
+          label: "Distrito",
+        });
         response.data.map(prov => {
           disAux.push({
                 value: prov.iddistrito,
@@ -113,19 +122,83 @@ export default function GestionBonos (){
     }
   
     const handleComboboxDep=(valor)=>{
-      setSelectedDep(valor);
-      // console.log(departamento,"id depa"); 
-      apiProvincias(valor);
+        setSelectedDep(valor);
+        setEstadoCargando(true);
+        if(valor === 0) {
+          handleComboboxProv(0);
+          handleComboboxDis(0);
+          setStateCbxProv(true);
+          setStateCbxDis(true);
+          setSelectedDep(null);
+          const filtroLugar ={
+            iddepartamento: null,
+            idprovincia: null,
+            iddistrito: null,
+            nombre: ""
+          }
+        //  apiLugares(filtroLugar);
+        }else{
+        
+          apiProvincias(valor);
+          const filtroLugar ={
+            iddepartamento: valor,
+            idprovincia: null,
+            iddistrito: null,
+            nombre: ""
+          }
+         // apiLugares(filtroLugar);
+        }
     }
   
     const handleComboboxProv=(valor)=>{
-      setSelectedProv(valor);
-      // console.log(valor,"id prov");
-      apiDistritos(valor);
+        setSelectedProv(valor);
+        setEstadoCargando(true);
+        console.log(valor, "valor dentro de prov combo");
+        if(valor === 0){
+          setStateCbxDis(true);
+          handleComboboxDis(0);
+          setSelectedProv(null);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: null,
+            iddistrito: null,
+            nombre: ""
+          }
+        //   apiLugares(filtroLugar);
+        }else{
+          console.log(valor,"id prov");
+          apiDistritos(valor);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: valor,
+            iddistrito: null,
+            nombre: ""
+          }
+        //   apiLugares(filtroLugar);
+        }
     }
   
     const handleComboboxDis=(valor)=>{
-      setSelectedDis(valor);
+        setEstadoCargando(true);        
+        if(valor === 0){
+          setSelectedDis(null);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: provincia,
+            iddistrito: null,
+            nombre: ""
+          }
+        //   apiLugares(filtroLugar);
+        }else{
+          setSelectedDis(valor);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: provincia,
+            iddistrito: valor,
+            nombre: ""
+        }
+        //   apiLugares(filtroLugar);
+        }
     }
   
     const [fechaInicio,setSelectedFechaIni]=useState(reporteInicial.fechaini);
@@ -160,6 +233,54 @@ export default function GestionBonos (){
       }    
       apiQuejas(reporteFiltrado);
     }
+
+    const [cronogramas, setCronogramas] = useState([]); //Para el api
+    useEffect(() => {
+      CronogramaListado.mostrarHistorico().then(response =>{
+          let cronogramasAux = []; //Para comobox
+          let cronogramasAux2 = []; //Para el api
+          response.data.map(hist => {
+            cronogramasAux.push({
+              value: hist.id, 
+              label: hist.nombre,
+              fechaIni: hist.fechaini,
+              fechaFin: hist.fechafin, 
+              });
+              cronogramasAux2.push({
+                id: hist.id, 
+                });
+          });
+          setCronogramas(cronogramasAux2); //
+          setSelectedCro(cronogramasAux); //Combobox
+          console.log(cronogramasAux);
+        })
+        .catch(() => {
+          console.log('Error al obtener historico')
+        });
+    },[]);
+    const handleComboboxCro=(valor)=>{
+        setEstadoCargando(true);        
+        if(valor === 0){
+          setSelectedCro(null);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: provincia,
+            iddistrito: null,
+            nombre: ""
+          }
+        //   apiLugares(filtroLugar);
+        }else{
+          setSelectedCro(valor);
+          const filtroLugar ={
+            iddepartamento: departamento,
+            idprovincia: provincia,
+            iddistrito: valor,
+            nombre: ""
+        }
+        //   apiLugares(filtroLugar);
+        }
+    }
+  
     //Fin de manejo de filtros
     
     //Colores del chart
@@ -185,8 +306,8 @@ export default function GestionBonos (){
     'pink',     '	rgb(240, 128, 128,0.4)', //rosado
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
     ];
-   // const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reportequejas";
-    const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
+    const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reportequejas";
+    //const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
@@ -198,6 +319,7 @@ export default function GestionBonos (){
              response = await axios.post(QUEJAS_URL,reporteDeseado).then();
          }
      else response = await axios.post(QUEJAS_URL,reporteInicial).then();
+     setEstadoCargando(false);
      console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
           //Para el chart reporte- Colores 
@@ -241,7 +363,10 @@ export default function GestionBonos (){
 
             )
           }
+    
+     const [estadoCargando,setEstadoCargando]= useState(true);
     //PARA MODAL CARGANDO
+
     const useStyles2 = makeStyles((theme) => ({
       root: {
         display: 'flex',
@@ -252,6 +377,9 @@ export default function GestionBonos (){
     }));
   const classes2 = useStyles2();
   //FIN DE MODAL CARGANDO
+
+
+
     return (
         <div style={{minHeight:"88vh"}}>
                <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
@@ -270,7 +398,7 @@ export default function GestionBonos (){
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid>
                         <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center" >
-                            <Typography variant="subtitle1" color="inherit">
+                            <Typography variant="subtitle1"  color="inherit">
                                 Departamento:
                             </Typography>
                             <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
@@ -284,26 +412,24 @@ export default function GestionBonos (){
                                 Distrito:
                             </Typography>
                             <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                            value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
-                        </Grid>
+                                    value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
+                            </Grid>
                         <br></br>
-                        <Grid container direction="row" item md={6} justify="space-evenly" alignItems="center">
+                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center">
                             <Typography variant="subtitle1" color="inherit">
                                 Fechas:
                             </Typography>
-                              <RangoFechas onCambio={cambiar}/>
-                              <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
+                              <RangoFechas onCambio={cambiar}/>                              
+                           
+                              <Typography variant="subtitle1" color="inherit">
+                                Cronogramas:
+                            </Typography>
+                            <Combobox options={cronogramass} onSeleccion={handleComboboxCro} 
+                                    value={cronogramass} placeholder="Todos"/>
+                             <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                 Filtrar
                               </Button> 
-                              <Link to={{
-                                        pathname: "/monitoreo"
-                                       
-                                      }} style={{textDecoration:"none"}}>
-                                <Button variant="contained"size="medium" color="secondary" style={{margin: 10}}>
-                                  Regresar
-                                </Button> 
-                              </Link>
-
+                           
                               
                         </Grid>
                     </Grid>

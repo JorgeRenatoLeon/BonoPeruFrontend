@@ -190,13 +190,6 @@ const GestionBonos = (props)=>{
    };
    //Manejo de publicar
    const PUB_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/publicar";//Ari
-   const cronGuardado = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
-    
-
-
-
-
-   
     const generarOpen={mensaje:"Generación exitosa. Le llegará un correo cuando este terminado el nuevo cronograma.", 
                     open:true,severity:"success"}
     const errorOpen={mensaje:"Error. Intente nuevamente en unos minutos", open:true,severity:"error"}
