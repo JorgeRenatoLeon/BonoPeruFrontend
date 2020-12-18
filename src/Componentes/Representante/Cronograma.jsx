@@ -33,7 +33,7 @@ import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
 import { SelectAll } from '@material-ui/icons';
-import CronogramaA from "./Cronograma";
+import  Cargando  from "../ModalCargando";
 
 const reducer = (state, action) => {
     return { checkedId: action.id }
@@ -107,7 +107,7 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
+            //sortDirection={orderBy === headCell.id ? order : false}
             style={{background: '#5AB9EA'}}
           >
             <TableSortLabel
@@ -130,10 +130,10 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
+  //classes: PropTypes.object.isRequired,
+  //onRequestSort: PropTypes.func.isRequired,
+  //order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  //orderBy: PropTypes.string.isRequired,
 };
 
 const useStyles = makeStyles({
@@ -165,9 +165,23 @@ const useStyles = makeStyles({
 
 
 const Cronograma = (props) => {
+  const [estadoCargando,setEstadoCargando]= useState(true);
+
+  //PARA MODAL CARGANDO
+  const useStyles2 = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      '& > * + *': {
+        marginLeft: theme.spacing(2),
+      },
+    },
+  }));
+  const classes2 = useStyles2();
+  //FIN DE MODAL CARGANDO
+
   //Para Kaytlin de Johana
   var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
-  console.log('joh: ',cronogramaGestionBonos) ; //Borralo cuando ya no lo uses, pero aquí está el api que me manda Caro,
+  //console.log('joh: ',cronogramaGestionBonos) ; //Borralo cuando ya no lo uses, pero aquí está el api que me manda Caro,
   /* Incluye estos datos, siempre te los pasaré una vez se haya generado el cronograma
     beneficiarios: 3
     fechafin: "2020-12-08"
@@ -185,13 +199,12 @@ const Cronograma = (props) => {
     fechafin: cronogramaGestionBonos.fechafin,
     nombre:""
   }
-  console.log(cronogramaInicial.fechaini);
-  console.log(cronogramaInicial.fechafin);
 
   const apiCronograma = (valor)=>{
     console.log(valor);
     console.log("apicronogrma",rows);
     HorariosService.obtenerHorarios(valor).then(response =>{
+      setEstadoCargando(false);
       let rowsAux = [];
       response.data.map(lug => {
         rowsAux.push({
@@ -310,6 +323,10 @@ const Cronograma = (props) => {
   } 
 
   const buscarCronogramas=()=>{
+    setEstadoCargando(true);
+    console.log("en buscar fechas",fechaInicio,fechaFin);
+    console.log("en buscar depa",departamento);
+    console.log("en buscar distrito",distrito);
     console.log("en buscar",fechaInicio,fechaFin);
     const cronogramaBusqueda={
       idcronograma: cronogramaGestionBonos.idcronograma,
@@ -378,21 +395,35 @@ const Cronograma = (props) => {
     const [state, dispatch] = useReducer(reducer, {})
  
     var arrayNumSelected = [];
-
-    const selectCheckBox= (event) =>{
+    var arrayFechaSelected = [];
+    var arrayHoraIniSelected = [];
+    var arrayHoraFinSelected = [];
+    const selectCheckBox= (event,fecha,horaIni,horaFin) =>{
       console.log(event);
       if(event.target.checked) {
         arrayNumSelected.push(parseInt(event.target.id));
+        arrayFechaSelected.push(fecha);
+        arrayHoraIniSelected.push(horaIni);
+        arrayHoraFinSelected.push(horaFin);
       } else{
         for (var i = arrayNumSelected.length - 1; i >= 0; i--) {
-          if (arrayNumSelected[i] === parseInt(event.target.id)) {
+          if (arrayNumSelected[i] === parseInt(event.target.id) &&
+              arrayFechaSelected[i] === fecha &&
+              arrayHoraIniSelected[i] === horaIni &&
+              arrayHoraFinSelected[i] === horaFin) {
             arrayNumSelected.splice(i, 1);
+            arrayFechaSelected.splice(i, 1);
+            arrayHoraIniSelected.splice(i, 1);
+            arrayHoraFinSelected.splice(i, 1);
             break;
           }
         }
       }
-      console.log(event, "checkbox");
+      //console.log(event, "checkbox");
       console.log(arrayNumSelected);
+      console.log(arrayFechaSelected);
+      console.log(arrayHoraIniSelected);
+      console.log(arrayHoraFinSelected);
     }
 
     const [errorDescarga, setError] = useState(false);
@@ -412,6 +443,9 @@ const Cronograma = (props) => {
         fechafin: fechaFin,
         nombre: searchText,
         numeros: arrayNumSelected,
+        fechas: arrayFechaSelected,
+        horainicio:arrayHoraIniSelected,
+        horafin:arrayHoraFinSelected,
       }
       DescargaService.descargarCronograma(cronogramaParaDescarga);
     }
@@ -470,12 +504,16 @@ const Cronograma = (props) => {
                         onChange={handleSearchText} />
                         <Button variant="contained" onClick={buscarCronogramas} size="medium" color="primary" style={{margin: 10}}>
                           Buscar
-                        </Button> 
+                        </Button>  
                     </Grid>
                 </Grid>
             </Paper> 
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10, marginBottom:20,  boxShadow: 'none'}}>
-                {rows.length > 0?
+                {estadoCargando?
+                <Grid container direction="row" justify="center">
+                  <Cargando/>
+                </Grid> :
+                rows.length > 0?
                 <Grid className={classes.paper}>                      
                     <TableContainer>
                     <Table
@@ -498,7 +536,9 @@ const Cronograma = (props) => {
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
                                 <TableCell padding="checkbox">
-                                  <Checkbox color="default" id={row.id} onChange={selectCheckBox}/>                                 
+                                  <Checkbox color="default" id={row.id} 
+                                    onChange={(e) => {selectCheckBox(e, row.fecha,row.turno.substring(0,5),row.turno.substring(9,14))}}
+                                  />                                 
                                 </TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
                                 <TableCell align="left">{row.locacion}</TableCell>
@@ -518,7 +558,7 @@ const Cronograma = (props) => {
                     </TableContainer>
                     <TablePagination
                     //rowsPerPageOptions={[5, 10, 25]}
-                    rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
+                    rowsPerPageOptions={[5, 10]}
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
@@ -535,7 +575,7 @@ const Cronograma = (props) => {
                     </Grid>}
                 <Grid container direction="row" justify="space-evenly" alignItems="center" >
                     <Button variant="contained" size="medium" color="primary" style={{margin: 10}} onClick={descargaCronograma}>
-                        Descargar
+                          Descargar
                     </Button> 
                     <Link to='/bonos' style={{textDecoration:"none"}}>
                         <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>

@@ -50,15 +50,14 @@ function Quejas() {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            {cant = cant + 1}
-            {apiBeneficiario.map(opcion=> (
+            {apiBeneficiario.map((opcion,index)=> (
 /*                         <Grid container direction="row" item md={4} xs={4}>  
                             <Typography variant="subtitle2" color="inherit">
                             {opcion.horariolugarentrega.lugarentrega.nombre} 
                             </Typography> 
                         </Grid>  */
-                    <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={cant} 
-                        idHorario={opcion.horariolugarentrega.idHorariolugarentrega}
+                    <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={index+1} 
+                        idHorario={opcion.idHorario}
                         idLugar={opcion.horariolugarentrega.lugarentrega.idLugarentrega}></Queja>      
                 )) 
             } 

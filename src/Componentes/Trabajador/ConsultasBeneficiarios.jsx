@@ -315,6 +315,13 @@ const ConsultasBeneficiarios = (params) => {
             </Paper> 
             {mensaje?
             <Respuesta mensaje={mensaje}></Respuesta>:<Grid></Grid>}
+            <Grid container direction="row" justify="center">
+              <Link to='/lugares' style={{textDecoration:"none"}}>
+                <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
+                    Regresar
+                </Button>
+              </Link> 
+            </Grid>
             </Grid>
             <BarraFinal/>
         </Grid>

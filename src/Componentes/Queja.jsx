@@ -16,7 +16,7 @@ var descripcion2 = [];
 
 const Queja=(props)=>{
     const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt"))[0];    //RespuestaBeneficiario.jsx            
-    //console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega          
+    console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega          
     const [tipoQueja1,setTipoQueja1]= useState("");
     const [respuesta1,setRespuesta1] = useState(false);
     const [razones1,setRazones1] = useState(true);
