@@ -6,18 +6,35 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
 import BarraFinal from '../Barras/BarraFinal';
 import InfoService from '../../Servicios/info.beneficiario';
-
+import  Cargando  from "../ModalCargando";
 
 
 const Informacion = (props) => {
-    let valor = 2;
+    const [estadoCargando,setEstadoCargando]= useState(true);
+
+    //PARA MODAL CARGANDO
+    const useStyles2 = makeStyles((theme) => ({
+        root: {
+        display: 'flex',
+        '& > * + *': {
+            marginLeft: theme.spacing(2),
+        },
+        },
+    }));
+    const classes2 = useStyles2();
+    //FIN DE MODAL CARGANDO
+    
+    const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt")) ;   //RespuestaBeneficiario.jsx            
+    //console.log('para kayt: ',apiBeneficiario[0].beneficiario.idbeneficiario); //
+
     const [depa,setDepa]= useState("");
     const [prov,setProv]= useState("");
     const [dist,setDist]= useState("");
     const [sexo,setSexo]= useState("");
     const [discapacitado,setDiscapacitado]= useState("");
     useEffect(() => {
-        InfoService.mostrarInfo(valor).then(response =>{
+        InfoService.mostrarInfo(apiBeneficiario[0].beneficiario.idbeneficiario).then(response =>{
+            setEstadoCargando(false);
             setDepa(response.data.departamento);
             setProv(response.data.provincia);
             setDist(response.data.distrito);
@@ -46,57 +63,64 @@ const Informacion = (props) => {
                    </Grid>
                </Toolbar>
            </AppBar>
-           <Paper elevation={0} style={{margin: 50, boxShadow: 'none'}}>
+           
+           <Paper elevation={0} style={{marginLeft: 100, marginRight:100, boxShadow: 'none'}}>
+                {estadoCargando?
+                <Grid container direction="row" justify="center">
+                    <Cargando/>
+                </Grid>:
                 <Grid container
                     direction="row"
                     justify="center"
                     alignItems="center">
                     <Grid item xs={6} sm={3}></Grid>
                     <Grid item xs={6} sm={3}>
-                        <Typography variant="h6" style={{color: 'blue', margin: 20,justify:"left" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }} >
                            Departamento
                         </Typography> 
-                        <Typography variant="h6" style={{color: 'black', margin: 20,justify:"right" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20}} >
                             Provincia
                         </Typography> 
-                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"right" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }} >
                             Distrito
                         </Typography>
-                        <Typography variant="h4"  style={{color: 'black', margin: 20,justify:"right" }} >
+                        <Typography variant="h6"  style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20}} >
                             Sexo
                         </Typography>
-                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"right" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }} >
                             Discapacitado
                         </Typography>
                     </Grid>
                     <Grid item xs={6} sm={3}>
-                        <Typography variant="body1" style={{color: 'black', margin: 20,justify:"center" }}  >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }}  >
                             {depa}
                         </Typography> 
-                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20}} >
                             {prov}
                         </Typography>
-                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }}>
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }}>
                             {dist}
                         </Typography> 
-                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" }} >
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20 }} >
                             {sexo}
                         </Typography> 
-                        <Typography variant="h4"   >
-                            <h3 style={{color: 'black', margin: 20,justify:"center" }}>{discapacitado}</h3>
+                        <Typography variant="h6" style={{color: 'black', marginLeft: 80, marginBottom:20, marginTop:20}} >
+                            {discapacitado}
                         </Typography> 
                     </Grid>
                     <Grid item xs={6} sm={3}></Grid>
-                </Grid>
+                </Grid>}
                 <Grid container
                     direction="row"
                     justify="center"
                     alignItems="center">
-                    <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
-                        Regresar 
-                    </Button>
-                </Grid>
-           </Paper> 
+                    <Link to='/consulta' style={{textDecoration:"none"}}>
+                        <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
+                            Regresar
+                        </Button>
+                    </Link> 
+                </Grid>               
+           </Paper>
            </Grid> 
            <BarraFinal/>
        </Grid>

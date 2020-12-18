@@ -66,6 +66,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'locacion', numeric: false, disablePadding: false, label: 'Locación' },
   { id: 'fecha', numeric: false, disablePadding: false, label: 'Fecha' },
@@ -98,10 +99,10 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <StyledTableCell padding="checkbox" style={{background: '#5AB9EA'}}>
+        {/* <StyledTableCell padding="checkbox" style={{background: '#5AB9EA'}}>
           <Checkbox color="default" 
           />
-        </StyledTableCell>
+        </StyledTableCell> */}
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}
@@ -224,14 +225,13 @@ const Cronograma = (props) => {
       console.log(rowsAux);
     })
     .catch(() => {
-      console.log('Error al obtener Lugares')
+      console.log('Error al obtener Cronograma')
     });  
   }
 
   const [departamento,setSelectedDep] = useState(null);
   const [provincia,setSelectedProv] = useState(null);
   const [distrito,setSelectedDis] = useState(null);
-  const [nombreLugar, setSelectedNom] =useState("");
 
   const [cbxProv, setStateCbxProv] = useState(true);
   const [cbxDis,setStateCbxDis] = useState(true);
@@ -242,6 +242,11 @@ const Cronograma = (props) => {
     ProvinciasService.mostrarProvincias(valor).then(response =>{
       console.log(valor,"dentro de la funcion api");
       let provAux=[];
+      if(response.data.length> 0)
+        provAux.push({
+          value: 0,
+          label: "Provincia",
+        }); 
       response.data.map(prov => {
         provAux.push({
               value: prov.idprovincia,
@@ -262,6 +267,11 @@ const Cronograma = (props) => {
     setStateCbxDis(false);
     DistritosService.mostrarDistritos(valor).then(response =>{
       let disAux=[];
+      if(response.data.length> 0)
+      disAux.push({
+        value: 0,
+        label: "Distrito",
+      });
       response.data.map(prov => {
         disAux.push({
               value: prov.iddistrito,
@@ -281,17 +291,38 @@ const Cronograma = (props) => {
   const handleComboboxDep=(valor)=>{
     setSelectedDep(valor);
     console.log(departamento,"id depa"); 
-    apiProvincias(valor);
+    if(valor === 0) {
+      handleComboboxProv(0);
+      handleComboboxDis(0);
+      setStateCbxProv(true);
+      setStateCbxDis(true);
+      setSelectedDep(null);      
+    }else{
+      console.log(departamento,"id depa"); 
+      apiProvincias(valor);
+    }
   }
 
   const handleComboboxProv=(valor)=>{
     setSelectedProv(valor);
     console.log(valor,"id prov");
-    apiDistritos(valor);
+    if(valor === 0){
+      setStateCbxDis(true);
+      handleComboboxDis(0);
+      setSelectedProv(null);
+    }else{
+      console.log(valor,"id prov");
+      apiDistritos(valor);
+    }
   }
 
   const handleComboboxDis=(valor)=>{
     setSelectedDis(valor);
+    if(valor === 0){
+      setSelectedDis(null);
+    }else{
+      setSelectedDis(valor);
+    }
   }
 
   const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaini);
@@ -303,14 +334,15 @@ const Cronograma = (props) => {
       setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
       setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
     }else if(fechaIni === null && fechaFin !== null){
-      setSelectedFechaIni(cronogramaInicial.fechaIni);
+      setSelectedFechaIni(cronogramaInicial.fechaini);
       setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
     }else if(fechaIni !== null && fechaFin === null){
       setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
       setSelectedFechaFin(cronogramaInicial.fechafin);
     }else if(fechaIni === null && fechaFin === null){
-      setSelectedFechaIni(cronogramaInicial.fechaIni);
+      setSelectedFechaIni(cronogramaInicial.fechaini);
       setSelectedFechaFin(cronogramaInicial.fechafin);
+      console.log("si entro aqui");
     }
 
   }
@@ -351,6 +383,11 @@ const Cronograma = (props) => {
     
     DepartamentosService.mostrarDepartamentos().then(response =>{
       let depAux=[];
+      if(response.data.length> 0)
+      depAux.push({
+        value: 0,
+        label: "Departamento",
+      });
       response.data.map(dep => {
         depAux.push({
               value: dep.iddepartamento,
