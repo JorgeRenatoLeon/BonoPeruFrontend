@@ -18,9 +18,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 //Para el api
 import { history } from "../../helpers/history";
-import  ModalPublicar  from "./ModalPublicar";
-import  Cargando  from "../ModalCargando";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+//Para el modal cargando
+import  Cargando  from "../ModalCargando";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -160,6 +160,7 @@ function formato(texto){
   }));
 
    const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+   //const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
   const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
 
   var updateCronograma=false;
@@ -169,14 +170,11 @@ const GestionBonos = (props)=>{
     function guardarFecha(event){
         //Guarda la fecha cuando hay un cambio
         setSoloFecha(event);
-        // console.log('e: ',event);
     }
     function guardarNombre(event){
         //Guarda el nombre cuando hay un cambio
         setSoloNombre(event);
-        // console.log('e: ',event);
     }
-    //const [openConfirmacion, setOpenConfirmacion] = useState(false);
     const [soloNombre, setSoloNombre] = useState("");
     const [soloFecha, setSoloFecha] = useState("");
     
@@ -190,15 +188,25 @@ const GestionBonos = (props)=>{
        
         setMensaje(defaultM);
    };
+   //Manejo de publicar
+   const PUB_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/publicar";//Ari
+   const cronGuardado = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
+    
+
+
+
 
    
-    const generarOpen={mensaje:"Generación exitosa. Le llegará un correo cuando este terminado el nuevo crograma.", 
+    const generarOpen={mensaje:"Generación exitosa. Le llegará un correo cuando este terminado el nuevo cronograma.", 
                     open:true,severity:"success"}
-    const errorOpen={mensaje:"Error", open:true,severity:"error"}
+    const errorOpen={mensaje:"Error. Intente nuevamente en unos minutos", open:true,severity:"error"}
     const faltaOpen={mensaje:"No pueden haber campos vacíos", open:true,severity:"error"}
     const defaultM={mensaje:"", open:false,severity:"error"}
+    const publicarOpen={mensaje:"Se ha publicado el cronograma para los beneficiarios.", open:true,severity:"success"}
     const [mensaje,setMensaje]=useState(defaultM);
+    const [publicado,setPublicado]=useState(false);
     
+
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
         const classes = useStyles();
         var respuesta;
@@ -223,17 +231,20 @@ const GestionBonos = (props)=>{
             const CronogramaActual = () => {
                 axios.post(API_URL)
                  .then(response =>{
-                     console.log("API OBT : ",response.data);
+                    //  console.log("API OBT : ",response.data);
                      if(response){                        
                         localStorage.setItem("cronogramaKaytlin", JSON.stringify(response.data)); //apenas lo recibo te lo envío
                         let apiCronograma = [];
                         apiCronograma.push(response.data);                        
                         if(apiCronograma){
+
                             setCronograma(apiCronograma);
                             console.log("API OBT cro: ",apiCronograma);                            
                             if(apiCronograma[0].idcronograma===""){
                                 updateCronograma=true;                               
-                            }                            
+                            }else if (apiCronograma[0].estado==="PUB"){
+                                setPublicado(true);
+                            }                           
                         }                        
                      }                     
                  })
@@ -256,6 +267,19 @@ const GestionBonos = (props)=>{
                  });           
 
             }
+            function PublicarCronograma(){
+                //No va a entrar si ya está publicado
+                    //   API de Ari
+                    axios.post(PUB_URL+"/"+cronograma.idcronograma)
+                    .then(response =>{             
+                        setMensaje(publicarOpen);
+                        setPublicado(true);
+                    })
+                    .catch(() => {
+                        console.log('Error al obtener Publicar cronograma');
+                        setMensaje(errorOpen);
+                    });
+            } 
             const GenerarCronograma = () => {
                 updateCronograma=true; 
                 // const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
@@ -313,7 +337,7 @@ const GestionBonos = (props)=>{
         var titulo="Gestión de Bonos";
         
         var botones;
-        console.log("API OBT cro2: ",cronograma);
+        // console.log("API OBT cro2: ",cronograma);
         if(updateCronograma===true){
             // setOpenConfirmacion(true);
              botones=rpta.map((boton) =>   
@@ -527,7 +551,11 @@ const GestionBonos = (props)=>{
                                 </Link>
                             </Grid>
                             <Grid container item md={3} justify="center">  
-                                <ModalPublicar></ModalPublicar>
+                                {/* <ModalPublicar></ModalPublicar> */}
+                                <Button disabled={publicado} variant="contained" size="medium" color="secondary" onClick={PublicarCronograma} >
+                                    Publicar Cronograma 
+                                </Button> 
+
                             </Grid>
                         </Grid>
                     );
@@ -665,12 +693,12 @@ const GestionBonos = (props)=>{
 
         }
         else  if ( cronograma[0].idcronograma==="inicial" ){           
-        //  respuesta="Cargando..."
-         respuesta=rpta.map((boton) => 
-            <Cargando/>
-         );
+            //  respuesta="Cargando..."
+            respuesta=rpta.map((boton) => 
+                <Cargando/>
+            );
 
-     }
+         }
 
      const [rows, setRows] = useState([]);
      useEffect(() => {

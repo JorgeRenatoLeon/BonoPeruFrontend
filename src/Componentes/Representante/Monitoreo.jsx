@@ -42,8 +42,8 @@ export default function GestionBonos (){
       fechafin: cronogramaGestionBonos.fechafin,
       nombre:""
     }
-    console.log(cronogramaInicial.fechaini);
-    console.log(cronogramaInicial.fechafin);
+    // console.log(cronogramaInicial.fechaini);
+    // console.log(cronogramaInicial.fechafin);
     const [departamento,setSelectedDep] = useState(null);
     const [provincia,setSelectedProv] = useState(null);
     const [distrito,setSelectedDis] = useState(null);  
@@ -53,7 +53,7 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     useEffect(() => {
-      console.log("dentro del use effect",cronogramaInicial);
+      // console.log("dentro del use effect",cronogramaInicial);
       DepartamentosService.mostrarDepartamentos().then(response =>{
         let depAux=[];
         response.data.map(dep => {
@@ -72,9 +72,7 @@ export default function GestionBonos (){
     },[]);
     const apiProvincias=(valor)=>{
       setStateCbxProv(false);
-      console.log(cbxProv);
       ProvinciasService.mostrarProvincias(valor).then(response =>{
-        console.log(valor,"dentro de la funcion api");
         let provAux=[];
         response.data.map(prov => {
           provAux.push({
@@ -83,8 +81,6 @@ export default function GestionBonos (){
             });
         });
         setProv(provAux);
-        console.log(provincias);
-  
       })
       .catch(() => {
           console.log('Error al pedir las provincias');
@@ -103,7 +99,7 @@ export default function GestionBonos (){
             });
         });
         setDis(disAux);
-        console.log(distritos);
+        // console.log(distritos);
   
       })
       .catch(() => {
@@ -114,13 +110,13 @@ export default function GestionBonos (){
   
     const handleComboboxDep=(valor)=>{
       setSelectedDep(valor);
-      console.log(departamento,"id depa"); 
+      // console.log(departamento,"id depa"); 
       apiProvincias(valor);
     }
   
     const handleComboboxProv=(valor)=>{
       setSelectedProv(valor);
-      console.log(valor,"id prov");
+      // console.log(valor,"id prov");
       apiDistritos(valor);
     }
   
@@ -149,7 +145,7 @@ export default function GestionBonos (){
   
     }
     const filtrarReporte=()=>{
-      console.log("en buscar",fechaInicio,fechaFin);
+      // console.log("en buscar",fechaInicio,fechaFin);
       const cronogramaBusqueda={
         idcronograma: cronogramaGestionBonos.idcronograma,
         iddepartamento: departamento,
@@ -180,11 +176,29 @@ export default function GestionBonos (){
         marginBottom: 12,
       },
     });
-
-  //Para el chart reporte- Colores 
-    var backgroundColor=[    'rgba(179, 229, 252, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
-      'rgba(153, 102, 255, 1)',     'rgba(255, 159, 64, 1)',     'rgba(255, 99, 132, 1)'   ];
-
+    //Colores del chart
+    const backgroundColor=[       
+    'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
+    'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul
+    '	rgb(0, 255, 127,1)','rgb(144, 238, 144,1)',//verde
+    'pink',     '	rgb(240, 128, 128,1)', //rosado
+    'rgb(255, 127, 80,1)' ,'	rgb(244, 164, 96,1)',//naranjita palido
+    'rgb(0, 255, 255,0.8)', 'rgb(100, 149, 237,0.8)', //Celeste
+    'rgb(0, 0, 139,0.8) ' , '	rgb(51,51,255,0.8)',//azul
+    '	rgb(0, 255, 127,0.8)','rgb(144, 238, 144,0.8)',//verde
+    'pink',     '	rgb(240, 128, 128,1)', //rosado
+    'rgb(255, 127, 80,0.8)' ,'	rgb(244, 164, 96,0.8)',//naranjita palido
+    'rgb(0, 255, 255,0.6)', 'rgb(100, 149, 237,0.6)', //Celeste
+    'rgb(0, 0, 139,0.6) ' , '	rgb(51,51,255,0.6)',//azul
+    '	rgb(0, 255, 127,0.6)','rgb(144, 238, 144,0.6)',//verde
+    'pink',     '	rgb(240, 128, 128,0.6)', //rosado
+    'rgb(255, 127, 80,0.6)' ,'	rgb(244, 164, 96,0.6)',//naranjita palido
+    'rgb(0, 255, 255,0.4)', 'rgb(100, 149, 237,0.4)', //Celeste
+    'rgb(0, 0, 139,0.4) ' , '	rgb(51,51,255,0.4)',//azul
+    '	rgb(0, 255, 127,0.4)','rgb(144, 238, 144,0.4)',//verde
+    'pink',     '	rgb(240, 128, 128,0.4)', //rosado
+    'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
+    ];
     const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
     var isResponse=false;
@@ -195,14 +209,21 @@ export default function GestionBonos (){
       const response = await axios.post(ENTREGADOS).then();
         // console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
-        
+          //Para el chart reporte- Colores 
+          
           isResponse=true;
           setdatosEntregados({
-            labels:response.data.listaFechas,
+            labels:response.data.listaFechas,//[,,]
+            /*labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
+            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
+            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
             datasets:[
               {
                 label:'Bonos Entregados',
-               data:response.data.listaCantidades,
+                 data:response.data.listaCantidades,
+                /* data:[201,456,98,12,456,999,441,
+                  420,456,98,12,456,999,441,
+                  300,456,98,12,456,999,441,785],*/
                 backgroundColor:backgroundColor,
               }
 
