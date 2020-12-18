@@ -2,15 +2,12 @@ import React from 'react'
 import {  AppBar, Toolbar,Typography,  Container} from "@material-ui/core"
 import { Grid, Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
+import axios from "axios"; //Para el api
 //Para los chart 
 import Line from "../../Componentes/Graficos/Line.js"
 import Bar from "../../Componentes/Graficos/Bar.js"
 import Pie from "../../Componentes/Graficos/Pie.js"
 import { makeStyles } from '@material-ui/core/styles';
-//Para los card
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import axios from "axios"; //Para el api
 import { useEffect,useState } from "react";
 //Pata los combobox/filtros del monitoreo
 import '../../assets/css/Cronograma.css';
@@ -23,7 +20,6 @@ import DescargaService from "../../Servicios/descarga.cronograma";
 import Combobox from '../Elementos/Combobox';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
-
 export default function GestionBonos (){
     function formato(texto){
       return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
@@ -32,20 +28,26 @@ export default function GestionBonos (){
     const rpta = [ { id: 'Respuesta',  label: 'Respuesta' },];
   //   cronograma que se desea monitorear
 
-    var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ; //Para el id
-    //cronogramaGestionBonos.idcronograma,
-    //inicio manejo de filtros
-    const cronogramaInicial={
-      idcronograma: cronogramaGestionBonos.idcronograma,
+    //inicio manejo de fecha inicial
+    var f = new Date();
+        var dd = f.getDate();//Mañana
+        var mm = f.getMonth()+1; 
+        if(dd<10)           dd='0'+dd;
+        if(mm<10)           mm='0'+mm;
+        //console.log( f.getFullYear()+"-" + mm+ "-"+dd);
+     //fin manejo de fecha inicial
+
+
+    const reporteInicial={
+      cronogramas: [1,2,98,99],
       iddepartamento:null,
       idprovincia:null,
       iddistrito:null,
-      fechaini: cronogramaGestionBonos.fechaini,
-      fechafin: cronogramaGestionBonos.fechafin,
-      nombre:""
+      fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+      //fechaini: "2020-11-01",//AAAA-MM-DD
+      fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
     }
-    // console.log(cronogramaInicial.fechaini);
-    // console.log(cronogramaInicial.fechafin);
+
     const [departamento,setSelectedDep] = useState(null);
     const [provincia,setSelectedProv] = useState(null);
     const [distrito,setSelectedDis] = useState(null);  
@@ -55,7 +57,7 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     useEffect(() => {
-      // console.log("dentro del use effect",cronogramaInicial);
+      // console.log("dentro del use effect",reporteInicial);
       DepartamentosService.mostrarDepartamentos().then(response =>{
         let depAux=[];
         response.data.map(dep => {
@@ -126,8 +128,8 @@ export default function GestionBonos (){
       setSelectedDis(valor);
     }
   
-    const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaini);
-    const [fechaFin, setSelectedFechaFin]=useState(cronogramaInicial.fechafin);
+    const [fechaInicio,setSelectedFechaIni]=useState(reporteInicial.fechaini);
+    const [fechaFin, setSelectedFechaFin]=useState(reporteInicial.fechafin);
     const cambiar=(fechaIni,fechaFin)=>{
       if((fechaFin !== null) && (fechaIni!== null)){
         // console.log("estoy dentro de cronograma",fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2),
@@ -135,49 +137,31 @@ export default function GestionBonos (){
         setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
         setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
       }else if(fechaIni === null && fechaFin !== null){
-        setSelectedFechaIni(cronogramaInicial.fechaIni);
+        setSelectedFechaIni(reporteInicial.fechaIni);
         setSelectedFechaFin(fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
       }else if(fechaIni !== null && fechaFin === null){
         setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
-        setSelectedFechaFin(cronogramaInicial.fechafin);
+        setSelectedFechaFin(reporteInicial.fechafin);
       }else if(fechaIni === null && fechaFin === null){
-        setSelectedFechaIni(cronogramaInicial.fechaIni);
-        setSelectedFechaFin(cronogramaInicial.fechafin);
+        setSelectedFechaIni(reporteInicial.fechaIni);
+        setSelectedFechaFin(reporteInicial.fechafin);
       }
   
     }
     const filtrarReporte=()=>{
       // console.log("en buscar",fechaInicio,fechaFin);
-      const cronogramaBusqueda={
-        idcronograma: cronogramaGestionBonos.idcronograma,
+      const reporteFiltrado={
+        cronogramas: [1,98,99],
         iddepartamento: departamento,
         idprovincia: provincia,
         iddistrito: distrito,
         fechaini: fechaInicio,
-        fechafin: fechaFin,
+        fechafi: fechaFin,
       }    
-      apiEntregados(cronogramaBusqueda);
-      apiTotales(cronogramaBusqueda);
+      apiQuejas(reporteFiltrado);
     }
     //Fin de manejo de filtros
-    //Para card de reporte 
-    const useStyles = makeStyles({
-      root: {
-        minWidth: 275,
-        marginRight:20,
-      },
-      bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-      },
-      // title: {
-      //   fontSize: 14,
-      // },
-      pos: {
-        marginBottom: 12,
-      },
-    });
+    
     //Colores del chart
     const backgroundColor=[       
     'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
@@ -201,31 +185,35 @@ export default function GestionBonos (){
     'pink',     '	rgb(240, 128, 128,0.4)', //rosado
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
     ];
-    const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
-    const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
+   // const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reportequejas";
+    const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
-    const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
     
-    const apiEntregados=async (cronogramaDeseado) => {   
-      const response = await axios.post(ENTREGADOS).then();
-        // console.log('rpta api.data: ',response.data);
+    const apiQuejas=async (reporteDeseado) => {   
+    console.log(reporteDeseado);
+    var response;
+    if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
+         reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
+             response = await axios.post(QUEJAS_URL,reporteDeseado).then();
+         }
+     else response = await axios.post(QUEJAS_URL,reporteInicial).then();
+     console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
           //Para el chart reporte- Colores 
           
           isResponse=true;
           setdatosEntregados({
-            labels:response.data.listaFechas,//[,,]
-            /*labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
+            labels:response.data.listacronogramas,
             datasets:[
               {
-                label:'Bonos Entregados',
-                 data:response.data.listaCantidades,
-                /* data:[201,456,98,12,456,999,441,
-                  420,456,98,12,456,999,441,
-                  300,456,98,12,456,999,441,785],*/
+                label:'Por Lugares',
+                 data:response.data.listalugares,
+                backgroundColor:backgroundColor,
+              },
+              {
+                label:'Por Horarios',
+                 data:response.data.listahorarios,
                 backgroundColor:backgroundColor,
               }
 
@@ -234,141 +222,21 @@ export default function GestionBonos (){
           
         }       
     }
-    const apiTotales = (cronogramaDeseado) => {
-      axios.post(TOTALES)
-        .then(response =>{                    
-            let api=[];
-            api.push(response.data);               
-            setdatosIndicadores(api);
-            
-        })
-        .catch(() => {
-            console.log('Error al obtener Totales');
-        });
-    }   
+
     useEffect(()=>{    
       //Llamo a todos los api de monitoreo    
-        apiEntregados(cronogramaInicial);
-        apiTotales(cronogramaInicial);
+        apiQuejas(reporteInicial);      
     },[]);
 
     //fin del chart reporte 
-     
-    //  path: /monitoreo
-    const classes = useStyles();
-    var titulo="Monitoreo";
+
+ 
+    var titulo="Reporte de Quejas";
     if(datosEntregados!==[] && datosEntregados.length!==0){
       //Debo preguntar esto antes de llamar a los gráficos
        var respuesta= rpta.map((rpta,index)   =>
             <Grid key={rpta.id} container  justify="center">
-              <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
-          
-              <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
-        
-               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
-               {/* <apiData></apiData> */}
-               <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Beneficiarios
-                        </Typography>                
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantmujeres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Mujeres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.canthombres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Hombres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                                {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantdisc}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Discapacitados
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                               {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantquejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                    Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-
-
-                        
-                    </CardContent>
-   
-                 </Card>
-                    {/* Card de Lugares de Entrega */}
-                {/* <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Lugares de entrega
-                        </Typography>                
-                                      
-                                {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalLugares}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 40,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Total
-                                    </Typography>                           
-                                </Grid>                                
-                            ))}
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalActivo}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Activos
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalQuejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-
-
-                        
-                    </CardContent> 
-                   
-               </Card> */}
-
-
+              <Bar chartData={datosEntregados} md={12} sm={12} xs={12}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
             </Grid>
 
             )
@@ -406,17 +274,17 @@ export default function GestionBonos (){
                                 Departamento:
                             </Typography>
                             <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                              value={departamento} placeholder="Departamento"/>
+                              value={departamento} placeholder="Todos"/>
                             <Typography variant="subtitle1" color="inherit">
                                 Provincia:
                             </Typography>
                             <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                            value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                            value={provincia} isDisabled={cbxProv} placeholder="Todos"/>
                             <Typography variant="subtitle1" color="inherit">
                                 Distrito:
                             </Typography>
                             <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                            value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                            value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                         </Grid>
                         <br></br>
                         <Grid container direction="row" item md={6} justify="space-evenly" alignItems="center">
@@ -428,11 +296,11 @@ export default function GestionBonos (){
                                 Filtrar
                               </Button> 
                               <Link to={{
-                                        pathname: "/reportequejas"
+                                        pathname: "/monitoreo"
                                        
                                       }} style={{textDecoration:"none"}}>
                                 <Button variant="contained"size="medium" color="secondary" style={{margin: 10}}>
-                                  Reporte Quejas
+                                  Regresar
                                 </Button> 
                               </Link>
 
@@ -462,4 +330,3 @@ export default function GestionBonos (){
 
 
 }
-

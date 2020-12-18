@@ -25,6 +25,7 @@ import EditarPreguntasFrecuentes from "./Componentes/Representante/EditarPregunt
 import Usuarios from './Componentes/Admin/Usuarios'
 import Formulario from './Componentes/Admin/Formulario'
 import OlvidarContrasena from "./Componentes/OlvidarContrasena";
+import ReporteQuejas from "./Componentes/Reportes/Quejas";
 
 const App = () => {
 
@@ -57,6 +58,8 @@ const App = () => {
             <BarraFinal />
           </Route>
           <RutaProtegida path="/monitoreo" component={Monitoreo}
+          /> 
+          <RutaProtegida path="/reportequejas" component={ReporteQuejas}
           />
 
 

@@ -159,8 +159,8 @@ function formato(texto){
     },
   }));
 
-   const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
-   //const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
+   //const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+   const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
   const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
 
   var updateCronograma=false;
