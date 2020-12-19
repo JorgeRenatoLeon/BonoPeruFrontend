@@ -25,6 +25,8 @@ import { render } from '@testing-library/react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
+import  Cargando  from "../ModalCargando";
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -135,6 +137,17 @@ const useStyles = makeStyles({
 
 
 const BusquedaLugares = (props) => {
+  const [estadoCargando,setEstadoCargando]= useState(true);
+
+  //PARA MODAL CARGANDO
+  const useStyles2 = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      '& > * + *': {
+        marginLeft: theme.spacing(2),
+      },
+    },
+  }));
 
   const datosInicio ={
     iddepartamento: null,
@@ -145,6 +158,7 @@ const BusquedaLugares = (props) => {
 
   const apiLugares=(valor)=>{
     LugaresService.obtenerLugares(valor).then(response =>{
+      setEstadoCargando(false);
       let rowsAux = [];
       response.data.map(lug => {
         rowsAux.push({
@@ -225,7 +239,7 @@ const BusquedaLugares = (props) => {
 
   const handleComboboxDep=(valor)=>{
     setSelectedDep(valor);
-    
+    setEstadoCargando(true);
     if(valor === 0) {
       handleComboboxProv(0);
       handleComboboxDis(0);
@@ -254,6 +268,7 @@ const BusquedaLugares = (props) => {
 
   const handleComboboxProv=(valor)=>{
     setSelectedProv(valor);
+    setEstadoCargando(true);
     console.log(valor, "valor dentro de prov combo");
     if(valor === 0){
       setStateCbxDis(true);
@@ -280,7 +295,7 @@ const BusquedaLugares = (props) => {
   }
 
   const handleComboboxDis=(valor)=>{
-    
+    setEstadoCargando(true);
     console.log(valor,"id dis");
     if(valor === 0){
       setSelectedDis(null);
@@ -307,6 +322,7 @@ const BusquedaLugares = (props) => {
   const buscarLugar=(nombre)=>{
     var letters = /^\d*[a-zA-Z][a-zA-Z\d\s]*$/;
     if(letters.test(nombre)){
+      setEstadoCargando(true);
       setErrorBusqueda(false);
       const nombreLugar ={
         iddepartamento: departamento,
@@ -436,18 +452,18 @@ const BusquedaLugares = (props) => {
     return ( 
         <Grid>
             <BarraInicial/>  
-            <Grid style={{minHeight: "83vh"}}>            
+            <Grid style={{minHeight: "83vh"}}>
             <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
-                            <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Búsqueda de Lugares</h3>
-                            </Typography> 
+                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                Búsqueda de Lugares
+                              </Typography>                         
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
-            </AppBar>
+            </AppBar>            
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -505,7 +521,11 @@ const BusquedaLugares = (props) => {
                 </Grid>
             </Paper> 
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>
-                {rows.length > 0?
+                {estadoCargando?
+                <Grid container direction="row" justify="center">
+                  <Cargando/>
+                </Grid>:
+                rows.length > 0?
                 <Grid className={classes.paper}>                      
                     <TableContainer>
                     <Table
@@ -545,7 +565,7 @@ const BusquedaLugares = (props) => {
                     </Table>
                     </TableContainer>
                     <TablePagination
-                    rowsPerPageOptions={[5, 10, { value: -1, label: 'Todo' }]}
+                    rowsPerPageOptions={[5, 10]}
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}

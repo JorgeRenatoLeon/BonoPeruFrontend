@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Tabla from './Tabla'
 import axios from "axios";
 
-const API_URL = "http://localhost:8084/api/";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
 
 const CargaMasiva = (props) => {
 

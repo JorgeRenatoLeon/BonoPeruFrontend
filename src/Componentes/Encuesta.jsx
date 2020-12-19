@@ -5,7 +5,7 @@ import authHeader from "../Servicios/auth-header";
 import axios from "axios";
 import EncuestaService from "../Servicios/encuestas.service";
 
-const API_URL = "http://localhost:8084/api/encuesta/";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/encuesta/";
 
 const Encuesta = (props) => {
 

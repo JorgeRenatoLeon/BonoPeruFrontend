@@ -17,8 +17,8 @@ export const fetchConsulta = ( payload) => (dispatch) => {
   //PAYLOAD es el dato de entrada
   dispatch(startGet());  
   
-  return fetch('http://localhost:8084/api/beneficiario/consultarHorario/'+payload ,{
-      method: 'POST'})  
+  return fetch('http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/beneficiario/consultarHorario/'+payload ,
+         {method: 'POST'})  
       .then( response => response.json())
       .then( result =>{ 
              //  console.log("Prueba action:",successGet(result));

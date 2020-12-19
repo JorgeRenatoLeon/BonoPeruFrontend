@@ -259,16 +259,14 @@ const ConsultasBeneficiarios = (params) => {
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
-                    
-                            <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Consulta de Beneficiarios</h3>
-                            </Typography> 
-                            
+                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                Consulta de Beneficiarios
+                              </Typography>                         
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
-            </AppBar>
-            <Paper elevation={0} style={{margin: 40, boxShadow: 'none'}}>
+            </AppBar> 
+            <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <TableContainer>
                         <Table
                             className={classes.table}
@@ -315,6 +313,13 @@ const ConsultasBeneficiarios = (params) => {
             </Paper> 
             {mensaje?
             <Respuesta mensaje={mensaje}></Respuesta>:<Grid></Grid>}
+            <Grid container direction="row" justify="center">
+              <Link to='/lugares' style={{textDecoration:"none"}}>
+                <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
+                    Regresar
+                </Button>
+              </Link> 
+            </Grid>
             </Grid>
             <BarraFinal/>
         </Grid>

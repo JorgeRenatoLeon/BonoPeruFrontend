@@ -23,7 +23,6 @@
      return (
        <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
             <Line
-            responsive={true}
            data={this.state.chartData}
            options={{
              title:{
