@@ -34,108 +34,11 @@ import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
 import { SelectAll } from '@material-ui/icons';
 import  Cargando  from "../ModalCargando";
+import Bar from "../../Componentes/Graficos/Bar.js";
 
 const reducer = (state, action) => {
     return { checkedId: action.id }
 }
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-const headCells = [
-  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
-  { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
-  { id: 'locacion', numeric: false, disablePadding: false, label: 'Locación' },
-  { id: 'fecha', numeric: false, disablePadding: false, label: 'Fecha' },
-  { id: 'turno', numeric: false, disablePadding: false, label: 'Turno' },
-  { id: 'aforo', numeric: true, disablePadding: false, label: '%Aforo utilizado' },
-  { id: 'mujeres', numeric: true, disablePadding: false, label: '%Mujeres' },
-  { id: 'discapacitados', numeric: true, disablePadding: false, label: '%Discapacitados' },
-  { id: 'riesgo', numeric: false, disablePadding: false, label: 'Riesgo' },
-];
-
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: "5AB9EA",
-    color: theme.palette.common.black,
-  },
-  body: {
-    fontSize: 18,
-  },
-}))(TableCell);
-
-
-function EnhancedTableHead(props) {
-  const { classes, order, orderBy, onRequestSort} = props;
-  /*const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };*/
-
-
-  return (
-    <TableHead>
-      <TableRow>
-        {/* <StyledTableCell padding="checkbox" style={{background: '#5AB9EA'}}>
-          <Checkbox color="default" 
-          />
-        </StyledTableCell> */}
-        {headCells.map((headCell) => (
-          <StyledTableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            //sortDirection={orderBy === headCell.id ? order : false}
-            style={{background: '#5AB9EA'}}
-          >
-            <TableSortLabel
-              //active={orderBy === headCell.id}
-              //direction={orderBy === headCell.id ? order : 'asc'}
-              // onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {/* {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null} */}
-            </TableSortLabel>
-          </StyledTableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  //classes: PropTypes.object.isRequired,
-  //onRequestSort: PropTypes.func.isRequired,
-  //order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  //orderBy: PropTypes.string.isRequired,
-};
 
 const useStyles = makeStyles({
     root: {
@@ -165,7 +68,7 @@ const useStyles = makeStyles({
   });
 
 
-const Cronograma = (props) => {
+const ReporteIncidentes = (props) => {
   const [estadoCargando,setEstadoCargando]= useState(true);
 
   //PARA MODAL CARGANDO
@@ -463,51 +366,21 @@ const Cronograma = (props) => {
       console.log(arrayHoraFinSelected);
     }
 
-    const [errorDescarga, setError] = useState(false);
-    const descargaCronograma=()=>{
-      if(arrayNumSelected.length === 0){
-        //alert("Debe seleccionar al menos un lugar para poder descargar");
-        setError(true);
-        return
-      }
-      setError(false);
-      const cronogramaParaDescarga ={
-        idcronograma: cronogramaGestionBonos.idcronograma,
-        iddepartamento: departamento,
-        idprovincia: provincia,
-        iddistrito: distrito,
-        fechaini: fechaInicio,
-        fechafin: fechaFin,
-        nombre: searchText,
-        numeros: arrayNumSelected,
-        fechas: arrayFechaSelected,
-        horainicio:arrayHoraIniSelected,
-        horafin:arrayHoraFinSelected,
-      }
-      DescargaService.descargarCronograma(cronogramaParaDescarga);
-    }
     return ( 
         <Grid>
-            <BarraInicial/>              
+            <BarraInicial/> 
+            <Grid style={{minHeight:"82.5vh"}}>              
             <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
                               <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                     Cronograma
+                                    Reporte de Incidentes
                                 </Typography>                         
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
             </AppBar>
-            {errorDescarga?
-            <Grid container justify="center" style={{marginLeft: 40, marginRight: 40, marginBottom: 20, boxShadow: 'none'}}>
-              <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-               Debe seleccionar <strong>al menos un </strong>lugar para poder descargar 
-              </Alert>
-            </Grid>
-            :<Grid></Grid>}
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -534,97 +407,21 @@ const Cronograma = (props) => {
                         </Typography>
                           <RangoFechas onCambio={cambiar}/>
                         <Typography variant="subtitle1" color="inherit">
-                            Lugar de entrega:
+                            Cronograma:
                         </Typography>
-                        <TextField className="inputRounded" id="outlined-basic" 
-                        label={null} variant="outlined" value={searchText}
-                        onChange={handleSearchText} />
+                        <Combobox c/>
                         <Button variant="contained" onClick={buscarCronogramas} size="medium" color="primary" style={{margin: 10}}>
-                          Buscar
+                          Filtrar
                         </Button>  
                     </Grid>
                 </Grid>
             </Paper> 
-            <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10, marginBottom:20,  boxShadow: 'none'}}>
-                {estadoCargando?
-                <Grid container direction="row" justify="center">
-                  <Cargando/>
-                </Grid> :
-                rows.length > 0?
-                <Grid className={classes.paper}>                      
-                    <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        aria-label="enhanced table"
-                    >
-                        <EnhancedTableHead
-                        classes={classes}
-                        order={order}
-                        orderBy={orderBy}
-                        onRequestSort={handleRequestSort}
-                        />
-                      
-                        <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {                            
-                            
-                            return (
-                                <TableRow hover tabIndex={-1} key={row.id} >
-                                <TableCell padding="checkbox">
-                                  <Checkbox color="default" id={row.id} 
-                                    onChange={(e) => {selectCheckBox(e, row.fecha,row.turno.substring(0,5),row.turno.substring(9,14))}}
-                                  />                                 
-                                </TableCell>
-                                <TableCell align="left">{row.nombre}</TableCell>
-                                <TableCell align="left">{row.locacion}</TableCell>
-                                <TableCell align="left">{row.fecha.substring(8)+row.fecha.substring(4,8)+row.fecha.substring(0,4)}</TableCell>
-                                <TableCell align="left">{row.turno.substring(0,5)+"-"+row.turno.substring(9,14)}</TableCell>
-                                <TableCell align="center">{row.aforo}</TableCell>
-                                <TableCell align="center">{row.mujeres}</TableCell>
-                                <TableCell align="center">{row.discapacitados}</TableCell>
-                                <TableCell align="center">{row.riesgo}</TableCell>
-                                </TableRow>
-                            );
-                            })}
-                        
-                        </TableBody>
-                        
-                    </Table>
-                    </TableContainer>
-                    <TablePagination
-                    //rowsPerPageOptions={[5, 10, 25]}
-                    rowsPerPageOptions={[5, 10]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
-                </Grid>:<Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                            <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
-                            </Typography> 
-                        </Grid>                                                  
-                    </Grid>}
-                <Grid container direction="row" justify="space-evenly" alignItems="center" >
-                    <Button variant="contained" size="medium" color="primary" style={{margin: 10}} onClick={descargaCronograma}>
-                          Descargar
-                    </Button> 
-                    <Link to='/bonos' style={{textDecoration:"none"}}>
-                        <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
-                            Regresar
-                        </Button>
-                    </Link> 
-                </Grid>                         
-            </Paper>  
+            </Grid>
+            {/* <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/>  */}
             <BarraFinal/>
         </Grid>
     );
 
 }
  
-export default Cronograma;
+export default ReporteIncidentes;

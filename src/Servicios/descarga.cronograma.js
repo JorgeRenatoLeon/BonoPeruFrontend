@@ -11,7 +11,7 @@ const descargarCronograma=(props)=>{
       data: props,
       responseType: 'blob', // Important
     }).then((response) => {
-        FileDownload(response.data, 'report.xlsx');
+        FileDownload(response.data, 'cronograma.xlsx');
     });
   };
   

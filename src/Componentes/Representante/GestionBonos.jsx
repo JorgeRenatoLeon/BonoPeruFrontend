@@ -13,16 +13,14 @@ import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider} from
  import TableRow from '@material-ui/core/TableRow';
  import TableSortLabel from '@material-ui/core/TableSortLabel';
  import HistoricoService from "../../Servicios/historico.service";
-
- //Para el mensaje de confirmacion
+  //Para el mensaje de confirmacion
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
 //Para el api
 import { history } from "../../helpers/history";
-import  ModalPublicar  from "./ModalPublicar";
-
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+//Para el modal cargando
+import  Cargando  from "../ModalCargando";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -160,7 +158,9 @@ function formato(texto){
         width: 1,
     },
   }));
-   const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+
+   //const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+   const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
   const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
 
   var updateCronograma=false;
@@ -170,14 +170,11 @@ const GestionBonos = (props)=>{
     function guardarFecha(event){
         //Guarda la fecha cuando hay un cambio
         setSoloFecha(event);
-        // console.log('e: ',event);
     }
     function guardarNombre(event){
         //Guarda el nombre cuando hay un cambio
         setSoloNombre(event);
-        // console.log('e: ',event);
     }
-    //const [openConfirmacion, setOpenConfirmacion] = useState(false);
     const [soloNombre, setSoloNombre] = useState("");
     const [soloFecha, setSoloFecha] = useState("");
     
@@ -191,15 +188,18 @@ const GestionBonos = (props)=>{
        
         setMensaje(defaultM);
    };
-
-   
-    const generarOpen={mensaje:"Generación exitosa. Le llegará un correo cuando este terminado el nuevo crograma.", 
+   //Manejo de publicar
+   const PUB_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/publicar";//Ari
+    const generarOpen={mensaje:"Generación exitosa. Le llegará un correo cuando este terminado el nuevo cronograma.", 
                     open:true,severity:"success"}
-    const errorOpen={mensaje:"Error", open:true,severity:"error"}
+    const errorOpen={mensaje:"Error. Intente nuevamente en unos minutos", open:true,severity:"error"}
     const faltaOpen={mensaje:"No pueden haber campos vacíos", open:true,severity:"error"}
     const defaultM={mensaje:"", open:false,severity:"error"}
+    const publicarOpen={mensaje:"Se ha publicado el cronograma para los beneficiarios.", open:true,severity:"success"}
     const [mensaje,setMensaje]=useState(defaultM);
+    const [publicado,setPublicado]=useState(false);
     
+
   //useState devuelve 2 valores, en la pos 0, devuelve  el valor, y el la pos 1, devuelve una función
         const classes = useStyles();
         var respuesta;
@@ -224,17 +224,20 @@ const GestionBonos = (props)=>{
             const CronogramaActual = () => {
                 axios.post(API_URL)
                  .then(response =>{
-                     console.log("API OBT : ",response.data);
+                    //  console.log("API OBT : ",response.data);
                      if(response){                        
                         localStorage.setItem("cronogramaKaytlin", JSON.stringify(response.data)); //apenas lo recibo te lo envío
                         let apiCronograma = [];
                         apiCronograma.push(response.data);                        
                         if(apiCronograma){
+
                             setCronograma(apiCronograma);
                             console.log("API OBT cro: ",apiCronograma);                            
                             if(apiCronograma[0].idcronograma===""){
                                 updateCronograma=true;                               
-                            }                            
+                            }else if (apiCronograma[0].estado==="PUB"){
+                                setPublicado(true);
+                            }                           
                         }                        
                      }                     
                  })
@@ -257,6 +260,19 @@ const GestionBonos = (props)=>{
                  });           
 
             }
+            function PublicarCronograma(){
+                //No va a entrar si ya está publicado
+                    //   API de Ari
+                    axios.post(PUB_URL+"/"+cronograma.idcronograma)
+                    .then(response =>{             
+                        setMensaje(publicarOpen);
+                        setPublicado(true);
+                    })
+                    .catch(() => {
+                        console.log('Error al obtener Publicar cronograma');
+                        setMensaje(errorOpen);
+                    });
+            } 
             const GenerarCronograma = () => {
                 updateCronograma=true; 
                 // const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
@@ -314,7 +330,7 @@ const GestionBonos = (props)=>{
         var titulo="Gestión de Bonos";
         
         var botones;
-        console.log("API OBT cro2: ",cronograma);
+        // console.log("API OBT cro2: ",cronograma);
         if(updateCronograma===true){
             // setOpenConfirmacion(true);
              botones=rpta.map((boton) =>   
@@ -518,7 +534,7 @@ const GestionBonos = (props)=>{
                             <Grid container item md={3} justify="center">
                                 <Link 
                                     to={{
-                                        pathname: "/cronogramaParaRepresentante"
+                                        pathname: "/cronogramapararepresentante"
                                        
                                       }}
                                     style={{textDecoration:"none"}}>
@@ -528,7 +544,11 @@ const GestionBonos = (props)=>{
                                 </Link>
                             </Grid>
                             <Grid container item md={3} justify="center">  
-                                <ModalPublicar></ModalPublicar>
+                                {/* <ModalPublicar></ModalPublicar> */}
+                                <Button disabled={publicado} variant="contained" size="medium" color="secondary" onClick={PublicarCronograma} >
+                                    Publicar Cronograma 
+                                </Button> 
+
                             </Grid>
                         </Grid>
                     );
@@ -666,8 +686,12 @@ const GestionBonos = (props)=>{
 
         }
         else  if ( cronograma[0].idcronograma==="inicial" ){           
-         respuesta="Cargando..."
-     }
+            //  respuesta="Cargando..."
+            respuesta=rpta.map((boton) => 
+                <Cargando/>
+            );
+
+         }
 
      const [rows, setRows] = useState([]);
      useEffect(() => {
@@ -722,6 +746,20 @@ const GestionBonos = (props)=>{
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    //PARA MODAL CARGANDO
+    const useStyles2 = makeStyles((theme) => ({
+        root: {
+          display: 'flex',
+          '& > * + *': {
+            marginLeft: theme.spacing(2),
+          },
+        },
+      }));
+    const classes2 = useStyles2();
+    //FIN DE MODAL CARGANDO
+
+
+
     return (
         <StrictMode >
         <Grid style={{minHeight:"88vh"}}>
@@ -756,8 +794,14 @@ const GestionBonos = (props)=>{
                 </Container>
 
             </Grid>
-            <Divider style={{ height:"2px", backgroundColor:"black"}}/>
+            {/* <Divider style={{ height:"2px", backgroundColor:"black"}}/> */}
+            {/* Historico de Bonos */}
             <Grid> 
+                <Grid container style={{paddingBottom: '3vh',paddingTop: '3vh',marginLeft: 40}}>
+                    <Typography variant="h4" color="inherit">
+                        Monitoreo Histórico
+                    </Typography>
+                </Grid>
                 <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>
                     {rows.length > 0?
                     <Grid className={classes.paper}>                      
@@ -803,13 +847,18 @@ const GestionBonos = (props)=>{
                         onChangeRowsPerPage={handleChangeRowsPerPage}                    
                         />
                     </Grid>:
+                        // <Grid container direction="row" justify="center">
+                        //     <Grid container item xs={12} justify="center">
+                        //         <Typography variant="h3"  gutterBottom justify="center" >
+                        //                 <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
+                        //         </Typography> 
+                        //     </Grid>                                                  
+                        // </Grid>
                         <Grid container direction="row" justify="center">
-                            <Grid container item xs={12} justify="center">
-                                <Typography variant="h3"  gutterBottom justify="center" >
-                                        <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
-                                </Typography> 
-                            </Grid>                                                  
-                        </Grid>}                 
+                            <Cargando/>
+                        </Grid>                        
+                        }       
+                        {/* CARGANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}          
                 </Paper>      
             </Grid>
         </Grid>

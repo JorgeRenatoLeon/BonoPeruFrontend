@@ -22,20 +22,9 @@ const useStyles = makeStyles({
 
 
 function Quejas() {
-    const incovenientesLugar = [
-        { value: 'tipo1', label: 'TIPO 1' },
-        { value: 'tipo2', label: 'TIPO 2' },
-        { value: 'tipo3', label: 'TIPO 3' }
-    ];
-    const incovenientesTurno = [
-        { value: 'tipo1', label: 'TIPO 1' },
-        { value: 'tipo2', label: 'TIPO 2' },
-        { value: 'tipo3', label: 'TIPO 3' }
-    ];
     const apiBeneficiario = JSON.parse(localStorage.getItem("beneficiarioKayt")) ;   //RespuestaBeneficiario.jsx            
     console.log('para kayt: ',apiBeneficiario); //necesitas el turno y el lugar de entrega 
 
-    let cant = 0;
     return ( 
         <Grid>
             <BarraInicial/>             
@@ -43,22 +32,16 @@ function Quejas() {
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
-                            <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>Quejas</h3>
-                            </Typography> 
+                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                    Quejas
+                                </Typography>                         
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
             </AppBar>
-            {cant = cant + 1}
-            {apiBeneficiario.map(opcion=> (
-/*                         <Grid container direction="row" item md={4} xs={4}>  
-                            <Typography variant="subtitle2" color="inherit">
-                            {opcion.horariolugarentrega.lugarentrega.nombre} 
-                            </Typography> 
-                        </Grid>  */
-                    <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={cant} 
-                        idHorario={opcion.horariolugarentrega.idHorariolugarentrega}
+            {apiBeneficiario.map((opcion,index)=> (
+                    <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={index+1} 
+                        idHorario={opcion.idHorario}
                         idLugar={opcion.horariolugarentrega.lugarentrega.idLugarentrega}></Queja>      
                 )) 
             } 
