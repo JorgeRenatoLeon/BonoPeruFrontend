@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8084/api/preguntas/";
+const API_URL = "http://localhost:8084/api/preguntasfrecuentes/";
 
 const pregunta = {
     "idpreguntasfrecuentes": null,

@@ -15,8 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import AgregarPregunta from './NuevaPreguntaFrecuente'
-
-//import PreguntasService from "../../Servicios/preguntas.service";
+import PreguntasService from "../../Servicios/preguntasfrecuentes.service";
 
 function createData(id, pregunta, respuesta) {
     return { id, pregunta, respuesta };
@@ -55,15 +54,15 @@ export default function PreguntasFrecuentes() {
 
     const classes = useStyles();
     const [openConfirmacion, setOpenConfirmacion] = useState(false);
-    //const [preguntas, setPreguntas] = useState([]);
+    const [preguntas, setPreguntas] = useState([]);
 
+    /*
     let preguntas = [
         createData(1, '¿Dónde encuentro el lugar de recojo?', 'El lugar de regojo se indica al momento de consultar su bono asignado usando su código de hogar'),
         createData(2, '¿Qué código debo colocar para visualizar si tengo un bono asignado?', 'El código es el código de hogar asignado a su familia'),
         createData(3, '¿En qué horario debo ir a recoger mi bono?', 'Las fechas y rangos de horas asignadas para el recojo se indican luego de consultar si tiene un bono asignado'),
-        createData(4, 'Pregunta 4', 'Respuesta 4'),
-        createData(5, 'Pregunta 5', 'Respuesta 5'),
     ];
+    */
 
     const handleCloseConfirmacion = (event, reason) => {
         if (reason === 'clickaway') {
@@ -72,61 +71,33 @@ export default function PreguntasFrecuentes() {
         setOpenConfirmacion(false);
     };
 
-    const actualizarLista = (valores) => {
-
-        /*
-        PreguntasService.listarPreguntasFiltradas(valores).then(response => {
-            let pregAux = [];
-            response.data.map(user => {
-                pregAux.push(createData(pregunta.id, pregunta.pregunta, pregunta.respuesta));
-            });
-
-            setPreguntas(pregAux);
-            console.log(pregAux);
-        })
-            .catch(() => {
-                console.log('Error al actualizar la lista')
-            });
-        */
-        //setPreguntas(pregAux);
-    }
-
-    const listarLista = () => {
-        /*
+    const actualizarLista = () => {
         PreguntasService.listarPreguntas().then(response => {
             let pregAux = [];
-            response.data.map(user => {
-                pregAux.push(createData(pregunta.id, pregunta.pregunta, pregunta.respuesta));
+            response.data.map(pregunta => {
+                pregAux.push(createData(pregunta.idpreguntasfrecuentes, pregunta.pregunta, pregunta.respuesta));
             });
-
             setPreguntas(pregAux);
-            console.log(pregAux);
-            handleOpenConfirmacion();
+            //console.log(pregAux);
+            //handleOpenConfirmacion();
         })
             .catch(() => {
                 console.log('Error al listar preguntas')
             });
-        */
-        //setPreguntas(pregAux);
     }
 
     useEffect(() => {
-        /*
         PreguntasService.listarPreguntas().then(response => {
             let pregAux = [];
-            response.data.map(user => {
-                pregAux.push(createData(pregunta.id, pregunta.pregunta, pregunta.respuesta));
+            response.data.map(pregunta => {
+                pregAux.push(createData(pregunta.idpreguntasfrecuentes, pregunta.pregunta, pregunta.respuesta));
             });
-
             setPreguntas(pregAux);
-            console.log(pregAux);
+            //console.log(pregAux);
         })
             .catch(() => {
                 console.log('Error al listar preguntas')
             });
-
-        */
-        //setPreguntas(pregAux);
     }, []);
 
     return (

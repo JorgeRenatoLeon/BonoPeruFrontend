@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button } from "@material-ui/core"
 import { Link } from "react-router-dom"
 
+import PreguntasService from "../../Servicios/preguntasfrecuentes.service";
 
 export default function FormDialog(props) {
 
@@ -60,14 +61,15 @@ export default function FormDialog(props) {
         const err = validate();
 
         if (!err) {
-            /*
             const preg = {
                 pregunta: pregunta,
                 respuesta: respuesta,
+                estado: "ACT",
+                usuariocreacion: JSON.parse(localStorage.getItem("user")).id,
+                //usuariocreacion: 1,
             };
 
-            
-            PreguntassService.insertarPregunta(preg).then(response => {
+            PreguntasService.insertarPregunta(preg).then(response => {
                 console.log(response);
                 setPregunta("");
                 setPreguntaErr("");
@@ -79,7 +81,6 @@ export default function FormDialog(props) {
                 .catch(() => {
                     console.log('Error al insertar pregunta')
                 });
-            */
         }
     };
 
@@ -97,9 +98,9 @@ export default function FormDialog(props) {
                             autoFocus
                             fullWidth
                             variant="outlined"
-                            label="Nombres"
+                            label="Pregunta"
+                            hintText="Pregunta"
                             id="name"
-                            hintText="Nombres"
                             value={pregunta}
                             onChange={p => changePregunta(p)}
                             helperText={preguntaErr === "" ? null : preguntaErr}
@@ -112,8 +113,8 @@ export default function FormDialog(props) {
                             fullWidth
                             variant="outlined"
                             id="lastname"
-                            label="Apellidos"
-                            hintText="Apellidos"
+                            label="Respuesta"
+                            hintText="Respuesta"
                             value={respuesta}
                             onChange={r => changeRespuesta(r)}
                             helperText={respuestaErr === "" ? null : respuestaErr}
