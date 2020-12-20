@@ -89,6 +89,7 @@ const Encuesta = (props) => {
     const [isLoading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [mensaje, setMensaje] = useState('');
+    const [disponible, setDisponible] = useState(true);
   
     const handleClose = () => {
       setOpen(false);
@@ -113,9 +114,13 @@ const Encuesta = (props) => {
             console.log("API OBT ENCUESTA: ",response.data)
             let encuestas = []
             encuestas.push(response.data)
-            if(encuestas){
+            if(encuestas[0]){
                 setOpcion(encuestas)
                 setLoading(false)
+            }
+            else{
+                setLoading(false)
+                setDisponible(false)
             }
         })
         .catch(() => {
@@ -143,8 +148,8 @@ const Encuesta = (props) => {
             </Grid>
             <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
                 <RadioGroup row variant="subtitle1" value={pregunta.respuesta} color="inherit">
-                    <FormControlLabel value="Si" control={<Radio color='black'/>} label="Si" onClick={() => handleChange(pregunta.id,"Si")}/>
-                    <FormControlLabel value="No" control={<Radio color='black'/>} label="No" onClick={() => handleChange(pregunta.id,"No")}/>
+                    <FormControlLabel value="Si" control={<Radio style={{color: 'black'}}/>} label="Si" onClick={() => handleChange(pregunta.id,"Si")}/>
+                    <FormControlLabel value="No" control={<Radio style={{color: 'black'}}/>} label="No" onClick={() => handleChange(pregunta.id,"No")}/>
                 </RadioGroup>
             </Grid>
         </Grid>
@@ -159,11 +164,11 @@ const Encuesta = (props) => {
             </Grid>
             <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
                 <RadioGroup row variant="subtitle1" value={respuesta.puntaje} color="inherit">
-                    <FormControlLabel value={1} control={<Radio color='black'/>} label="1" onClick={() => handleChangeOpcion(index,1)}/>
-                    <FormControlLabel value={2} control={<Radio color='black'/>} label="2" onClick={() => handleChangeOpcion(index,2)}/>
-                    <FormControlLabel value={3} control={<Radio color='black'/>} label="3" onClick={() => handleChangeOpcion(index,3)}/>
-                    <FormControlLabel value={4} control={<Radio color='black'/>} label="4" onClick={() => handleChangeOpcion(index,4)}/>
-                    <FormControlLabel value={5} control={<Radio color='black'/>} label="5" onClick={() => handleChangeOpcion(index,5)}/>
+                    <FormControlLabel value={1} control={<Radio style={{color: 'black'}}/>} label="1" onClick={() => handleChangeOpcion(index,1)}/>
+                    <FormControlLabel value={2} control={<Radio style={{color: 'black'}}/>} label="2" onClick={() => handleChangeOpcion(index,2)}/>
+                    <FormControlLabel value={3} control={<Radio style={{color: 'black'}}/>} label="3" onClick={() => handleChangeOpcion(index,3)}/>
+                    <FormControlLabel value={4} control={<Radio style={{color: 'black'}}/>} label="4" onClick={() => handleChangeOpcion(index,4)}/>
+                    <FormControlLabel value={5} control={<Radio style={{color: 'black'}}/>} label="5" onClick={() => handleChangeOpcion(index,5)}/>
                 </RadioGroup>
             </Grid>
         </Grid>
@@ -171,6 +176,13 @@ const Encuesta = (props) => {
     
     if (isLoading) {
         return <div>Loading...</div>;
+    }
+    if (!disponible) {
+        return <Grid container justify="center" alignContent="center" style={{minHeight: '88vh'}}>
+                    <Typography variant="h3" color="inherit">
+                        No cuenta con encuestas pendientes
+                    </Typography>
+                </Grid>;
     }
 
     return ( 
@@ -201,7 +213,7 @@ const Encuesta = (props) => {
                             <Select variant="outlined"
                             value={opcionSel}
                             style={{padding: 0, height: '3vh', color: 'black'}}>
-                                {opciones.map((opcion,index) => <MenuItem value={index+1} onClick={()=>setOpcionSel(index+1)}>1</MenuItem>)}
+                                {opciones.map((opcion,index) => <MenuItem key={index+1} value={index+1} onClick={()=>setOpcionSel(index+1)}>1</MenuItem>)}
                             </Select>
                         </Grid>
                         <Grid item md={4} style={{paddingTop: '1.5vh'}}>
