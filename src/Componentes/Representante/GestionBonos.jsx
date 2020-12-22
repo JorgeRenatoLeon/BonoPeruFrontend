@@ -159,9 +159,10 @@ function formato(texto){
     },
   }));
 
-   //const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
-   const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
-  const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
+   const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
+   //const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
+   //const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
+   const ARI_URL = "http://127.0.0.1:8084/api/cronograma/generarcronograma";//Ari
 
   var updateCronograma=false;
 //  path: /bonos
@@ -278,7 +279,7 @@ const GestionBonos = (props)=>{
                 // const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
                 // const soloNombre = JSON.parse(localStorage.getItem("soloNombre")) ;    //La hemos obtenido 
                  const idUsuario= JSON.parse(localStorage.getItem("user")).id;
-    
+                 setMensaje(generarOpen);
                 console.log('idUsuario: ',idUsuario);
                 console.log('solo nombre ',soloNombre," fecha: ",soloFecha);
                 
@@ -299,15 +300,11 @@ const GestionBonos = (props)=>{
                       localStorage.setItem("Gcronograma", JSON.stringify(response.data));
                      
                       //setOpenConfirmacion(true);
-                      setMensaje(generarOpen);
+                    //   setMensaje(generarOpen);
                       CronogramaActual();
-                      
-                    //   localStorage.setItem("openConf", JSON.stringify(true));
                      
                   })
                   .catch(() => {
-                    // localStorage.setItem("openConf", JSON.stringify(true));
-                        //setOpenError(true);
                         setMensaje(errorOpen);
                         
                       console.log('Error al obtener Cronograma generado')

@@ -71,7 +71,7 @@ function BarraInicial () {
     const AdminTabs = 
         admin ? 
             (tabsAdmin.map(tab =>
-                    <Grid key={tab.id} item style={{marginLeft: 10, borderBottom: (location.pathname===tab.path?"2px solid black":"inherit")}} align="center">
+                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: (location.pathname===tab.path?"2px solid white":"inherit")}} align="center">
                         <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
@@ -83,8 +83,8 @@ function BarraInicial () {
     const RepresentanteTabs = 
         representante ? 
             (tabsRepresentante.map(tab =>
-                    <Grid key={tab.id} item style={{marginLeft: 10, borderBottom: (location.pathname===tab.path?"2px solid black":"inherit")}} align="center">
-                        <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
+                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: (location.pathname===tab.path?"2px solid white":"inherit")}} align="center">
+                        <Link to={tab.path} style={{textDecoration: 'none', color:'white', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
                     </Grid>
@@ -94,7 +94,7 @@ function BarraInicial () {
 
     return (
         <div className={classes.root}>
-            <AppBar position="relative" style={{background:"#B3E5FC"}}>
+            <AppBar position="relative" style={{background:"#01B9DF"}}>
                 <Toolbar>
                     <Typography variant="h5" color="inherit" noWrap>
                         BONO PERU
