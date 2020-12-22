@@ -58,18 +58,20 @@ function BarraInicial () {
                             {id: 2, nombre: 'Gestión de Bonos', path: '/bonos'},
                             {id: 3, nombre: 'Monitoreo', path: '/monitoreo'},
                             {id: 4, nombre: 'Reportes', path: '/reportes'},
-                            {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'}]
+                            {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'},
+                            {id: 5, nombre: currentUser.username, path: '/cambiarcontrasena'}]
     const tabsAdmin = [
                         {id: 0, nombre: 'Gestión de Bonos', path: '/bonos'},
                         // {nombre: 'Reportes', path: '/reportes'},
                        
                         {id: 2, nombre: 'Encuestas', path: '/encuesta'},
-                        {id: 3, nombre: 'Usuarios', path: '/usuarios'}]
+                        {id: 3, nombre: 'Usuarios', path: '/usuarios'},
+                        {id: 5, nombre: currentUser.username, path: '/cambiarcontrasena'}]
 
     const AdminTabs = 
         admin ? 
             (tabsAdmin.map(tab =>
-                    <Grid key={tab.id} item style={{paddingLeft: 10}} align="center">
+                    <Grid key={tab.id} item style={{marginLeft: 10, borderBottom: (location.pathname===tab.path?"2px solid black":"inherit")}} align="center">
                         <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
@@ -81,7 +83,7 @@ function BarraInicial () {
     const RepresentanteTabs = 
         representante ? 
             (tabsRepresentante.map(tab =>
-                    <Grid item style={{paddingLeft: 10}} align="center">
+                    <Grid key={tab.id} item style={{marginLeft: 10, borderBottom: (location.pathname===tab.path?"2px solid black":"inherit")}} align="center">
                         <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
@@ -101,16 +103,6 @@ function BarraInicial () {
                         <Grid md={12} container item direction="row" justify="flex-end" alignContent="flex-end">
                             {AdminTabs}
                             {RepresentanteTabs}
-                            {currentUser ? (
-                                <Grid item style={{paddingLeft: 10}} align="center">
-                                    <Link to={"/profile"} style={{textDecoration: 'none', color:'black'}}>
-                                        {currentUser.username}
-                                    </Link>
-                                </Grid>
-                            ) : (
-                                <Grid></Grid>
-                            )
-                            }
                             {currentUser ? (
                                 <Grid item style={{paddingLeft: 10}}>
                                     <Link to={"/acceso"} onClick={logOut} style={{paddingLeft: 10,marginTop: -3, height: 'auto',display: 'flex', color:'black'}}>

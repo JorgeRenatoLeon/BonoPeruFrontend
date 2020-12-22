@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Tabla from './Tabla'
 import axios from "axios";
+import EjemploLugaresCarga from '../../assets/img/EjemploLugaresCarga.jpg'
+import EjemploBeneficiariosCarga from '../../assets/img/EjemploBeneficiariosCarga.jpg'
 
 const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
+// const API_URL = "http://localhost:8084/api/";
+
 
 const CargaMasiva = (props) => {
 
@@ -215,8 +219,15 @@ const CargaMasiva = (props) => {
                             - El archivo debe tener formato .csv
                         </Typography>
                         <Typography>
-                            - El archivo debe tener el siguiente formato “código, nombre de la agencia, departamento, provincia, distrito,  dirección, capacidad, media de atención y lista de horarios,, zona de riesgo del distrito(del 1 al 5) siendo 1 el menos riesgoso y 5 el más riesgoso”
+                            - El archivo debe tener el siguiente formato CODIGO, 
+                            NOMBRE, UBIGEO, AFORO, TIPO, DIRECCION, RATIO_ATENCION, 
+                            y el horario de cada dia (LUNES, MARTES, etc) en el formato 
+                            "HH:MM-HH:MM / HH:MM-HH:MM" que representa los dos horarios 
+                            de trabajo diarios del lugar de entrega
                         </Typography>
+                    </Grid>
+                    <Grid container justify="center">
+                        <img alt="Ejemplo" src={EjemploLugaresCarga} />
                     </Grid>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
@@ -255,11 +266,15 @@ const CargaMasiva = (props) => {
                             - El archivo debe tener formato .csv en caso contrario se muestra un mensaje de error
                         </Typography>
                         <Typography>
-                            - El archivo debe tener el formato establecido en datos abiertos, es decir, “código de hogar, ubigeo(6 dígitos),
-                            nombre de departamento, nombre de provincia, nombre de distrito, código de género (1: masculino, 2: femenino), código de incapacidad, 
-                            código de jefe de familia, código de discapacidad severa (1: presenta discapacidad severa, 0: no presenta discapacidad severa), 
-                            código de edad (1: adulto mayor, 0: no adulto mayor)”, en caso contrario se mostrará un mensaje de error
+                            - El archivo debe tener el formato establecido en datos abiertos, es decir, 
+                            “código de hogar, ubigeo(6 dígitos), código de género (1: masculino, 0: femenino), 
+                            código de discapacidad severa (1: presenta discapacidad severa, 0: no presenta discapacidad severa)”, 
+                            las cabeceras que representaran estos datos son respectivamente: “CO_HOGAR, UBIGEO, DE_GENERO, FLAG_DISCAP_SEVERA”, 
+                            en caso contrario se mostrará un mensaje de error
                         </Typography>
+                    </Grid>
+                    <Grid container justify="center">
+                        <img alt="Ejemplo" src={EjemploBeneficiariosCarga} />
                     </Grid>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
