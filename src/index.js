@@ -15,15 +15,15 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       light: '#B3E5FF',
-      main: '#5AB9EA', //Color principal-celeste
+      main: '#01B9DF', //Color principal-celeste
       dark: '#2380AF',
-      contrastText: '#000', //color de la letra
+      contrastText: '#FFFFFF', //color de la letra
     },
     secondary: {
       light: '#ff7961',
       main: '#CED4DD',//Color principal-gris
       dark: '#808888', 
-      contrastText: '#000',//color de la letra
+      contrastText: '#000000',//color de la letra
     },
   },
   typography: {

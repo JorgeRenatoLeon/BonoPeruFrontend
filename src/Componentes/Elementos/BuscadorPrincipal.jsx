@@ -52,7 +52,7 @@ export default function BuscadorPrincipal(props) {
           history.push("/consulta");     
         })
         .catch(() => {
-          console.log('Error en las credenciales');
+          console.log('Error en las credenciales del buscador');
         });
       
   }

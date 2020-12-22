@@ -212,7 +212,7 @@ export default function GestionBonos (){
         // console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
           //Para el chart reporte- Colores 
-          
+          console.log('api entregados',response.data);
           isResponse=true;
           setdatosEntregados({
             labels:response.data.listaFechas,//[,,]

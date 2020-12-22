@@ -21,7 +21,7 @@ export const fetchConsulta = ( payload) => (dispatch) => {
          {method: 'POST'})  
       .then( response => response.json())
       .then( result =>{ 
-             //  console.log("Prueba action:",successGet(result));
+              console.log("Prueba action:",successGet(result));
               dispatch(successGet(result) );
               localStorage.setItem("beneficiario", JSON.stringify(result)); //Guardar la rpta del apibeneficiario
               return Promise.resolve(); 
