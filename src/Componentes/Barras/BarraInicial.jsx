@@ -59,14 +59,14 @@ function BarraInicial () {
                             {id: 3, nombre: 'Monitoreo', path: '/monitoreo'},
                             {id: 4, nombre: 'Reportes', path: '/reportes'},
                             {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'},
-                            {id: 5, nombre: currentUser.username, path: '/cambiarcontrasena'}]
+                            {id: 5, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena'}]
     const tabsAdmin = [
                         {id: 0, nombre: 'Gestión de Bonos', path: '/bonos'},
                         // {nombre: 'Reportes', path: '/reportes'},
                        
                         {id: 2, nombre: 'Encuestas', path: '/encuesta'},
                         {id: 3, nombre: 'Usuarios', path: '/usuarios'},
-                        {id: 5, nombre: currentUser.username, path: '/cambiarcontrasena'}]
+                        {id: 5, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena'}]
 
     const AdminTabs = 
         admin ? 
@@ -101,8 +101,16 @@ function BarraInicial () {
                     </Typography>
                     <Grid style={{marginLeft: 'auto'}}>
                         <Grid md={12} container item direction="row" justify="flex-end" alignContent="flex-end">
-                            {AdminTabs}
-                            {RepresentanteTabs}
+                            {currentUser? AdminTabs
+                            :
+                            (
+                                <Grid></Grid>
+                            )}
+                            {currentUser? RepresentanteTabs
+                            :
+                            (
+                                <Grid></Grid>
+                            )}
                             {currentUser ? (
                                 <Grid item style={{paddingLeft: 10}}>
                                     <Link to={"/acceso"} onClick={logOut} style={{paddingLeft: 10,marginTop: -3, height: 'auto',display: 'flex', color:'black'}}>
