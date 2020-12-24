@@ -37,7 +37,9 @@ const AccesoSistema = (props) => {
         else{
             dispatch(login(usuario, contrasena))
             .then(() => {
-                props.history.push("/usuarios");
+                let usuarioRecibido = JSON.parse(localStorage.getItem("user"))
+                if(usuarioRecibido.roles.includes("ROLE_ADMIN")) props.history.push("/usuarios");
+                else props.history.push("/bonos");
                 // window.location.reload();
             })
             .catch(() => {

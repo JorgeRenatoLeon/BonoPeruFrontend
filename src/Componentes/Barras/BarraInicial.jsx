@@ -9,7 +9,7 @@ import { logout } from "../../actions/auth";
 import { clearMessage } from "../../actions/message";
 import { Link } from 'react-router-dom';
 
-function BarraInicial () {
+function BarraInicial (props) {
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -91,6 +91,28 @@ function BarraInicial () {
                 ))
             :
             (<Grid></Grid>)
+    
+    if(currentUser && admin){
+        let valid = false
+        for (let index = 0; index < tabsAdmin.length; index++) {
+           if(tabsAdmin[index].path===location.pathname){
+               valid = true
+               break
+           }            
+        }
+        if(!valid) history.push("/usuarios");
+    }
+
+    if(currentUser && representante){
+        let valid = false
+        for (let index = 0; index < tabsRepresentante.length; index++) {
+           if(tabsRepresentante[index].path===location.pathname){
+               valid = true
+               break
+           }            
+        }
+        if(!valid) history.push("/bonos");
+    }
 
     return (
         <div className={classes.root}>

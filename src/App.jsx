@@ -28,6 +28,7 @@ import OlvidarContrasena from "./Componentes/OlvidarContrasena";
 import ReporteQuejas from "./Componentes/Reportes/Quejas";
 
 import ReporteIncidentes from "./Componentes/Reportes/Incidentes";
+import NoEncontrada from "./Componentes/NoEncontrada";
 const App = () => {
 
   return (
@@ -63,8 +64,7 @@ const App = () => {
           /> 
           <RutaProtegida path="/reportequejas" component={ReporteQuejas}
           />
-
-
+          <Route component={NoEncontrada}/>
         </Switch>
       </div>
     </Router>
