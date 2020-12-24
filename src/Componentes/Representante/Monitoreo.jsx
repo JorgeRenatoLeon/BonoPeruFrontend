@@ -221,7 +221,7 @@ export default function GestionBonos (){
             "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
             datasets:[
               {
-                label:'Bonos Entregados',
+                label:'Fechas de entrega de bonos',
                  data:response.data.listaCantidades,
                 /* data:[201,456,98,12,456,999,441,
                   420,456,98,12,456,999,441,
@@ -265,7 +265,7 @@ export default function GestionBonos (){
           
               <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
         
-               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Bonos Entregados" legendPosition="bottom"/>
+               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
                {/* <apiData></apiData> */}
                <Card className={classes.root} variant="outlined">
                     <CardContent>

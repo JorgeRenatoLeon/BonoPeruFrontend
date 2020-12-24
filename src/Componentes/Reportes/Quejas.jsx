@@ -18,6 +18,7 @@ import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
 import DescargaService from "../../Servicios/descarga.cronograma";
 import Combobox from '../Elementos/Combobox';
+import ComboboxMultiple from '../Elementos/ComboboxMultiple';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
 import CronogramaListado from "../../Servicios/historico.service";
@@ -51,15 +52,46 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     const [cronogramass,setSelectedCro] = useState(null);  
-    const reporteInicial={
-        cronogramas: [1,2,98,99],        
-        iddepartamento:null,
-        idprovincia:null,
-        iddistrito:null,
-       // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-        fechaini: "2020-11-01",//AAAA-MM-DD
-        fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+    const [cronogramas, setCronogramas] = useState([]); //Para el api
+    useEffect(() => {
+      const apiQuejas=async () => { 
+      const response = await CronogramaListado.mostrarHistorico().then(response =>{
+          let cronogramasAux = []; //Para comobox
+          let cronogramasAux2 = []; //Para el api
+          response.data.map(hist => {
+            //Para comobox
+            cronogramasAux.push({
+              value: hist.id, 
+              label: hist.nombre,
+              fechaIni: hist.fechaini,
+              fechaFin: hist.fechafin, 
+              });
+              //Para el api
+              cronogramasAux2.push(hist.id);
+          });
+          
+          setSelectedCro(cronogramasAux); //Combobox- cronogramass
+          setCronogramas(cronogramasAux2); // para el api- cronograma
+          // console.log(cronogramasAux);
+        })
+        .catch(() => {
+          console.log('Error al obtener historico')
+        });
       }
+      apiQuejas();
+    
+
+    },[]);
+    const reporteInicial={
+      cronogramas: [1,2,98,99],        
+      iddepartamento:null,
+      idprovincia:null,
+      iddistrito:null,
+     // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+      fechaini: "2020-11-01",//AAAA-MM-DD
+      fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+    }
+    // console.log('reporte inicial',reporteInicial );
     useEffect(() => {
       // console.log("dentro del use effect",reporteInicial);
       DepartamentosService.mostrarDepartamentos().then(response =>{
@@ -222,44 +254,24 @@ export default function GestionBonos (){
   
     }
     const filtrarReporte=()=>{
-      // console.log("en buscar",fechaInicio,fechaFin);
+      
       const reporteFiltrado={
-        cronogramas: [1,98,99],
+        // cronogramas: [1,98,99],
+        cronogramas: cronogramas,
         iddepartamento: departamento,
         idprovincia: provincia,
         iddistrito: distrito,
         fechaini: fechaInicio,
         fechafi: fechaFin,
       }    
+      console.log("en filtrar",reporteFiltrado);
       apiQuejas(reporteFiltrado);
     }
 
-    const [cronogramas, setCronogramas] = useState([]); //Para el api
-    useEffect(() => {
-      CronogramaListado.mostrarHistorico().then(response =>{
-          let cronogramasAux = []; //Para comobox
-          let cronogramasAux2 = []; //Para el api
-          response.data.map(hist => {
-            cronogramasAux.push({
-              value: hist.id, 
-              label: hist.nombre,
-              fechaIni: hist.fechaini,
-              fechaFin: hist.fechafin, 
-              });
-              cronogramasAux2.push({
-                id: hist.id, 
-                });
-          });
-          setCronogramas(cronogramasAux2); //
-          setSelectedCro(cronogramasAux); //Combobox
-          console.log(cronogramasAux);
-        })
-        .catch(() => {
-          console.log('Error al obtener historico')
-        });
-    },[]);
+   
     const handleComboboxCro=(valor)=>{
-        setEstadoCargando(true);        
+        setEstadoCargando(true);     
+        console.log('cronogramas?',valor)  ; 
         if(valor === 0){
           setSelectedCro(null);
           const filtroLugar ={
@@ -268,16 +280,19 @@ export default function GestionBonos (){
             iddistrito: null,
             nombre: ""
           }
-        //   apiLugares(filtroLugar);
+          apiQuejas(filtroLugar);
         }else{
+          let arr=[];
+          arr.push(valor);
           setSelectedCro(valor);
+          setCronogramas(arr);
           const filtroLugar ={
             iddepartamento: departamento,
             idprovincia: provincia,
             iddistrito: valor,
             nombre: ""
         }
-        //   apiLugares(filtroLugar);
+          apiQuejas(filtroLugar);
         }
     }
   
@@ -312,8 +327,9 @@ export default function GestionBonos (){
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
     const apiQuejas=async (reporteDeseado) => {   
-    console.log(reporteDeseado);
+    console.log('filtros del reporte: ',reporteDeseado);
     var response;
+    
     if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
          reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
              response = await axios.post(QUEJAS_URL,reporteDeseado).then();
@@ -358,7 +374,8 @@ export default function GestionBonos (){
       //Debo preguntar esto antes de llamar a los gráficos
        var respuesta= rpta.map((rpta,index)   =>
             <Grid key={rpta.id} container  justify="center">
-              <Bar chartData={datosEntregados} md={12} sm={12} xs={12}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
+              <Bar chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
+              <Pie chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/> 
             </Grid>
 
             )
@@ -419,8 +436,7 @@ export default function GestionBonos (){
                             <Typography variant="subtitle1" color="inherit">
                                 Fechas:
                             </Typography>
-                              <RangoFechas onCambio={cambiar}/>                              
-                           
+                              <RangoFechas onCambio={cambiar}/>  
                               <Typography variant="subtitle1" color="inherit">
                                 Cronogramas:
                             </Typography>

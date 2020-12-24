@@ -1,7 +1,7 @@
 import React from 'react'
 function BarraFinal () {
     return (
-        <footer style={{backgroundColor:"#B3E5FC", }}>
+        <footer style={{backgroundColor:"#01B9DF", }}>
             <div style={{height: 50}}/>
         </footer>
     );
