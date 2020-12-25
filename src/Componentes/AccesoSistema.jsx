@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import BarraInicial from './Barras/BarraInicial'
@@ -52,8 +52,8 @@ const AccesoSistema = (props) => {
     
     if (isLoggedIn) {
         let usuarioRecibido = JSON.parse(localStorage.getItem("user"))
-        if(usuarioRecibido.roles.includes("ROLE_ADMIN")) props.history.push("/usuarios");
-        else props.history.push("/bonos");
+        if(usuarioRecibido.roles.includes("ROLE_ADMIN")) return <Redirect to="/usuarios" />
+        else return <Redirect to="/bonos" />
     }
 
     function onKeyPress(event) {
