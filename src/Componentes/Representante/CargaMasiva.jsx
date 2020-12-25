@@ -25,6 +25,10 @@ const CargaMasiva = (props) => {
         {especial: false, valor: '0',compuesto: false},
         {especial: false, valor: '1',compuesto: false},
     ])
+    const [headCellsErrores,setCabecerasErrores] = React.useState([
+        { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
+        { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
+    ])
   
     const handleClose = () => {
       setOpen(false)
@@ -34,6 +38,10 @@ const CargaMasiva = (props) => {
         setValue(newValue)
         setRegistros([])
         setErrores([])
+        setCabecerasErrores([
+            { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
+            { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
+        ])
     }
 
     const headCellsLugares = [
@@ -51,11 +59,6 @@ const CargaMasiva = (props) => {
         { id: 'distrito', numeric: false, disablePadding: false, label: 'Distrito' },
         { id: 'ubigeo', numeric: false, disablePadding: false, label: 'Discapacitado' },
         { id: 'direccion', numeric: false, disablePadding: false, label: 'Sexo'},
-    ];
-    
-    const headCellsErrores = [
-        { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
-        { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
     ];
 
     const datosBeneficiarios = [
@@ -88,6 +91,10 @@ const CargaMasiva = (props) => {
         );
         
         console.log(file)
+        setCabecerasErrores([
+            { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
+            { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
+        ])
 
         axios
         .post(API_URL + "lugarentrega/carga/"+ JSON.parse(localStorage.getItem("user")).id, 
@@ -105,9 +112,14 @@ const CargaMasiva = (props) => {
             setErrores(response.data.errores)
             let max = 0;
             let datos = []
+            let auxCabeceras = [...headCellsErrores]
             for (let index = 0; index < response.data.errores.length; index++) {
                 if(response.data.errores[index].length>max) max = response.data.errores[index].length;
+                if(index>1) {
+                    auxCabeceras.push({ id: 'error'+index, numeric: false, disablePadding: false, label: ' ' })
+                }
             }
+            setCabecerasErrores(auxCabeceras)
             for (let index = 0; index < max; index++) {
                 datos.push({especial: false, valor: index.toString(),compuesto: false})
             }
@@ -134,6 +146,11 @@ const CargaMasiva = (props) => {
         
         console.log(file)
 
+        setCabecerasErrores([
+            { id: 'fila', numeric: false, disablePadding: false, label: 'Fila' },
+            { id: 'error', numeric: false, disablePadding: false, label: 'Error' },
+        ])
+
         axios
         .post(API_URL + "beneficiario/carga/"+ JSON.parse(localStorage.getItem("user")).id, 
         formData,
@@ -150,9 +167,14 @@ const CargaMasiva = (props) => {
             setErrores(response.data.errores)
             let max = 0;
             let datos = []
+            let auxCabeceras = [...headCellsErrores]
             for (let index = 0; index < response.data.errores.length; index++) {
                 if(response.data.errores[index].length>max) max = response.data.errores[index].length;
+                if(index>1) {
+                    auxCabeceras.push({ id: 'error'+index, numeric: false, disablePadding: false, label: ' ' })
+                }
             }
+            setCabecerasErrores(auxCabeceras)
             for (let index = 0; index < max; index++) {
                 datos.push({especial: false, valor: index.toString(),compuesto: false})
             }
