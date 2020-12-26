@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Container, Grid, Button } from "@material-ui/core"
+import { Toolbar, Typography, Container, Grid } from "@material-ui/core"
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import BarraInicial from '../Barras/BarraInicial'
@@ -332,17 +332,15 @@ export default function ReporteEncuestasSatisfaccion() {
                         </Grid>
                     </Grid>
                     <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                            <Typography variant="h5" gutterBottom justify="center" >
-                                <Grid container justify="center">
-                                    <Bar data={datosPreg1} md={6} sm={12} xs={12} nameTitle={preguntas[0]} legendPosition="bottom" />
-                                    <Bar data={datosPreg2} md={6} sm={12} xs={12} nameTitle={preguntas[1]} legendPosition="bottom" />
-                                    <Pie chartData={datosPreg3} md={6} sm={12} xs={12} nameTitle={preguntas[2]} legendPosition="bottom" />
-                                    <Pie chartData={datosPreg4} md={6} sm={12} xs={12} nameTitle={preguntas[3]} legendPosition="bottom" />
-                                    <Pie chartData={datosPreg5} md={6} sm={12} xs={12} nameTitle={preguntas[4]} legendPosition="bottom" />
-                                </Grid>
-                            </Typography>
-                        </Grid>
+                        <Typography variant="h5" gutterBottom justify="center" >
+                            <Grid container justify="center">
+                                <Bar chartData={datosPreg1} md={10} sm={12} xs={12} nameTitle={preguntas[0]} legendPosition="bottom" />
+                                <Bar chartData={datosPreg2} md={10} sm={12} xs={12} nameTitle={preguntas[1]} legendPosition="bottom" />
+                                <Pie chartData={datosPreg3} md={6} sm={12} xs={12} nameTitle={preguntas[2]} legendPosition="bottom" />
+                                <Pie chartData={datosPreg4} md={6} sm={12} xs={12} nameTitle={preguntas[3]} legendPosition="bottom" />
+                                <Pie chartData={datosPreg5} md={6} sm={12} xs={12} nameTitle={preguntas[4]} legendPosition="bottom" />
+                            </Grid>
+                        </Typography>
                     </Grid>
                     <Snackbar open={openConfirmacion} autoHideDuration={3000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"topcenter"}>
                         <Alert open={openConfirmacion} onClose={handleCloseConfirmacion} severity="info">

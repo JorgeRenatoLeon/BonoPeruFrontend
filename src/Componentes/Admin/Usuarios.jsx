@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { AppBar, Container, Grid } from "@material-ui/core"
+import { Container, Grid } from "@material-ui/core"
 import Buscador from './BuscadorUsuarios'
 import Formulario from './Formulario'
 import VerFormulario from './VerFormulario'

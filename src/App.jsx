@@ -37,21 +37,22 @@ const App = () => {
     <Router history={history}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={PantallaInicial}/> {/* pantalla de Johana */}
-          <Route exact path="/usuarios" component={Usuarios}/>
-          <Route exact path="/lugares" component={BusquedaLugares}/>
-          <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios}/>
-          <Route exact path="/cronogramapararepresentante" component={Cronograma}/>
-          <Route exact path="/informacion" component={Informacion}/>
-          <Route exact path='/quejas' component={Quejas}/>
-          <Route exact path='/reporteincidentes' component={ReporteIncidentes}/>
-          <Route path="/acceso" component={AccesoSistema}/>
-          <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena}/>
-          <RutaProtegida path="/encuesta" component={Encuesta}/>
-          <RutaProtegida path="/carga" component={CargaMasiva}/>
-          <RutaProtegida path="/reportes" component={Reportes}/>
+          <Route exact path="/" component={PantallaInicial} /> {/* pantalla de Johana */}
+          <Route exact path="/usuarios" component={Usuarios} />
+          <Route exact path="/lugares" component={BusquedaLugares} />
+          <Route exact path="/consultasBeneficiarios" component={ConsultasBeneficiarios} />
+          <Route exact path="/cronogramapararepresentante" component={Cronograma} />
+          <Route exact path="/informacion" component={Informacion} />
+          <Route exact path='/quejas' component={Quejas} />
+          <Route exact path='/reporteincidentes' component={ReporteIncidentes} />
+          <Route path="/acceso" component={AccesoSistema} />
+          <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena} />
+          <RutaProtegida path="/encuesta" component={Encuesta} />
+          <RutaProtegida path="/carga" component={CargaMasiva} />
+          <RutaProtegida path="/reportes" component={Reportes} />
           <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />
           <Route path="/editarpreguntasfrecuentes" component={EditarPreguntasFrecuentes} />
+          <Route path="/reporteencuestas" component={ReporteEncuestas} />
           <Route path="/prueba" component={PruebaC} />            {/* pantalla de Johana para todos :D */}
           <Route exact path="/formulario" component={Formulario} />
           <RutaProtegida path="/bonos" component={GestionBonos}
@@ -67,7 +68,7 @@ const App = () => {
           />
           <RutaProtegida path="/reportequejas" component={ReporteQuejas}
           />
-          <Route component={NoEncontrada}/>
+          <Route component={NoEncontrada} />
         </Switch>
       </div>
     </Router>
