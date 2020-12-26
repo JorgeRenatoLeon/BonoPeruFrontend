@@ -103,14 +103,14 @@ function Reportes (props){
             labels:response.data.listacronogramas,
             datasets:[
                 {
-                label:'Por Lugares',
+                    label:'Por Lugares',
                     data:response.data.listalugares,
-                backgroundColor:backgroundColor,
+                    backgroundColor:backgroundColor,
                 },
                 {
-                label:'Por Horarios',
+                    label:'Por Horarios',
                     data:response.data.listahorarios,
-                backgroundColor:backgroundColor,
+                    backgroundColor:backgroundColor,
                 }
 
             ]
