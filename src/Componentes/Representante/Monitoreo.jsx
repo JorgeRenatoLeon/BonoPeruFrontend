@@ -36,16 +36,13 @@ export default function GestionBonos (){
     //cronogramaGestionBonos.idcronograma,
     //inicio manejo de filtros
     const cronogramaInicial={
-      idcronograma: cronogramaGestionBonos.idcronograma,
-      iddepartamento:null,
-      idprovincia:null,
-      iddistrito:null,
+      listaDepartamentos:[],
+      listaProvincias:[],
+      listaDistritos:[],
       fechaini: cronogramaGestionBonos.fechaini,
-      fechafin: cronogramaGestionBonos.fechafin,
-      nombre:""
+      fechafin: cronogramaGestionBonos.fechafin
     }
-    // console.log(cronogramaInicial.fechaini);
-    // console.log(cronogramaInicial.fechafin);
+
     const [departamento,setSelectedDep] = useState(null);
     const [provincia,setSelectedProv] = useState(null);
     const [distrito,setSelectedDis] = useState(null);  
@@ -55,7 +52,7 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     useEffect(() => {
-      // console.log("dentro del use effect",cronogramaInicial);
+    
       DepartamentosService.mostrarDepartamentos().then(response =>{
         let depAux=[];
         response.data.map(dep => {
@@ -111,19 +108,27 @@ export default function GestionBonos (){
     }
   
     const handleComboboxDep=(valor)=>{
-      setSelectedDep(valor);
-      // console.log(departamento,"id depa"); 
+      let arr=[];
+      arr.push(valor);
+      setSelectedDep(arr);
+      // console.log("arr depa ",departamento); 
+      // console.log("arr depa ",arr); 
+      // console.log("valor ",valor); 
       apiProvincias(valor);
     }
   
     const handleComboboxProv=(valor)=>{
-      setSelectedProv(valor);
+      let arr=[];
+      arr.push(valor);
+      setSelectedProv(arr);
       // console.log(valor,"id prov");
       apiDistritos(valor);
     }
   
     const handleComboboxDis=(valor)=>{
-      setSelectedDis(valor);
+      let arr=[];
+      arr.push(valor);
+      setSelectedDis(arr);
     }
   
     const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaini);
@@ -150,13 +155,15 @@ export default function GestionBonos (){
       // console.log("en buscar",fechaInicio,fechaFin);
       const cronogramaBusqueda={
         idcronograma: cronogramaGestionBonos.idcronograma,
-        iddepartamento: departamento,
-        idprovincia: provincia,
-        iddistrito: distrito,
+        listaDepartamentos: departamento,
+        listaProvincias: provincia,
+        listaDistritos: distrito,
         fechaini: fechaInicio,
         fechafin: fechaFin,
       }    
+      console.log('cronogramaBusqueda',cronogramaBusqueda)
       apiEntregados(cronogramaBusqueda);
+      apiLugares(cronogramaBusqueda);
       apiTotales(cronogramaBusqueda);
     }
     //Fin de manejo de filtros
@@ -201,31 +208,29 @@ export default function GestionBonos (){
     'pink',     '	rgb(240, 128, 128,0.4)', //rosado
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
     ];
-    const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    //const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    const ENTREGADOS = "http://127.0.0.1:8084/api/cronograma/monitoreoentregabono";
+    // const TOPLUGARES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreotoplugares";
+    const TOPLUGARES = "http://127.0.0.1:8084/api/cronograma/monitoreotoplugares";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
+    const [datosTopLugares,setTopLugares]=useState([]); //Set cronograma, creando y un estado de toda la función
     const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
     
     const apiEntregados=async (cronogramaDeseado) => {   
-      const response = await axios.post(ENTREGADOS).then();
+      const response = await axios.post(ENTREGADOS,cronogramaDeseado).then();
         // console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
           //Para el chart reporte- Colores 
           console.log('api entregados',response.data);
           isResponse=true;
           setdatosEntregados({
-            labels:response.data.listaFechas,//[,,]
-            /*labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
+            labels:response.data.listaFechas,
             datasets:[
               {
                 label:'Fechas de entrega de bonos',
-                 data:response.data.listaCantidades,
-                /* data:[201,456,98,12,456,999,441,
-                  420,456,98,12,456,999,441,
-                  300,456,98,12,456,999,441,785],*/
+                data:response.data.listaCantidades,
                 backgroundColor:backgroundColor,
               }
 
@@ -233,6 +238,48 @@ export default function GestionBonos (){
           });
           
         }       
+    }
+    const apiLugares=async (cronogramaDeseado) => { 
+
+      console.log('filtro',cronogramaDeseado);
+      axios.post(TOPLUGARES,cronogramaDeseado)
+      .then(response =>{                    
+                   
+          setTopLugares({
+            labels:response.data.listaLugares,
+            datasets:[
+              {
+                label:'Lugares de Entrega',
+                data:response.data.listaCantidades,
+                backgroundColor:backgroundColor,
+              }
+
+            ]
+          }); 
+      })
+      .catch(() => {
+          console.log('Error al obtener Totales');
+      });
+      /*
+      const response = await axios.post(TOPLUGARES,cronogramaDeseado).then();
+        // console.log('rpta api.data: ',response.data);
+      if(response!==undefined && isResponse===false ){
+          //Para el chart reporte- Colores 
+          console.log('api Lugares',response.data);
+         
+          setTopLugares({
+            labels:response.data.listaLugares,
+            datasets:[
+              {
+                label:'Lugares de Entrega',
+                data:response.data.listaCantidades,
+                backgroundColor:backgroundColor,
+              }
+
+            ]
+          });
+          
+        }  */     
     }
     const apiTotales = (cronogramaDeseado) => {
       axios.post(TOTALES)
@@ -250,6 +297,7 @@ export default function GestionBonos (){
       //Llamo a todos los api de monitoreo    
         apiEntregados(cronogramaInicial);
         apiTotales(cronogramaInicial);
+        apiLugares(cronogramaInicial);
     },[]);
 
     //fin del chart reporte 
@@ -263,7 +311,7 @@ export default function GestionBonos (){
             <Grid key={rpta.id} container  justify="center">
               <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
           
-              <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
+              <Bar chartData={datosTopLugares} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
         
                <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
                {/* <apiData></apiData> */}
