@@ -780,8 +780,6 @@ const GestionBonos = (props)=>{
     return (
         <StrictMode >
         <Grid style={{minHeight:"88vh"}}>
-               {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
-                    <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
                                 <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
@@ -789,9 +787,6 @@ const GestionBonos = (props)=>{
                                 </Typography>
                             </Grid>
                         </Grid>
-                    </Toolbar>
-                {/* </AppBar> */}
-
             <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid container direction="row" justify="center">

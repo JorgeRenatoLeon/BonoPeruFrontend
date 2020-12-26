@@ -453,17 +453,13 @@ const BusquedaLugares = (props) => {
         <Grid>
             <BarraInicial/>  
             <Grid style={{minHeight: "83vh"}}>
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                Búsqueda de Lugares
-                              </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>            
+              <Grid container direction="row" justify="center">
+                  <Grid container item xs={12} justify="center">
+                        <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                          Búsqueda de Lugares
+                        </Typography>                         
+                  </Grid>                                                  
+              </Grid>
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >

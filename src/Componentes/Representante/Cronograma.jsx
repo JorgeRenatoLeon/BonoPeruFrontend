@@ -66,15 +66,14 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
-  { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
-  { id: 'locacion', numeric: false, disablePadding: false, label: 'Locación' },
-  { id: 'fecha', numeric: false, disablePadding: false, label: 'Fecha' },
-  { id: 'turno', numeric: false, disablePadding: false, label: 'Turno' },
-  { id: 'aforo', numeric: true, disablePadding: false, label: '%Aforo utilizado' },
-  { id: 'mujeres', numeric: true, disablePadding: false, label: '%Mujeres' },
-  { id: 'discapacitados', numeric: true, disablePadding: false, label: '%Discapacitados' },
-  { id: 'riesgo', numeric: false, disablePadding: false, label: 'Riesgo' },
+  { id: 'beneficiario', numeric: false, disablePadding: false, label: 'Beneficiario' },
+  { id: 'ubicacion', numeric: false, disablePadding: false, label: 'Ubicacion' },
+  { id: 'horario', numeric: false, disablePadding: false, label: 'Horario' },
+  { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar de Entrega' },
+  { id: 'estado', numeric: false, disablePadding: false, label: 'Estado' },
+  { id: 'horario', numeric: false, disablePadding: false, label: 'Horario' },
+  { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar de Entrega' },
+  { id: 'estado', numeric: false, disablePadding: false, label: 'Estado' },
 ];
 
 
@@ -191,6 +190,12 @@ const Cronograma = (props) => {
     lugares: 3
   */
   let data = useLocation();
+  var dia = ("0" + (new Date()).getDate()).slice(-2);
+  var mes = ("0" + ((new Date()).getMonth() + 1)).slice(-2);
+  var anho = (new Date()).getFullYear();
+  var fecha = anho+'-'+mes+'-'+dia;
+  //console.log("fecha",fecha);
+  
   const cronogramaInicial={
     idcronograma: cronogramaGestionBonos.idcronograma,
     iddepartamento:null,
@@ -198,31 +203,37 @@ const Cronograma = (props) => {
     iddistrito:null,
     fechaini: cronogramaGestionBonos.fechaini,
     fechafin: cronogramaGestionBonos.fechafin,
-    nombre:""
+    nombre:"",
+    fechaactual: fecha,
   }
 
+  
+  const [arrayBeneficiarios,setBeneficiarios]=useState([]);
   const apiCronograma = (valor)=>{
     console.log(valor);
     console.log("apicronogrma",rows);
     HorariosService.obtenerHorarios(valor).then(response =>{
       setEstadoCargando(false);
       let rowsAux = [];
+      var arrayNumSelected = [];
+      console.log(response.data);
       response.data.map(lug => {
         rowsAux.push({
-          id: lug.idlugarentrega, 
           nombre: lug.nombre, 
           locacion: lug.locacion,
-          fecha: lug.fecha,
-          turno: lug.horainicio + '-'+ lug.horafin,
-          aforo: lug.aforo,
-          mujeres: lug.mujeres,
-          discapacitados: lug.discapacitados,
-          riesgo:lug.riesgo,
+          horario1: lug.horario1,
+          lugar1: lug.lugar1,
+          estado1: lug.estado1,
+          horario2: lug.horario2,
+          lugar2: lug.lugar2,
+          estado2: lug.estado2,
         });
+        arrayNumSelected.push(lug.idbeneficiario);
       });
       setRows([]);
       setRows(rowsAux);
-      console.log(rowsAux);
+      setBeneficiarios(arrayNumSelected);
+      console.log(arrayNumSelected,"array aui");
     })
     .catch(() => {
       console.log('Error al obtener Cronograma')
@@ -245,7 +256,7 @@ const Cronograma = (props) => {
       if(response.data.length> 0)
         provAux.push({
           value: 0,
-          label: "Provincia",
+          label: "Todas",
         }); 
       response.data.map(prov => {
         provAux.push({
@@ -270,7 +281,7 @@ const Cronograma = (props) => {
       if(response.data.length> 0)
       disAux.push({
         value: 0,
-        label: "Distrito",
+        label: "Todos",
       });
       response.data.map(prov => {
         disAux.push({
@@ -367,11 +378,11 @@ const Cronograma = (props) => {
       iddistrito: distrito,
       fechaini: fechaInicio,
       fechafin: fechaFin,
-      nombre: searchText
+      nombre: searchText,
+      fechaactual:fecha,
     }
     apiCronograma(cronogramaBusqueda);
   }
-
 
   const [departamentos, setDep] = useState([]);
   const [rows, setRows] = useState([]);
@@ -386,7 +397,7 @@ const Cronograma = (props) => {
       if(response.data.length> 0)
       depAux.push({
         value: 0,
-        label: "Departamento",
+        label: "Todos",
       });
       response.data.map(dep => {
         depAux.push({
@@ -431,46 +442,15 @@ const Cronograma = (props) => {
 
     const [state, dispatch] = useReducer(reducer, {})
  
-    var arrayNumSelected = [];
+    
     var arrayFechaSelected = [];
     var arrayHoraIniSelected = [];
     var arrayHoraFinSelected = [];
-    const selectCheckBox= (event,fecha,horaIni,horaFin) =>{
-      console.log(event);
-      if(event.target.checked) {
-        arrayNumSelected.push(parseInt(event.target.id));
-        arrayFechaSelected.push(fecha);
-        arrayHoraIniSelected.push(horaIni);
-        arrayHoraFinSelected.push(horaFin);
-      } else{
-        for (var i = arrayNumSelected.length - 1; i >= 0; i--) {
-          if (arrayNumSelected[i] === parseInt(event.target.id) &&
-              arrayFechaSelected[i] === fecha &&
-              arrayHoraIniSelected[i] === horaIni &&
-              arrayHoraFinSelected[i] === horaFin) {
-            arrayNumSelected.splice(i, 1);
-            arrayFechaSelected.splice(i, 1);
-            arrayHoraIniSelected.splice(i, 1);
-            arrayHoraFinSelected.splice(i, 1);
-            break;
-          }
-        }
-      }
-      //console.log(event, "checkbox");
-      console.log(arrayNumSelected);
-      console.log(arrayFechaSelected);
-      console.log(arrayHoraIniSelected);
-      console.log(arrayHoraFinSelected);
-    }
 
     const [errorDescarga, setError] = useState(false);
     const descargaCronograma=()=>{
-      if(arrayNumSelected.length === 0){
-        //alert("Debe seleccionar al menos un lugar para poder descargar");
-        setError(true);
-        return
-      }
-      setError(false);
+      console.log("array beneficiarios", arrayBeneficiarios);
+
       const cronogramaParaDescarga ={
         idcronograma: cronogramaGestionBonos.idcronograma,
         iddepartamento: departamento,
@@ -479,35 +459,21 @@ const Cronograma = (props) => {
         fechaini: fechaInicio,
         fechafin: fechaFin,
         nombre: searchText,
-        numeros: arrayNumSelected,
-        fechas: arrayFechaSelected,
-        horainicio:arrayHoraIniSelected,
-        horafin:arrayHoraFinSelected,
+        numeros: arrayBeneficiarios,
       }
       DescargaService.descargarCronograma(cronogramaParaDescarga);
     }
     return ( 
         <Grid>
             <BarraInicial/>              
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                     Cronograma
-                                </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>
-            {errorDescarga?
-            <Grid container justify="center" style={{marginLeft: 40, marginRight: 40, marginBottom: 20, boxShadow: 'none'}}>
-              <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-               Debe seleccionar <strong>al menos un </strong>lugar para poder descargar 
-              </Alert>
+            <Grid style={{minHeight:"84.2vh"}}>
+            <Grid container direction="row" justify="center">
+                <Grid container item xs={12} justify="center">
+                      <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                              Cronograma
+                        </Typography>                         
+                </Grid>                                                  
             </Grid>
-            :<Grid></Grid>}
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -515,17 +481,17 @@ const Cronograma = (props) => {
                             Departamento:
                         </Typography>
                         <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                          value={departamento} placeholder="Departamento"/>
+                          value={departamento} placeholder="Todos"/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>
                         <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                        value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                        value={provincia} isDisabled={cbxProv} placeholder="Todas"/>
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
                         <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                        value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                        value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                     </Grid>
                     <br></br>
                     <Grid container direction="row"  justify="space-evenly" alignItems="center">
@@ -534,11 +500,11 @@ const Cronograma = (props) => {
                         </Typography>
                           <RangoFechas onCambio={cambiar}/>
                         <Typography variant="subtitle1" color="inherit">
-                            Lugar de entrega:
+                            Código de familia:
                         </Typography>
                         <TextField className="inputRounded" id="outlined-basic" 
                         label={null} variant="outlined" value={searchText}
-                        onChange={handleSearchText} />
+                        onChange={handleSearchText} inputProps={{maxLength: 10}}/>
                         <Button variant="contained" onClick={buscarCronogramas} size="medium" color="primary" style={{margin: 10}}>
                           Buscar
                         </Button>  
@@ -572,19 +538,14 @@ const Cronograma = (props) => {
                             
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} >
-                                <TableCell padding="checkbox">
-                                  <Checkbox color="default" id={row.id} 
-                                    onChange={(e) => {selectCheckBox(e, row.fecha,row.turno.substring(0,5),row.turno.substring(9,14))}}
-                                  />                                 
-                                </TableCell>
                                 <TableCell align="left">{row.nombre}</TableCell>
                                 <TableCell align="left">{row.locacion}</TableCell>
-                                <TableCell align="left">{row.fecha.substring(8)+row.fecha.substring(4,8)+row.fecha.substring(0,4)}</TableCell>
-                                <TableCell align="left">{row.turno.substring(0,5)+"-"+row.turno.substring(9,14)}</TableCell>
-                                <TableCell align="center">{row.aforo}</TableCell>
-                                <TableCell align="center">{row.mujeres}</TableCell>
-                                <TableCell align="center">{row.discapacitados}</TableCell>
-                                <TableCell align="center">{row.riesgo}</TableCell>
+                                <TableCell align="left">{row.horario1}</TableCell>
+                                <TableCell align="left">{row.lugar1}</TableCell>
+                                <TableCell align="left">{row.estado1}</TableCell>
+                                <TableCell align="left">{row.horario2}</TableCell>
+                                <TableCell align="left">{row.lugar2}</TableCell>
+                                <TableCell align="left">{row.estado2}</TableCell>
                                 </TableRow>
                             );
                             })}
@@ -620,7 +581,8 @@ const Cronograma = (props) => {
                         </Button>
                     </Link> 
                 </Grid>                         
-            </Paper>  
+            </Paper> 
+            </Grid>
             <BarraFinal/>
         </Grid>
     );

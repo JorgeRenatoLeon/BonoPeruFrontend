@@ -50,7 +50,7 @@ const Informacion = (props) => {
    return (
        <Grid>
            <BarraInicial/> 
-           <Grid style={{minHeight:"82.5vh"}}>             
+           <Grid style={{minHeight:"84vh"}}>             
            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                <Toolbar>
                    <Grid container direction="row" justify="center">
@@ -116,7 +116,7 @@ const Informacion = (props) => {
                     alignItems="center">
                     <Link to='/consulta' style={{textDecoration:"none"}}>
                         <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
-                            Regresar
+                            Salir
                         </Button>
                     </Link> 
                 </Grid>               

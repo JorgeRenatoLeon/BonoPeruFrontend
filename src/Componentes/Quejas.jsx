@@ -27,24 +27,22 @@ function Quejas() {
 
     return ( 
         <Grid>
-            <BarraInicial/>             
-            {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                    Quejas
-                                </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            {/* </AppBar> */}
-            {apiBeneficiario.map((opcion,index)=> (
+            <BarraInicial/>
+            <Grid style={{minHeight:"84vh"}}>          
+            <Grid container direction="row" justify="center">
+                <Grid container item xs={12} justify="center">
+                        <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                            Quejas
+                        </Typography>                         
+                </Grid>                                                  
+            </Grid>
+            { (apiBeneficiario!==null)?apiBeneficiario.map((opcion,index)=> (
                     <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={index+1} 
                         idHorario={opcion.idHorario}
                         idLugar={opcion.horariolugarentrega.lugarentrega.idLugarentrega}></Queja>      
-                )) 
-            } 
+                )): <Grid></Grid>
+            }
+            </Grid>  
             <BarraFinal/>
         </Grid>
     );
