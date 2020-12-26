@@ -7,8 +7,8 @@ import axios from "axios";
 import EjemploLugaresCarga from '../../assets/img/EjemploLugaresCarga.jpg'
 import EjemploBeneficiariosCarga from '../../assets/img/EjemploBeneficiariosCarga.jpg'
 
-const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
-// const API_URL = "http://localhost:8084/api/";
+// const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
+const API_URL = "http://localhost:8084/api/";
 
 
 const CargaMasiva = (props) => {
@@ -250,10 +250,10 @@ const CargaMasiva = (props) => {
                         </Typography>
                         <Typography>
                             - El archivo debe tener el siguiente formato CODIGO, 
-                            NOMBRE, UBIGEO, AFORO, TIPO, DIRECCION, RATIO_ATENCION, 
+                            NOMBRE, UBIGEO, AFORO, TIPO (CAJ,AGE,BAN), DIRECCION, RATIO_ATENCION, 
                             y el horario de cada dia (LUNES, MARTES, etc) en el formato 
-                            "HH:MM-HH:MM / HH:MM-HH:MM" que representa los dos horarios 
-                            de trabajo diarios del lugar de entrega
+                            "HH:MM-HH:MM" que representa el horario 
+                            de trabajo del lugar de entrega
                         </Typography>
                         <Typography variant="h5" color="inherit" style={{padding:"2%"}}>
                             Ejemplo:
@@ -302,8 +302,7 @@ const CargaMasiva = (props) => {
                             - El archivo debe tener el formato establecido en datos abiertos, es decir, 
                             “código de hogar, ubigeo(6 dígitos), código de género (1: masculino, 0: femenino), 
                             código de discapacidad severa (1: presenta discapacidad severa, 0: no presenta discapacidad severa)”, 
-                            las cabeceras que representaran estos datos son respectivamente: “CO_HOGAR, UBIGEO, DE_GENERO, FLAG_DISCAP_SEVERA”, 
-                            en caso contrario se mostrará un mensaje de error
+                            las cabeceras que representaran estos datos son respectivamente: “CO_HOGAR, UBIGEO, DE_GENERO, FLAG_DISCAP_SEVERA”
                         </Typography>
                         <Typography variant="h5" color="inherit" style={{padding:"2%"}}>
                             Ejemplo:
