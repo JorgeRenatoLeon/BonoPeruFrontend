@@ -296,6 +296,7 @@ export default function GestionBonos() {
       });
 
     }
+    //hola vale
     const apiLugares=async (cronogramaDeseado) => { 
 
       console.log('filtro',cronogramaDeseado);
