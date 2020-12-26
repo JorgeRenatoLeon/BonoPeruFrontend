@@ -21,7 +21,16 @@ import Combobox from '../Elementos/Combobox';
 import ComboboxMultiple from '../Elementos/ComboboxMultiple';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
-import CronogramaListado from "../../Servicios/historico.service";
+//mANEJO COMOBOX CRONOGRAMAS 
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, useTheme, Theme } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import CronogramaService from "../../Servicios/historico.service";
 export default function GestionBonos (){
     
     function formato(texto){
@@ -51,39 +60,11 @@ export default function GestionBonos (){
     const [departamentos, setDep] = useState([]);
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
-    const [cronogramass,setSelectedCro] = useState(null);  
-    const [cronogramas, setCronogramas] = useState([]); //Para el api
-    useEffect(() => {
-      const apiQuejas=async () => { 
-      const response = await CronogramaListado.mostrarHistorico().then(response =>{
-          let cronogramasAux = []; //Para comobox
-          let cronogramasAux2 = []; //Para el api
-          response.data.map(hist => {
-            //Para comobox
-            cronogramasAux.push({
-              value: hist.id, 
-              label: hist.nombre,
-              fechaIni: hist.fechaini,
-              fechaFin: hist.fechafin, 
-              });
-              //Para el api
-              cronogramasAux2.push(hist.id);
-          });
-          
-          setSelectedCro(cronogramasAux); //Combobox- cronogramass
-          setCronogramas(cronogramasAux2); // para el api- cronograma
-          // console.log(cronogramasAux);
-        })
-        .catch(() => {
-          console.log('Error al obtener historico')
-        });
-      }
-      apiQuejas();
-    
-
-    },[]);
+    const [cronogramas, setCro]= useState([]);
+    const [names,setNames] = useState([]);
+ 
     const reporteInicial={
-      cronogramas: [1,2,98,99],        
+      cronogramas: cronogramas,        
       iddepartamento:null,
       idprovincia:null,
       iddistrito:null,
@@ -110,6 +91,24 @@ export default function GestionBonos (){
         });
   
     },[]);
+    useEffect(() => { //Llamar al api de cronogramas
+     
+      CronogramaService.mostrarHistorico().then(response =>{
+        let croAux=[];
+        response.data.map(cro => {
+          croAux.push({
+            key: cro.id,
+            label: cro.nombre,
+          });
+        });
+        setNames(croAux);
+        console.log("cronogramas", croAux);
+        })
+        .catch(() => {
+          console.log('Error al pedir los cronogramas')
+        });
+      
+    },[]);
     const apiProvincias=(valor)=>{
       setStateCbxProv(false);
       ProvinciasService.mostrarProvincias(valor).then(response =>{
@@ -135,7 +134,7 @@ export default function GestionBonos (){
         if(response.data.length> 0)
         disAux.push({
           value: 0,
-          label: "Distrito",
+          label: "Todos",
         });
         response.data.map(prov => {
           disAux.push({
@@ -162,23 +161,9 @@ export default function GestionBonos (){
           setStateCbxProv(true);
           setStateCbxDis(true);
           setSelectedDep(null);
-          const filtroLugar ={
-            iddepartamento: null,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-        //  apiLugares(filtroLugar);
         }else{
         
           apiProvincias(valor);
-          const filtroLugar ={
-            iddepartamento: valor,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-         // apiLugares(filtroLugar);
         }
     }
   
@@ -190,23 +175,11 @@ export default function GestionBonos (){
           setStateCbxDis(true);
           handleComboboxDis(0);
           setSelectedProv(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }else{
           console.log(valor,"id prov");
           apiDistritos(valor);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: valor,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }
     }
   
@@ -214,22 +187,10 @@ export default function GestionBonos (){
         setEstadoCargando(true);        
         if(valor === 0){
           setSelectedDis(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }else{
           setSelectedDis(valor);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: valor,
-            nombre: ""
-        }
-        //   apiLugares(filtroLugar);
+
         }
     }
   
@@ -257,44 +218,20 @@ export default function GestionBonos (){
       
       const reporteFiltrado={
         // cronogramas: [1,98,99],
-        cronogramas: cronogramas,
+        cronogramas: personName,
         iddepartamento: departamento,
         idprovincia: provincia,
         iddistrito: distrito,
         fechaini: fechaInicio,
-        fechafi: fechaFin,
+        fechafi: "2020-12-31",
       }    
       console.log("en filtrar",reporteFiltrado);
       apiQuejas(reporteFiltrado);
+      
     }
 
    
-    const handleComboboxCro=(valor)=>{
-        setEstadoCargando(true);     
-        console.log('cronogramas?',valor)  ; 
-        if(valor === 0){
-          setSelectedCro(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: null,
-            nombre: ""
-          }
-          apiQuejas(filtroLugar);
-        }else{
-          let arr=[];
-          arr.push(valor);
-          setSelectedCro(valor);
-          setCronogramas(arr);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: valor,
-            nombre: ""
-        }
-          apiQuejas(filtroLugar);
-        }
-    }
+    
   
     //Fin de manejo de filtros
     
@@ -357,8 +294,8 @@ export default function GestionBonos (){
       '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
   
       ];
-    const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
-    //const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
+    //const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
+    const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
@@ -394,29 +331,37 @@ export default function GestionBonos (){
                 ]
               });
               
-            }       
+            }      
+            llamadaGraficos();  
     }
 
     useEffect(()=>{    
       //Llamo a todos los api de monitoreo    
-        apiQuejas(reporteInicial);      
+        apiQuejas(reporteInicial); 
+           
     },[]);
 
     //fin del chart reporte 
 
  
     var titulo="Reporte de Quejas";
-    if(datosEntregados!==[] && datosEntregados.length!==0){
-      //Debo preguntar esto antes de llamar a los gráficos
-       var respuesta= rpta.map((rpta,index)   =>
-            <Grid key={rpta.id} container  justify="center">
-              <Bar chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
-              <Pie chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/> 
-            </Grid>
+    var respuesta;
+    const llamadaGraficos= () => {  
+            if(datosEntregados!==[] && datosEntregados.length!==0){
+              //Debo preguntar esto antes de llamar a los gráficos
+              respuesta= rpta.map((rpta,index)   =>
+                    <Grid key={rpta.id} container  justify="center">
+                      <Bar chartData={datosEntregados} md={12} sm={10} xs={10}  nameTitle="Cantidad de Quejas Por Cronograma" legendPosition="bottom"/> 
+                      {/* <Pie chartData={datosEntregados} md={6} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/>  */}
+                      <Typography variant="h4" style={{color: 'white', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                    "Grupo IMposible"
+                                </Typography>
+                    </Grid>
 
-            )
-          }
-    
+                    )
+                  }
+    }
+    llamadaGraficos();
      const [estadoCargando,setEstadoCargando]= useState(true);
     //PARA MODAL CARGANDO
 
@@ -431,6 +376,74 @@ export default function GestionBonos (){
   const classes2 = useStyles2();
   //FIN DE MODAL CARGANDO
 
+
+    //COMBOBOX MULTIPLE MATERIAL UI
+    const useStyles3 = makeStyles((theme) =>
+    createStyles({
+      formControl: {
+        margin: theme.spacing(1),
+        minWidth: 200,
+        maxWidth: 1070,
+      },
+      chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+      chip: {
+        margin: 2,
+      },
+      noLabel: {
+        marginTop: theme.spacing(3),
+      },
+      
+    }),
+  );
+  
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  
+  
+  
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+  
+ 
+    const classes3 = useStyles3();
+    const theme = useTheme();
+    const [personName, setPersonName] = useState([]);    
+      
+    const handleChange = (event) => {
+      setPersonName(event.target.value);
+      
+    };
+  
+    const handleChangeMultiple = (event) => {
+      const { options } = event.target;
+      const value= [];
+      for (let i = 0, l = options.length; i < l; i += 1) {
+        if (options[i].selected) {
+          value.push(options[i].value);
+        }
+      }
+      setPersonName(value);
+    };
+
+
+    //FIN DE COMBOBOX MULTIPLE MATERIAL UI
 
 
     return (
@@ -450,7 +463,7 @@ export default function GestionBonos (){
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center" >
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center" >
                             <Typography variant="subtitle1"  color="inherit">
                                 Departamento:
                             </Typography>
@@ -468,16 +481,54 @@ export default function GestionBonos (){
                                     value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                             </Grid>
                         <br></br>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center">
-                            <Typography variant="subtitle1" color="inherit">
-                                Fechas:
-                            </Typography>
-                              <RangoFechas onCambio={cambiar}/>  
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
+                        
                               <Typography variant="subtitle1" color="inherit">
-                                Cronograma:
+                                Cronogramas:
                             </Typography>
-                            <Combobox options={cronogramass} onSeleccion={handleComboboxCro} 
-                                    value={cronogramass} placeholder="Todos"/>
+
+                              {/* comobox multiple
+                               */}
+                            <Grid>
+                                  <FormControl className={classes3.formControl}>
+                                    <InputLabel id="demo-mutiple-chip-label"></InputLabel>
+                                    <Select
+                                      labelId="demo-mutiple-chip-label"
+                                      id="demo-mutiple-chip"
+                                      multiple
+                                      value={personName}
+                                      onChange={handleChange}
+                                      input={<Input id="select-multiple-chip" />}
+                                      renderValue={(selected) => (
+                                        <div className={classes3.chips}>
+                                          {(selected).map((value) => (
+                                            <Chip key={value} label={value} className={classes3.chip} />
+                                          ))}
+                                        </div>
+                                      )}
+                                      MenuProps={MenuProps}
+                                    >
+                                      {names.map((name) => (
+                                        <MenuItem key={name.key}  value={name.label} style={getStyles(name, personName, theme)}>
+                                          {name.label}
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+
+                               {/* fin de comobox multiple */}
+
+                               <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
+                              <Typography variant="subtitle1" color="inherit">
+                                  Fechas:
+                              </Typography>
+                              <RangoFechas onCambio={cambiar}/>  
+                              </Grid>
+
+
+
+
                              <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                 Filtrar
                               </Button> 
