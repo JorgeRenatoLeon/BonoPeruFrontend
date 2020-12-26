@@ -222,7 +222,7 @@ function RespuestaBeneficiario (props) {
                             </Link>                            
                     </Grid> 
                     <Grid container item md={4} xs={4} justify="center">
-                            <Link to='/encuesta' style={{textDecoration:"none", paddingTop:"0px"}}>
+                            <Link to='/informacion' style={{textDecoration:"none", paddingTop:"0px"}}>
                                 <Button variant="contained" size="medium" color="primary" >
                                     Quiero ver mi información personal
                                 </Button>

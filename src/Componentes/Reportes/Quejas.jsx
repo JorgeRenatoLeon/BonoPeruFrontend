@@ -40,11 +40,13 @@ export default function GestionBonos (){
     const rpta = [ { id: 'Respuesta',  label: 'Respuesta' },];
   //   cronograma que se desea monitorear
 
-    //inicio manejo de fecha inicial
-    var f = new Date();
-        var dd = f.getDate();//Mañana
-        var mm = f.getMonth()+1; 
-        if(dd<10)           dd='0'+dd;
+ //fecha de hace un mes
+    let f = new Date();
+    let dd = f.getDate();//Mañana
+    let mm = f.getMonth();
+    if(mm>1)     mm = f.getMonth()-1; 
+    if(dd<10)           dd='0'+dd;
+    if(mm<10)           mm='0'+mm;
         if(mm<10)           mm='0'+mm;
         //console.log( f.getFullYear()+"-" + mm+ "-"+dd);
      //fin manejo de fecha inicial
@@ -62,14 +64,17 @@ export default function GestionBonos (){
     const [distritos, setDis] =useState([]);
     const [cronogramas, setCro]= useState([]);
     const [names,setNames] = useState([]);
- 
+ //fecha de hace un mes
+
+    
+    let    FechaMes=f.getFullYear()+ '-'+mm+'-'+ dd ; //AAAA-MM-DD
     const reporteInicial={
       cronogramas: cronogramas,        
       iddepartamento:null,
       idprovincia:null,
       iddistrito:null,
      // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-      fechaini: "2020-11-01",//AAAA-MM-DD
+      fechaini: FechaMes,//AAAA-MM-DD
       fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
     }
     // console.log('reporte inicial',reporteInicial );
@@ -294,8 +299,8 @@ export default function GestionBonos (){
       '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
   
       ];
-    //const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
-    const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
+    const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
+    //const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
@@ -520,18 +525,19 @@ export default function GestionBonos (){
                                {/* fin de comobox multiple */}
 
                                <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
-                              <Typography variant="subtitle1" color="inherit">
-                                  Fechas:
-                              </Typography>
-                              <RangoFechas onCambio={cambiar}/>  
+                                  <Typography variant="subtitle1" color="inherit">
+                                      Fechas:
+                                  </Typography>
+                                  <RangoFechas onCambio={cambiar}/> 
+                                  <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 20}}>
+                                      Filtrar
+                                   </Button> 
                               </Grid>
 
 
 
 
-                             <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
-                                Filtrar
-                              </Button> 
+                            
                            
                               
                         </Grid>
