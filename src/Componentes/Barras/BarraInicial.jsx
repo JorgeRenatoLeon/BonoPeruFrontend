@@ -55,7 +55,7 @@ function BarraInicial (props) {
     const tabsRepresentante = [
                             {id: 0, nombre: 'Cargar Datos', path: '/carga',childs: []},
                             // {id: 1, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
-                            {id: 2, nombre: 'Gestión de Bonos', path: '/bonos',childs: []},
+                            {id: 2, nombre: 'Gestión de Bonos', path: '/bonos',childs: ['/cronogramapararepresentante']},
                             {id: 3, nombre: 'Monitoreo', path: '/monitoreo',childs: []},
                             {id: 4, nombre: 'Reportes', path: '/reportes', childs: ['/reportequejas','/reporteincidentes']},
                             {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes',childs: []},

@@ -69,6 +69,7 @@ function getStyles(name, personName, theme) {
 }
 
 const ReporteIncidentes = (props) => {
+  const [respuesta,setRespuesta] = useState(false);
   const [estadoCargando,setEstadoCargando]= useState(true);
   const classes = useStyles();
   const theme = useTheme();
@@ -82,39 +83,112 @@ const ReporteIncidentes = (props) => {
     },
   }));
 
-  //Para Kaytlin de Johana
-  var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
-  //console.log('joh: ',cronogramaGestionBonos) ; //Borralo cuando ya no lo uses, pero aquí está el api que me manda Caro,
-  /* Incluye estos datos, siempre te los pasaré una vez se haya generado el cronograma
-    beneficiarios: 3
-    fechafin: "2020-12-08"
-    fechaini: "2020-11-23"
-    idcronograma: 2
-    lugares: 3
-  */
-  let data = useLocation();
+
+  var dia = ("0" + (new Date()).getDate()).slice(-2);
+  var mes1 = ("0" + ((new Date()).getMonth())).slice(-2);
+  var mes2 = ("0" + ((new Date()).getMonth()+1)).slice(-2);
+  var anho = (new Date()).getFullYear();
+  var fechaini = anho+'-'+mes1+'-'+dia;
+  var fechafin = anho+'-'+mes2+'-'+dia;
+  console.log(fechaini);
+  console.log(fechafin);
   const cronogramaInicial={
-    cronogramas: [98,99],//debo enviar un array de id
+    cronogramas: [],//debo enviar un array de id
     iddepartamento:null,
     idprovincia:null,
     iddistrito:null,
-    fechaini: "2020-12-01",
-    fechafin: "2020-12-08",
+    fechaini: fechaini,
+    fechafin: fechafin,
   }
-
+  const backgroundColor1=[       
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    ];
+  const backgroundColor2=[       
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    ];
+  const backgroundColor3=[       
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    ];
   const [dias,setDias]=useState([]);
   const [lugares,setLugares] = useState([]);
   const [horarios,setHorarios] = useState([]);
   const [labels, setLabels] = useState([]);
+  const [datosEntregados,setdatosEntregados]=useState([]);
+
   const apiReporte = (valor)=>{
     console.log(valor);
-
     ReporteService.obtenerReporte(valor).then(response =>{
-      console.log(response.data);
-      setDias(response.data.listadias);
-      setLugares(response.data.listalugares);
-      setHorarios(response.data.listahorarios);
-      setLabels(response.data.listacronogramas);
+      console.log(response.data, "api filtrar");
+      setdatosEntregados({
+        labels:response.data.listacronogramas,
+          datasets:[
+            {
+              label:'Dias',
+              data:response.data.listadias,
+              backgroundColor:backgroundColor1,
+            },
+            {
+              label:'Lugares',
+               data:response.data.listalugares,
+              backgroundColor:backgroundColor2,
+            },
+            {
+              label:'Horarios',
+               data:response.data.listahorarios,
+              backgroundColor:backgroundColor3,
+            },
+          ]
+      }); 
+      setRespuesta(true); 
     })
     .catch(() => {
       console.log('Error al obtener Reporte incidentes')
@@ -247,90 +321,10 @@ const ReporteIncidentes = (props) => {
   const [provincias, setProv] =useState([]);
   const [distritos, setDis] =useState([]);
   const [cronogramas, setCro]= useState([]);
-  const backgroundColor1=[       
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
-    ];
-  const backgroundColor2=[       
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
-    ];
-  const backgroundColor3=[       
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
-    ];
-  const [datosEntregados,setdatosEntregados]=useState({
-    //labels:response.data.listaFechas,//[,,]
-    labels:labels,
-      datasets:[
-        {
-          label:'Dias',
-          //data:response.data.listaCantidades,
-           data:dias,
-          backgroundColor:backgroundColor1,
-        },
-        {
-          label:'Lugares',
-          //data:response.data.listaCantidades,
-           data:lugares,
-          backgroundColor:backgroundColor2,
-        },
-        {
-          label:'Horarios',
-          //data:response.data.listaCantidades,
-           data:horarios,
-          backgroundColor:backgroundColor3,
-        },
-      ]
-  }); 
+ 
   useEffect(() => {
     apiReporte(cronogramaInicial);
+    //setDatosInicio();
     DepartamentosService.mostrarDepartamentos().then(response =>{
       let depAux=[];
       if(response.data.length> 0)
@@ -366,7 +360,7 @@ const ReporteIncidentes = (props) => {
       .catch(() => {
         console.log('Error al pedir los cronogramas')
       });
-    
+      
   },[]);
    
 
@@ -382,17 +376,25 @@ const ReporteIncidentes = (props) => {
   
 
   const filtrarReporte=()=>{
-    
+    setRespuesta(false);
     console.log("fechaini",fechaInicio);
     console.log("fechafin",fechaFin);
     console.log("iddepartamento",departamento);
     console.log("idprovincia",provincia);
     console.log("iddistrito",distrito);
     console.log("cronogramas",cronogramas);
-    apiReporte(cronogramaInicial);
+    const cronogramaFiltro={
+      cronogramas: cronogramas,//debo enviar un array de id
+      iddepartamento:departamento,
+      idprovincia:provincia,
+      iddistrito:distrito,
+      fechaini: fechaInicio,
+      fechafin: fechaFin,
+    }
+    apiReporte(cronogramaFiltro);
     console.log(datosEntregados);
     console.log("click filtrar");
-    setdatosEntregados({
+   /*  setdatosEntregados({
       //labels:response.data.listaFechas,//[,,]
       labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder"],
       datasets:[
@@ -406,33 +408,29 @@ const ReporteIncidentes = (props) => {
           label:'Lugares',
           //data:response.data.listaCantidades,
            data:[21,56,98,12,56,99,41],
-          backgroundColor:backgroundColor1,
+          backgroundColor:backgroundColor2,
         },
         {
           label:'Horarios',
           //data:response.data.listaCantidades,
            data:[21,56,98,12,56,99,41],
-          backgroundColor:backgroundColor1,
+          backgroundColor:backgroundColor3,
         },
       ]
-    });
+    }); */
   }
     
     return ( 
         <Grid>
             <BarraInicial/> 
             <Grid style={{minHeight:"82.5vh"}}>              
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                    Reporte de Incidentes
-                                </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>
+                <Grid container direction="row" justify="center">
+                    <Grid container item xs={12} justify="center">
+                          <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                Reporte de Incidentes
+                            </Typography>                         
+                    </Grid>                                                  
+                </Grid>
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -497,7 +495,9 @@ const ReporteIncidentes = (props) => {
                 </Grid>
             </Paper>
             <Grid container direction="row" justify="center" alignItems="center">
-              <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Incidentes" legendPosition="bottom"/>
+            {respuesta?
+            <Bar chartData={datosEntregados} md={10} sm={12} xs={12}  nameTitle="Incidentes" legendPosition="bottom"/>
+            :<Cargando></Cargando>}
             </Grid>
             </Grid>
             <BarraFinal/>
