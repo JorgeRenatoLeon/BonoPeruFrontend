@@ -202,8 +202,33 @@ function RespuestaBeneficiario (props) {
              //Cabecera manejado por headCells
              var mensajeBeneficiario="Usted sí es beneficiario y  cuenta con las siguientes opciones, se le brindará información de cada lugar de entrega y la fecha de recojo.   ";
              //Todoooo la muestra del cronograma está manejado por respuesta
-            respuesta= rpta.map((rpta,index)   =>   
+            respuesta= rpta.map((rpta,index)   => 
+              
             <Grid key={rpta.id} container direction="col" justify="center">
+                <Grid container direction="row" justify="center">
+                    <Grid container item md={4} xs={4} justify="center">
+                            <Link to='/quejas' style={{textDecoration:"none", paddingTop:"0px"}}>
+                                <Button variant="contained" size="medium" color="primary" >
+                                    Quiero realizar una queja
+                                </Button>
+                            </Link>                            
+                        </Grid> 
+                 
+                    <Grid container item md={4} xs={4} justify="center">
+                            <Link to='/encuesta' style={{textDecoration:"none", paddingTop:"0px"}}>
+                                <Button variant="contained" size="medium" color="primary" >
+                                    Quiero realizar una encuesta
+                                </Button>
+                            </Link>                            
+                    </Grid> 
+                    <Grid container item md={4} xs={4} justify="center">
+                            <Link to='/informacion' style={{textDecoration:"none", paddingTop:"0px"}}>
+                                <Button variant="contained" size="medium" color="primary" >
+                                    Quiero ver mi información personal
+                                </Button>
+                            </Link>                            
+                    </Grid> 
+                </Grid>
                 <Grid  item md={12} xs={12} style={{paddingTop: '1.5vh'}}>
                     <Typography variant="subtitle1" color="inherit">
                         {mensajeBeneficiario}
@@ -343,6 +368,7 @@ function RespuestaBeneficiario (props) {
             
             <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
+                
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">                       
                                 <Typography variant="h5"  gutterBottom justify="center" >

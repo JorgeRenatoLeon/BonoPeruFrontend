@@ -45,12 +45,12 @@ function getComparator(order, orderBy) {
 
 
 const headCells = [
-  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
-  { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
+  { id: 'opcion', numeric: false, disablePadding: false, label: ' ' },
+  { id: 'codigo', numeric: false, disablePadding: false, label: 'Código' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'tipo', numeric: false, disablePadding: false, label: 'Tipo'},
   { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar' },
-  { id: 'direccion', numeric: false, disablePadding: false, label: 'Direccion' },
+  { id: 'direccion', numeric: false, disablePadding: false, label: 'Dirección' },
 ];
 
 const StyledTableCell = withStyles((theme) => ({
@@ -194,7 +194,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
         provAux.push({
           value: 0,
-          label: "Provincia",
+          label: "Todas",
         });   
       response.data.map(prov => {
         provAux.push({
@@ -219,7 +219,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
       disAux.push({
         value: 0,
-        label: "Distrito",
+        label: "Todos",
       });
       response.data.map(prov => {
         disAux.push({
@@ -351,7 +351,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
       depAux.push({
         value: 0,
-        label: "Departamento",
+        label: "Todos",
       });
       response.data.map(dep => {
         depAux.push({
@@ -453,17 +453,13 @@ const BusquedaLugares = (props) => {
         <Grid>
             <BarraInicial/>  
             <Grid style={{minHeight: "83vh"}}>
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                Búsqueda de Lugares
-                              </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>            
+              <Grid container direction="row" justify="center">
+                  <Grid container item xs={12} justify="center">
+                        <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                          Búsqueda de Lugares
+                        </Typography>                         
+                  </Grid>                                                  
+              </Grid>
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -471,17 +467,17 @@ const BusquedaLugares = (props) => {
                             Departamento:
                         </Typography>
                         <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                        value={departamento} placeholder="Departamento"/>
+                        value={departamento} placeholder="Todos"/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>
                         <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                        value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                        value={provincia} isDisabled={cbxProv} placeholder="Todas"/>
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
                         <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                        value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                        value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                     </Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center">
                       <Grid container direction="row" justify="space-evenly" alignItems="center" item xs={6}>
@@ -571,7 +567,9 @@ const BusquedaLugares = (props) => {
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}                    
+                    onChangeRowsPerPage={handleChangeRowsPerPage}    
+                    labelRowsPerPage={"Filas por página:"}  
+                            
                     />
                 </Grid>:
                     <Grid container direction="row" justify="center">

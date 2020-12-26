@@ -1,16 +1,14 @@
 import { Button, Container, Grid, Typography } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import Combobox from '../Elementos/Combobox';
 import axios from "axios";
 
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
-import { Bar } from 'react-chartjs-2';
-import CronogramaListado from "../../Servicios/historico.service";
+import Pie from "../../Componentes/Graficos/Pie.js"
 
 
-const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
+const URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
 const backgroundColor=[       
     'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
     'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul
@@ -36,19 +34,26 @@ const backgroundColor=[
 
 function Reportes (props){
 
-    const [cronogramass,setSelectedCro] = useState(null);
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
-    const [cronogramas, setCronogramas] = useState([]); //Para el api
-    
-  
-    var isResponse=false;
-    const rpta = [ { id: 'Respuesta',  label: 'Respuesta' },];
+    const [datosEntregados2,setdatosEntregados2]=useState([]); //Set cronograma, creando y un estado de toda la función
+
+    const rpta = [ { id: 1,  label: 'Respuesta' },];
+    const inci = [ { id: 1,  label: 'Incidentes' },];
     var respuesta = <Grid></Grid>
     if(datosEntregados!==[] && datosEntregados.length!==0 && datosEntregados!==undefined){
         //Debo preguntar esto antes de llamar a los gráficos
         respuesta = rpta.map((rptas,index)   =>
             <Grid key={rptas.id} container justify="center">
-                <Bar data={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
+                <Pie chartData={datosEntregados} nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
+            </Grid>
+        )
+    }
+    var incidentes = <Grid></Grid>
+    if(datosEntregados2!==[] && datosEntregados2.length!==0 && datosEntregados2!==undefined){
+        //Debo preguntar esto antes de llamar a los gráficos
+        incidentes = inci.map((rptas,index)   =>
+            <Grid key={rptas.id} container justify="center">
+                <Pie chartData={datosEntregados2} nameTitle="Cantidad de Incidentes" legendPosition="bottom"/> 
             </Grid>
         )
     }
@@ -61,10 +66,6 @@ function Reportes (props){
     if(mm<10) mm='0'+mm;
     
     const reporteInicial={
-        cronogramas: [1,2,98,99],        
-        iddepartamento:null,
-        idprovincia:null,
-        iddistrito:null,
         fechaini: "2020-11-01",//AAAA-MM-DD
         fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
         // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
@@ -74,8 +75,6 @@ function Reportes (props){
 
     const cambiar=(fechaIni,fechaFinAux)=>{
         if((fechaFinAux !== null) && (fechaIni!== null)){
-          // console.log("estoy dentro de cronograma",fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2),
-          //fechaFin.toDate().getFullYear()+"-"+("0" + (fechaFin.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFin.toDate().getDate()).slice(-2));
           setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
           setSelectedFechaFin(fechaFinAux.toDate().getFullYear()+"-"+("0" + (fechaFinAux.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaFinAux.toDate().getDate()).slice(-2));
         }else if(fechaIni === null && fechaFinAux !== null){
@@ -84,114 +83,58 @@ function Reportes (props){
         }else if(fechaIni !== null && fechaFinAux === null){
           setSelectedFechaIni(fechaIni.toDate().getFullYear()+"-"+("0" + (fechaIni.toDate().getMonth() + 1)).slice(-2)+"-"+("0" + fechaIni.toDate().getDate()).slice(-2));
           setSelectedFechaFin(reporteInicial.fechafin);
-        }else if(fechaIni === null && fechaFinAux === null){
+        }else if((fechaIni === null && fechaFinAux === null)||(fechaIni === undefined && fechaFinAux === undefined)){
           setSelectedFechaIni(reporteInicial.fechaIni);
           setSelectedFechaFin(reporteInicial.fechafin);
         }
-    
     }
 
-    const apiQuejas=async (reporteDeseado) => {
+    const apiQuejas=async () => {
         var response;
-        
-        response = await axios.post(QUEJAS_URL,reporteInicial).then();
-        if(response!==undefined && isResponse===false ){
-            //Para el chart reporte- Colores 
-            
-            isResponse=true;
+        response = await axios.post(URL+"quejas/reportequejas",{fechaini: fechaInicio===undefined?reporteInicial.fechaini:fechaInicio,fechafi: fechaFin===undefined?reporteInicial.fechafi:fechaFin})
+        if(response.data){
             setdatosEntregados({
-            labels:response.data.listacronogramas,
+            labels:response.data.listanombres,
             datasets:[
                 {
-                    label:'Por Lugares',
-                    data:response.data.listalugares,
-                    backgroundColor:backgroundColor,
-                },
-                {
                     label:'Por Horarios',
-                    data:response.data.listahorarios,
-                    backgroundColor:backgroundColor,
+                    data:response.data.listacantidades,
+                    backgroundColor:backgroundColor,    
                 }
-
             ]
             });
             
         }       
     }
 
-    const handleComboboxCro=(valor)=>{  
-        if(valor === 0){
-            setSelectedCro(null);
-            const filtroLugar = {
-                iddepartamento: null,
-                idprovincia: null,
-                iddistrito: null,
-                nombre: ""
-            }
-            apiQuejas(filtroLugar);
-        }
-        else{
-            let arr=[];
-            arr.push(valor);
-            setSelectedCro(valor);
-            setCronogramas(arr);
-            const filtroLugar = {
-                iddepartamento: null,
-                idprovincia: null,
-                iddistrito: null,
-                nombre: ""
-            }
-            apiQuejas(filtroLugar);
-        }
+    const apiIncidentes=async () => {
+        var response;
+        
+        response = await axios.post(URL+"incidente/reporteinicial",{fechaini: fechaInicio===undefined?reporteInicial.fechaini:fechaInicio,fechafin: fechaFin===undefined?reporteInicial.fechafi:fechaFin})
+        if(response.data){
+            setdatosEntregados2({
+            labels:response.data.listanombres,
+            datasets:[
+                {
+                    label:'Por Horarios',
+                    data:response.data.listacantidades,
+                    backgroundColor:backgroundColor,    
+                }
+            ]
+            });
+            
+        }       
     }
-
     
     const filtrarReporte=()=>{
-        const reporteFiltrado={
-          // cronogramas: [1,98,99],
-          cronogramas: cronogramas,
-          iddepartamento: null,
-          idprovincia: null,
-          iddistrito: null,
-          fechaini: fechaInicio,
-          fechafi: fechaFin,
-        }
-        apiQuejas(reporteFiltrado);
+        apiQuejas();
+        apiIncidentes();
     }
-
-    useEffect(() => {
-        const apiQuejasFun=async () => { 
-            await CronogramaListado.mostrarHistorico()
-            .then(response =>{
-                let cronogramasAux = []; //Para comobox
-                let cronogramasAux2 = []; //Para el api
-                response.data.map(hist => {
-                    //Para comobox
-                    cronogramasAux.push({
-                        value: hist.id, 
-                        label: hist.nombre,
-                        fechaIni: hist.fechaini,
-                        fechaFin: hist.fechafin, 
-                        });
-                        //Para el api
-                        cronogramasAux2.push(hist.id);
-                    return hist
-                });
-                
-                setSelectedCro(cronogramasAux); //Combobox- cronogramass
-                setCronogramas(cronogramasAux2); // para el api- cronograma
-                // console.log(cronogramasAux);
-            })
-            .catch(() => {
-                console.log('Error al obtener historico')
-            });
-        }
-        apiQuejasFun();
-    },[]);
 
     useEffect(()=>{    
         //Llamo a todos los api de monitoreo    
-        apiQuejas(reporteInicial);      
+        apiQuejas();  
+        apiIncidentes();  
     },[]);
 
     return (
@@ -207,41 +150,64 @@ function Reportes (props){
             <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center">
-                            <Typography variant="subtitle1" color="inherit">
+                        <Grid container direction="row" item md={12} alignItems="center">
+                            <Typography variant="subtitle1" color="inherit" style={{paddingRight:"2vw"}}>
                                 Fechas:
                             </Typography>
-                              <RangoFechas onCambio={cambiar}/>  
-                              <Typography variant="subtitle1" color="inherit">
-                                Cronogramas:
-                            </Typography>
-                            <Combobox options={cronogramass} onSeleccion={handleComboboxCro} 
-                                    value={cronogramass} placeholder="Todos"/>
+                            <RangoFechas onCambio={cambiar}/>  
                             <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                 Filtrar
                             </Button> 
                         </Grid>
                     </Grid>
-                    <Grid container direction="column" justify="center">
-                        <Grid container item style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                            <Typography variant="h4" color="inherit">
-                                Reporte de Quejas
-                            </Typography>
+                    <Grid container direction="row">
+                        <Grid container item md={6} direction="column" justify="center">
+                            <Grid container item style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                                <Typography variant="h4" color="inherit">
+                                    Reporte de Quejas
+                                </Typography>
+                            </Grid>
+                            <Grid container item>                 
+                                {datosEntregados!==[] && datosEntregados.length!==0?
+                                respuesta:
+                                <Grid container direction="row" justify="center">
+                                    <Cargando value={2}/>
+                                </Grid>
+                                }
+                            </Grid>
+                            <Grid container item justify="flex-end">
+                                <Grid item>
+                                    <Link to="/reportequejas">
+                                        <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
+                                            Ver más
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid container item xs={8}>                 
-                            {datosEntregados!==[] && datosEntregados.length!==0?
-                            respuesta:
-                            <Grid container direction="row" justify="center">
-                                <Cargando value={2}/>
-                            </Grid>       
-                            }
-                        </Grid>
-                        <Grid>
-                            <Link to="/reportequejas">
-                                <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
-                                    Ver más
-                                </Button>
-                            </Link>
+                        <Grid container item md={6} direction="column" justify="center">
+                            <Grid container item style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                                <Typography variant="h4" color="inherit">
+                                    Reporte de Incidentes
+                                </Typography>
+                            </Grid>
+                            <Grid container item>                 
+                                {datosEntregados2!==[] && datosEntregados2.length!==0?
+                                incidentes:
+                                <Grid container direction="row" justify="center">
+                                    <Cargando value={2}/>
+                                </Grid>
+                                }
+                            </Grid>
+                            <Grid container item justify="flex-end">
+                                <Grid item>
+                                    <Link to="/reporteincidentes">
+                                        <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
+                                            Ver más
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                    

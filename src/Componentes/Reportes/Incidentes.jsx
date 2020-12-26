@@ -2,75 +2,77 @@ import { AppBar, Toolbar, Typography, Button ,Cointaner, FormControlLabel, Grid,
 import Paper from '@material-ui/core/Paper';
 import React, {Component, useReducer,  useEffect,useState} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, withStyles, makeStyles, useTheme} from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
 import BarraFinal from '../Barras/BarraFinal';
 import Combobox from '../Elementos/Combobox';
 import RangoFechas from '../Elementos/RangoFechas';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
+
 
 import '../../assets/css/Cronograma.css';
-import Checkbox from '@material-ui/core/Checkbox';
 import HorariosService from "../../Servicios/horarios.service";
 import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
-import DescargaService from "../../Servicios/descarga.cronograma";
+import CronogramaService from "../../Servicios/historico.service";
+import ReporteService from "../../Servicios/reporteincidentes.service";
 import { SelectAll } from '@material-ui/icons';
 import  Cargando  from "../ModalCargando";
 import Bar from "../../Componentes/Graficos/Bar.js";
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import Chip from '@material-ui/core/Chip';
 
 const reducer = (state, action) => {
     return { checkedId: action.id }
 }
 
-const useStyles = makeStyles({
-    root: {
-      width: '100%',
-      maxWidth: 500,
-      justify:"center",    
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+      maxWidth: 1070,
     },
-    table: {
-      minWidth: 500,
-    },
-    modal: {
+    chips: {
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexWrap: 'wrap',
     },
-    visuallyHidden: {
-        border: 0,
-        clip: 'rect(0 0 0 0)',
-        height: 1,
-        margin: -1,
-        overflow: 'hidden',
-        padding: 0,
-        position: 'absolute',
-        top: 20,
-        width: 1,
-      },
-  });
+    chip: {
+      margin: 2,
+    },
+    noLabel: {
+      marginTop: theme.spacing(3),
+    },
+    
+  }),
+);
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 
 const ReporteIncidentes = (props) => {
+  const [respuesta,setRespuesta] = useState(false);
   const [estadoCargando,setEstadoCargando]= useState(true);
-
+  const classes = useStyles();
+  const theme = useTheme();
   //PARA MODAL CARGANDO
   const useStyles2 = makeStyles((theme) => ({
     root: {
@@ -80,61 +82,123 @@ const ReporteIncidentes = (props) => {
       },
     },
   }));
-  const classes2 = useStyles2();
-  //FIN DE MODAL CARGANDO
 
-  //Para Kaytlin de Johana
-  var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ;    //La hemos obtenido 
-  //console.log('joh: ',cronogramaGestionBonos) ; //Borralo cuando ya no lo uses, pero aquí está el api que me manda Caro,
-  /* Incluye estos datos, siempre te los pasaré una vez se haya generado el cronograma
-    beneficiarios: 3
-    fechafin: "2020-12-08"
-    fechaini: "2020-11-23"
-    idcronograma: 2
-    lugares: 3
-  */
-  let data = useLocation();
+
+  var dia = ("0" + (new Date()).getDate()).slice(-2);
+  var mes1 = ("0" + ((new Date()).getMonth())).slice(-2);
+  var mes2 = ("0" + ((new Date()).getMonth()+1)).slice(-2);
+  var anho = (new Date()).getFullYear();
+  var fechaini = anho+'-'+mes1+'-'+dia;
+  var fechafin = anho+'-'+mes2+'-'+dia;
+  console.log(fechaini);
+  console.log(fechafin);
   const cronogramaInicial={
-    idcronograma: cronogramaGestionBonos.idcronograma,
+    cronogramas: [],//debo enviar un array de id
     iddepartamento:null,
     idprovincia:null,
     iddistrito:null,
-    fechaini: cronogramaGestionBonos.fechaini,
-    fechafin: cronogramaGestionBonos.fechafin,
-    nombre:""
+    fechaini: fechaini,
+    fechafin: fechafin,
   }
+  const backgroundColor1=[       
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    'rgb(179,229,252,0.5)', 'rgb(179,229,252,0.5)', //Celeste
+    ];
+  const backgroundColor2=[       
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    'rgb(0, 0, 139,1) ' , 'rgb(0, 0, 139,1) ',//azul
+    ];
+  const backgroundColor3=[       
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde
+    ];
+  const [dias,setDias]=useState([]);
+  const [lugares,setLugares] = useState([]);
+  const [horarios,setHorarios] = useState([]);
+  const [labels, setLabels] = useState([]);
+  const [datosEntregados,setdatosEntregados]=useState([]);
 
-  const apiCronograma = (valor)=>{
+  const apiReporte = (valor)=>{
     console.log(valor);
-    console.log("apicronogrma",rows);
-    HorariosService.obtenerHorarios(valor).then(response =>{
-      setEstadoCargando(false);
-      let rowsAux = [];
-      response.data.map(lug => {
-        rowsAux.push({
-          id: lug.idlugarentrega, 
-          nombre: lug.nombre, 
-          locacion: lug.locacion,
-          fecha: lug.fecha,
-          turno: lug.horainicio + '-'+ lug.horafin,
-          aforo: lug.aforo,
-          mujeres: lug.mujeres,
-          discapacitados: lug.discapacitados,
-          riesgo:lug.riesgo,
-        });
-      });
-      setRows([]);
-      setRows(rowsAux);
-      console.log(rowsAux);
+    ReporteService.obtenerReporte(valor).then(response =>{
+      console.log(response.data, "api filtrar");
+      setdatosEntregados({
+        labels:response.data.listacronogramas,
+          datasets:[
+            {
+              label:'Dias',
+              data:response.data.listadias,
+              backgroundColor:backgroundColor1,
+            },
+            {
+              label:'Lugares',
+               data:response.data.listalugares,
+              backgroundColor:backgroundColor2,
+            },
+            {
+              label:'Horarios',
+               data:response.data.listahorarios,
+              backgroundColor:backgroundColor3,
+            },
+          ]
+      }); 
+      setRespuesta(true); 
     })
     .catch(() => {
-      console.log('Error al obtener Cronograma')
-    });  
+      console.log('Error al obtener Reporte incidentes')
+    }); 
   }
 
   const [departamento,setSelectedDep] = useState(null);
   const [provincia,setSelectedProv] = useState(null);
   const [distrito,setSelectedDis] = useState(null);
+  const [cronograma,setSelectedCro] = useState(null);  
 
   const [cbxProv, setStateCbxProv] = useState(true);
   const [cbxDis,setStateCbxDis] = useState(true);
@@ -148,7 +212,7 @@ const ReporteIncidentes = (props) => {
       if(response.data.length> 0)
         provAux.push({
           value: 0,
-          label: "Provincia",
+          label: "Todas",
         }); 
       response.data.map(prov => {
         provAux.push({
@@ -173,7 +237,7 @@ const ReporteIncidentes = (props) => {
       if(response.data.length> 0)
       disAux.push({
         value: 0,
-        label: "Distrito",
+        label: "Todos",
       });
       response.data.map(prov => {
         disAux.push({
@@ -249,47 +313,24 @@ const ReporteIncidentes = (props) => {
     }
 
   }
-
-  const [searchText,setSearchText] =React.useState("");
-  const handleSearchText = event =>{
-      setSearchText(event.target.value);
-      console.log(event.target.value);
-      console.log(searchText);
-  } 
-
-  const buscarCronogramas=()=>{
-    setEstadoCargando(true);
-    console.log("en buscar fechas",fechaInicio,fechaFin);
-    console.log("en buscar depa",departamento);
-    console.log("en buscar distrito",distrito);
-    console.log("en buscar",fechaInicio,fechaFin);
-    const cronogramaBusqueda={
-      idcronograma: cronogramaGestionBonos.idcronograma,
-      iddepartamento: departamento,
-      idprovincia: provincia,
-      iddistrito: distrito,
-      fechaini: fechaInicio,
-      fechafin: fechaFin,
-      nombre: searchText
-    }
-    apiCronograma(cronogramaBusqueda);
-  }
-
+  const [personName, setPersonName] = useState([]);
+  const [names,setNames] = useState([]);
 
   const [departamentos, setDep] = useState([]);
   const [rows, setRows] = useState([]);
   const [provincias, setProv] =useState([]);
   const [distritos, setDis] =useState([]);
+  const [cronogramas, setCro]= useState([]);
+ 
   useEffect(() => {
-    console.log("dentro del use effect",cronogramaInicial);
-    apiCronograma(cronogramaInicial);  
-    
+    apiReporte(cronogramaInicial);
+    //setDatosInicio();
     DepartamentosService.mostrarDepartamentos().then(response =>{
       let depAux=[];
       if(response.data.length> 0)
       depAux.push({
         value: 0,
-        label: "Departamento",
+        label: "Todos",
       });
       response.data.map(dep => {
         depAux.push({
@@ -299,88 +340,97 @@ const ReporteIncidentes = (props) => {
       });
       setDep(depAux);
       console.log(departamentos);
+      console.log("datos para el bar",datosEntregados.length);
       })
       .catch(() => {
         console.log('Error al pedir los departamentos')
       });
-
+    
+    CronogramaService.mostrarHistorico().then(response =>{
+      let croAux=[];
+      response.data.map(cro => {
+        croAux.push({
+          key: cro.id,
+          label: cro.nombre,
+        });
+      });
+      setNames(croAux);
+      console.log("cronogramas", croAux);
+      })
+      .catch(() => {
+        console.log('Error al pedir los cronogramas')
+      });
+      
   },[]);
+   
+
+  const handleChange = (event) => {
+    setCro([]);
+    setPersonName(event.target.value);
+    console.log(event.target.value, "lo que muestro");
+    setCro(event.target.value);
+  };
+
   
-    const styles = { width: 260, display: 'block', marginBottom: 10 };
-    const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    
+  
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-        console.log(property);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-        console.log(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-    const [state, dispatch] = useReducer(reducer, {})
- 
-    var arrayNumSelected = [];
-    var arrayFechaSelected = [];
-    var arrayHoraIniSelected = [];
-    var arrayHoraFinSelected = [];
-    const selectCheckBox= (event,fecha,horaIni,horaFin) =>{
-      console.log(event);
-      if(event.target.checked) {
-        arrayNumSelected.push(parseInt(event.target.id));
-        arrayFechaSelected.push(fecha);
-        arrayHoraIniSelected.push(horaIni);
-        arrayHoraFinSelected.push(horaFin);
-      } else{
-        for (var i = arrayNumSelected.length - 1; i >= 0; i--) {
-          if (arrayNumSelected[i] === parseInt(event.target.id) &&
-              arrayFechaSelected[i] === fecha &&
-              arrayHoraIniSelected[i] === horaIni &&
-              arrayHoraFinSelected[i] === horaFin) {
-            arrayNumSelected.splice(i, 1);
-            arrayFechaSelected.splice(i, 1);
-            arrayHoraIniSelected.splice(i, 1);
-            arrayHoraFinSelected.splice(i, 1);
-            break;
-          }
-        }
-      }
-      //console.log(event, "checkbox");
-      console.log(arrayNumSelected);
-      console.log(arrayFechaSelected);
-      console.log(arrayHoraIniSelected);
-      console.log(arrayHoraFinSelected);
+  const filtrarReporte=()=>{
+    setRespuesta(false);
+    console.log("fechaini",fechaInicio);
+    console.log("fechafin",fechaFin);
+    console.log("iddepartamento",departamento);
+    console.log("idprovincia",provincia);
+    console.log("iddistrito",distrito);
+    console.log("cronogramas",cronogramas);
+    const cronogramaFiltro={
+      cronogramas: cronogramas,//debo enviar un array de id
+      iddepartamento:departamento,
+      idprovincia:provincia,
+      iddistrito:distrito,
+      fechaini: fechaInicio,
+      fechafin: fechaFin,
     }
-
+    apiReporte(cronogramaFiltro);
+    console.log(datosEntregados);
+    console.log("click filtrar");
+   /*  setdatosEntregados({
+      //labels:response.data.listaFechas,//[,,]
+      labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder"],
+      datasets:[
+        {
+          label:'Dias',
+          //data:response.data.listaCantidades,
+           data:[201,456,98,12,456,999,441],
+          backgroundColor:backgroundColor1,
+        },
+        {
+          label:'Lugares',
+          //data:response.data.listaCantidades,
+           data:[21,56,98,12,56,99,41],
+          backgroundColor:backgroundColor2,
+        },
+        {
+          label:'Horarios',
+          //data:response.data.listaCantidades,
+           data:[21,56,98,12,56,99,41],
+          backgroundColor:backgroundColor3,
+        },
+      ]
+    }); */
+  }
+    
     return ( 
         <Grid>
             <BarraInicial/> 
             <Grid style={{minHeight:"82.5vh"}}>              
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                <Toolbar>
-                    <Grid container direction="row" justify="center">
-                        <Grid container item xs={12} justify="center">
-                              <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                    Reporte de Incidentes
-                                </Typography>                         
-                        </Grid>                                                  
-                    </Grid>
-                </Toolbar>
-            </AppBar>
+                <Grid container direction="row" justify="center">
+                    <Grid container item xs={12} justify="center">
+                          <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                Reporte de Incidentes
+                            </Typography>                         
+                    </Grid>                                                  
+                </Grid>
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center" >
@@ -388,36 +438,68 @@ const ReporteIncidentes = (props) => {
                             Departamento:
                         </Typography>
                         <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                          value={departamento} placeholder="Departamento"/>
+                          value={departamento} placeholder="Todos"/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>
                         <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                        value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                        value={provincia} isDisabled={cbxProv} placeholder="Todas"/>
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
                         <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                        value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                        value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                     </Grid>
                     <br></br>
-                    <Grid container direction="row"  justify="space-evenly" alignItems="center">
-                        <Typography variant="subtitle1" color="inherit">
-                            Fechas:
-                        </Typography>
-                          <RangoFechas onCambio={cambiar}/>
+                    <Grid container direction="row"  justify="flex-start" alignItems="center" style={{marginLeft: 45}}>
                         <Typography variant="subtitle1" color="inherit">
                             Cronograma:
                         </Typography>
-                        <Combobox c/>
-                        <Button variant="contained" onClick={buscarCronogramas} size="medium" color="primary" style={{margin: 10}}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="demo-mutiple-chip-label"></InputLabel>
+                          <Select
+                            labelId="demo-mutiple-chip-label"
+                            id="demo-mutiple-chip"
+                            multiple
+                            value={personName}
+                            onChange={handleChange}
+                            input={<Input id="select-multiple-chip" />}
+                            renderValue={(selected) => (
+                              <div className={classes.chips}>
+                                {(selected).map((value) => (
+                                  <Chip key={value} label={value} className={classes.chip} />
+                                ))}
+                              </div>
+                            )}
+                            MenuProps={MenuProps}
+                          >
+                            {names.map((name) => (
+                              <MenuItem key={name.key}  value={name.label} style={getStyles(name, personName, theme)}>
+                                {name.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid container direction="row"  justify="flex-start" alignItems="center" style={{marginLeft: 45, marginTop:20}}>
+                        <Typography variant="subtitle1" color="inherit" style={{marginRight: 45}}>
+                            Fechas:
+                        </Typography>
+                        <RangoFechas onCambio={cambiar}/>
+                        <Button variant="contained"  onClick={filtrarReporte}  size="medium" color="primary" style={{marginLeft: 70}}>
                           Filtrar
                         </Button>  
+                        {/* <Combobox options={cronogramas} onSeleccion={handleComboboxCro} 
+                                    value={cronograma} placeholder="Todos"/> */}
                     </Grid>
                 </Grid>
-            </Paper> 
+            </Paper>
+            <Grid container direction="row" justify="center" alignItems="center">
+            {respuesta?
+            <Bar chartData={datosEntregados} md={10} sm={12} xs={12}  nameTitle="Incidentes" legendPosition="bottom"/>
+            :<Cargando></Cargando>}
             </Grid>
-            {/* <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/>  */}
+            </Grid>
             <BarraFinal/>
         </Grid>
     );

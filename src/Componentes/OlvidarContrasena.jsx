@@ -28,7 +28,7 @@ const OlvidarContrasena = (props) => {
   
     const handleClose = () => {
       setOpen(false);
-      if(mensaje==='Cambio de Contraseña Exitosa') props.history.push("/usuarios");
+      if(mensaje==='El cambio de contraseña se ha realizado con exito') props.history.push("/usuarios");
     };
 
 
@@ -53,22 +53,28 @@ const OlvidarContrasena = (props) => {
     function cambiarContrasena(){
         // if(usuario!==''){
             // setUsuarioValido(true)
-            if(nuevaContrasena!=='' && confirmarContrasena===nuevaContrasena){
+            const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/
+            if(nuevaContrasena!=='' && confirmarContrasena===nuevaContrasena && regex.test(nuevaContrasena)){
                 axios
                 .post(API_URL + "usuarios/contrasena/" + JSON.parse(localStorage.getItem("user")).id, 
                 {contrasena: nuevaContrasena})
                 .then(response =>{
                     console.log("API Cambiar Contrasena: ",response)
-                    setMensaje('Cambio de Contraseña Exitosa')
+                    setMensaje('El cambio de contraseña se ha realizado con exito')
                     setMessage(null)
                     setOpen(true)
                 })
                 .catch((response) => {
                     console.log('Error al Cambiar de Contraseña')
-                    setMensaje('Error al Cambiar de Contraseña')
+                    setMensaje('Error al cambiar de contraseña')
                     setMessage(response)
                     setOpen(true)
                 });
+            }
+            else{
+                setMensaje('La contraseña no contiene al menos un número y al menos un caracter')
+                setMessage('La contraseña no contiene al menos un número y al menos un caracter')
+                setOpen(true)
             }
         // }
         // else{
@@ -110,7 +116,7 @@ const OlvidarContrasena = (props) => {
                     <Grid container direction="row" item md={12} justify="center" style={{paddingBottom: '3vh'}}>
                         <Grid container item xs={10} md={2} alignContent="center">
                             <Typography variant="subtitle2" color="inherit">
-                                Nueva Contraseña
+                                Contraseña Nueva
                             </Typography>
                         </Grid>
                         <Grid container item xs={10} md={4} justify="center">
@@ -151,7 +157,7 @@ const OlvidarContrasena = (props) => {
                             <TextField
                                 value={confirmarContrasena}
                                 onChange={(event) => {setConfirmarContrasena(event.target.value)}}
-                                error={confirmarContrasena!=='' && confirmarContrasena!==nuevaContrasena}
+                                error={(confirmarContrasena!=='' && confirmarContrasena!==nuevaContrasena)||(nuevaContrasena!==''&&confirmarContrasena==='')}
                                 id="outlined-basic"
                                 variant="outlined"
                                 type={showPasswordC ? "text" : "password"}
@@ -159,7 +165,7 @@ const OlvidarContrasena = (props) => {
                                 autoComplete="current-password"
                                 fullWidth={true}
                                 onKeyPress={onKeyPress.bind(this)}
-                                helperText={confirmarContrasena!=='' && confirmarContrasena!==nuevaContrasena ? "Las contraseñas no coinciden": null}
+                                helperText={confirmarContrasena!=='' && confirmarContrasena!==nuevaContrasena ? "Las contraseñas no coinciden": confirmarContrasena===''?"Debe completar este campo":null }
                                 inputProps={{maxLength: 20}}
                                 InputProps={{
                                 endAdornment: (
@@ -189,11 +195,19 @@ const OlvidarContrasena = (props) => {
                         </Button>
                     </Grid>
                     <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                        <Link to='/'>
+                        {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN")?
+                        <Link to='/usuarios'>
                             <Button variant="contained"  size="medium" color="secondary">
                                 Cancelar
                             </Button>
                         </Link>
+                            :
+                        <Link to='/bonos'>
+                            <Button variant="contained"  size="medium" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
+                        }
                     </Grid>
                 </Grid>
             </Grid>

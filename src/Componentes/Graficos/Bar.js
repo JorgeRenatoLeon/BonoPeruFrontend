@@ -36,6 +36,14 @@
              legend:{
                display:this.props.displayLegend,
                position:this.props.legendPosition
+             },
+             scales: {
+              yAxes: [{
+                  ticks: {
+                    min: 0,
+                    stepSize: 1
+                  }
+              }]
              }
            }} 
          />
