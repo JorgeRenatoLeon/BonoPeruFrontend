@@ -196,16 +196,38 @@ export default function GestionBonos() {
     'pink', '	rgb(240, 128, 128,0.6)', //rosado
     'rgb(255, 127, 80,0.6)', '	rgb(244, 164, 96,0.6)',//naranjita palido
     'rgb(0, 255, 255,0.4)', 'rgb(100, 149, 237,0.4)', //Celeste
-    'rgb(0, 0, 139,0.4) ', '	rgb(51,51,255,0.4)',//azul
-    '	rgb(0, 255, 127,0.4)', 'rgb(144, 238, 144,0.4)',//verde
-    'pink', '	rgb(240, 128, 128,0.4)', //rosado
-    'rgb(255, 127, 80,0.4)', '	rgb(244, 164, 96,0.4)'//naranjita palido
-  ];
-  const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
-  const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
-  var isResponse = false;
-  const [datosEntregados, setdatosEntregados] = useState([]); //Set cronograma, creando y un estado de toda la función
-  const [datosIndicadores, setdatosIndicadores] = useState([]); //Set cronograma, creando y un estado de toda la función
+    'rgb(0, 0, 139,0.4) ' , '	rgb(51,51,255,0.4)',//azul
+    '	rgb(0, 255, 127,0.4)','rgb(144, 238, 144,0.4)',//verde
+    'pink',     '	rgb(240, 128, 128,0.4)', //rosado
+    'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
+    ];
+    const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
+    var isResponse=false;
+    const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
+    const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
+    
+    const apiEntregados=async (cronogramaDeseado) => {   
+      const response = await axios.post(ENTREGADOS).then();
+        // console.log('rpta api.data: ',response.data);
+      if(response!==undefined && isResponse===false ){
+          //Para el chart reporte- Colores 
+          console.log('api entregados',response.data);
+          isResponse=true;
+          setdatosEntregados({
+            labels:response.data.listaFechas,//[,,]
+            /*labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
+            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
+            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
+            datasets:[
+              {
+                label:'Fechas de entrega de bonos',
+                 data:response.data.listaCantidades,
+                /* data:[201,456,98,12,456,999,441,
+                  420,456,98,12,456,999,441,
+                  300,456,98,12,456,999,441,785],*/
+                backgroundColor:backgroundColor,
+              }
 
   const apiEntregados = async (cronogramaDeseado) => {
     const response = await axios.post(ENTREGADOS).then();
@@ -241,16 +263,70 @@ export default function GestionBonos() {
         api.push(response.data);
         setdatosIndicadores(api);
 
-      })
-      .catch(() => {
-        console.log('Error al obtener Totales');
-      });
-  }
-  useEffect(() => {
-    //Llamo a todos los api de monitoreo    
-    apiEntregados(cronogramaInicial);
-    apiTotales(cronogramaInicial);
-  }, []);
+    //fin del chart reporte 
+     
+    //  path: /monitoreo
+    const classes = useStyles();
+    var titulo="Monitoreo";
+    if(datosEntregados!==[] && datosEntregados.length!==0){
+      //Debo preguntar esto antes de llamar a los gráficos
+       var respuesta= rpta.map((rpta,index)   =>
+            <Grid key={rpta.id} container  justify="center">
+              <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
+          
+              <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
+        
+               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
+               {/* <apiData></apiData> */}
+               <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                     <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        Beneficiarios
+                        </Typography>                
+                            {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantmujeres}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Mujeres
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                             {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.canthombres}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Hombres
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                                {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantdisc}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                         Discapacitados
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
+                               {datosIndicadores.map(opcion=> (
+                                <Grid container direction="row" >
+                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                    {opcion.cantquejas}
+                                    </Typography>                                     
+                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                    Quejas
+                                    </Typography>                           
+                                </Grid>                                
+                            ))
+                            } 
 
   //fin del chart reporte 
 

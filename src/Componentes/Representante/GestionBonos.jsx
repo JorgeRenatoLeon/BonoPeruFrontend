@@ -1,5 +1,5 @@
 import React, {StrictMode, useEffect,useState} from 'react'
-import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider} from "@material-ui/core"
+import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider,TextField} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
  import axios from "axios";
@@ -31,7 +31,7 @@ function descendingComparator(a, b, orderBy) {
     }
     return 0;
 }
-  
+
 function getComparator(order, orderBy) {
 return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -197,6 +197,7 @@ const GestionBonos = (props)=>{
     const faltaOpen={mensaje:"No pueden haber campos vacíos", open:true,severity:"error"}
     const defaultM={mensaje:"", open:false,severity:"error"}
     const publicarOpen={mensaje:"Se ha publicado el cronograma para los beneficiarios.", open:true,severity:"success"}
+    const errorFecha={mensaje:"La fecha de inicio debe ser a la posterior de hoy", open:true,severity:"error"}
     const [mensaje,setMensaje]=useState(defaultM);
     const [publicado,setPublicado]=useState(false);
     
@@ -264,8 +265,12 @@ const GestionBonos = (props)=>{
             function PublicarCronograma(){
                 //No va a entrar si ya está publicado
                     //   API de Ari
-                    axios.post(PUB_URL+"/"+cronograma.idcronograma)
-                    .then(response =>{             
+                    setMensaje(publicarOpen);
+                        setPublicado(true);
+                    console.log('cronograma.',cronograma);
+                    axios.post(PUB_URL+"/"+cronograma[0].idcronograma)
+                    .then(response =>{        
+                        console.log(response);     
                         setMensaje(publicarOpen);
                         setPublicado(true);
                     })
@@ -274,22 +279,43 @@ const GestionBonos = (props)=>{
                         setMensaje(errorOpen);
                     });
             } 
+            const moment = require('moment');
             const GenerarCronograma = () => {
                 updateCronograma=true; 
                 // const soloFecha = JSON.parse(localStorage.getItem("soloFecha")) ;    //La hemos obtenido 
                 // const soloNombre = JSON.parse(localStorage.getItem("soloNombre")) ;    //La hemos obtenido 
                  const idUsuario= JSON.parse(localStorage.getItem("user")).id;
-                 setMensaje(generarOpen);
+                 
                 console.log('idUsuario: ',idUsuario);
                 console.log('solo nombre ',soloNombre," fecha: ",soloFecha);
+                let day= formatoInverso(soloFecha);                
+                let f = new Date();
+                let dd = f.getDate()+1;//Mañana
+                let mm = f.getMonth()+1; 
+                if(dd<10)           dd='0'+dd;
+                if(mm<10)           mm='0'+mm;
                 
-                if(soloNombre!=="" && soloFecha!=="" ){
+                 let    FechaHoy=f.getFullYear()+ '-'+mm+'-'+ dd ; //AAAA-MM-DD
+                if(soloNombre=="" || soloFecha==""){
+                    //setOpenError(true);
+                    setMensaje(faltaOpen);
+                }
+                else if (soloFecha!=="" && day<FechaHoy ){
+                    //Validación de fecha menor a la de hoy
+                    console.log(soloFecha);
+                    setMensaje(errorFecha);
+                    
+                }
+                else if(soloNombre!=="" && soloFecha!=="" ){
+                    setMensaje(generarOpen);
                     const params=     {
                         nombre:soloNombre, 
                         fechaini:formatoInverso(soloFecha), //AAAA-MM-DD
                         fechafin:"",
                         usuariocreacion:idUsuario,
-                }
+                    }
+              
+               
                     console.log('params',params);
                     //   API de Ari
                   axios.post(ARI_URL,params)
@@ -297,26 +323,17 @@ const GestionBonos = (props)=>{
                       console.log("ARI url ",response.data);
                       let apiCronograma = [];
                       apiCronograma.push(response.data);
-                      localStorage.setItem("Gcronograma", JSON.stringify(response.data));
-                     
-                      //setOpenConfirmacion(true);
+                      localStorage.setItem("Gcronograma", JSON.stringify(response.data));                    
                     //   setMensaje(generarOpen);
                       CronogramaActual();
                      
                   })
                   .catch(() => {
-                        setMensaje(errorOpen);
-                        
+                        setMensaje(errorOpen);                        
                       console.log('Error al obtener Cronograma generado')
                   });
                 }
-                else {
-                    //setOpenError(true);
-                    setMensaje(faltaOpen);
-                    // localStorage.setItem("openConf", JSON.stringify(true));
-                    console.log('else: ');
-                   
-                }
+                
             
             
             }
@@ -344,7 +361,7 @@ const GestionBonos = (props)=>{
                                         Regresar
                                     </Button>                             
                             </Grid>
-                            <Snackbar open={mensaje.open} autoHideDuration={13000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"success"}>
+                            <Snackbar open={mensaje.open} autoHideDuration={180000} onClose={handleCloseConfirmacion} anchorOrigin={{ vertical: "top", horizontal: "center" }} key={"success"}>
                             <Alert open={mensaje.open} onClose={handleCloseConfirmacion} severity={mensaje.severity}>
                                  {mensaje.mensaje}
                                   </Alert>
@@ -356,14 +373,11 @@ const GestionBonos = (props)=>{
 
             
         }
-        var f = new Date();
-        var dd = f.getDate()+1;//Mañana
-        var mm = f.getMonth()+1; 
-        if(dd<10)           dd='0'+dd;
-        if(mm<10)           mm='0'+mm;
+      
+        
         var escribePantalla=     {
             nombre:"", //<3
-            FechaInicio:dd+ "/" + mm+ "/" + f.getFullYear(), //AAAA-MM-DD
+            FechaInicio:"", //debe de ser AAAA-MM-DD
         }
         localStorage.setItem("soloFecha",JSON.stringify(escribePantalla.FechaInicio)); 
         if( cronograma[0].idcronograma==="" ){//entra por el api-no hay cronograma
@@ -385,18 +399,19 @@ const GestionBonos = (props)=>{
                             </Typography>
                       </Grid>
                     {cronograma.map(opcion=> (
-                        <Grid container direction="row" item md={4} >
-                            <Paper component="form"  className={classes.root}>
-   
-                                <InputBase
-                                    className={classes.input}
-                                     placeholder= {"Escriba el nombre de un bono"}                                
+                        <Grid container direction="row" item md={4} >                         
+                                <TextField
+                                   className="inputRounded" id="outlined-basic" 
+                                   variant="outlined"
+                                     placeholder= {"Escriba el nombre"}                                
                                     style={{padding:0 }}
+                                    label={null}
                                     inputProps={{ "aria-label": "Escriba un nombre" }}
                                     defaultValue={escribePantalla.nombre}
                                     onChange={e =>guardarNombre(e.target.value)}
                                 />
-                             </Paper>                              
+                               
+                            
                         </Grid>
 
                         )) }
@@ -412,16 +427,21 @@ const GestionBonos = (props)=>{
                       </Grid>
                     {cronograma.map(opcion=> (
                         <Grid container direction="row" item md={4} >
-                            <Paper component="form"  className={classes.root}>   
-                                <InputBase
-                                    className={classes.input}
-                                     placeholder= {"DD/MM/AAAA"}                                
+                     
+                       
+                             
+                                    <TextField
+                                     className="inputRounded" id="outlined-basic" 
+                                     variant="outlined"
+                                    //  placeholder= {"DD/MM/AAAA"}                                
                                     style={{padding:0 }}
-                                    inputProps={{ "aria-label": "Escriba una fecha" }}
+                                    label={
+                                        "DD/MM/AAAA"
+                                }
+
                                     defaultValue={escribePantalla.FechaInicio}
                                     onChange={e =>guardarFecha(e.target.value)}
-                                />
-                             </Paper>
+                                />  
                                {/* <Typography variant="subtitle2" color="inherit">
                                     {opcion.fechaini?opcion.fechaini:"Por definir"}
                             </Typography> */}
