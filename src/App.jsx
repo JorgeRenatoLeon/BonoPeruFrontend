@@ -26,6 +26,7 @@ import Usuarios from './Componentes/Admin/Usuarios'
 import Formulario from './Componentes/Admin/Formulario'
 import OlvidarContrasena from "./Componentes/OlvidarContrasena";
 import ReporteQuejas from "./Componentes/Reportes/Quejas";
+import ReporteEncuestas from "./Componentes/Reportes/ReporteEncuestasSatisfaccion";
 
 import ReporteIncidentes from "./Componentes/Reportes/Incidentes";
 import NoEncontrada from "./Componentes/NoEncontrada";
@@ -51,9 +52,9 @@ const App = () => {
           <RutaProtegida path="/reportes" component={Reportes}/>
           <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />
           <Route path="/editarpreguntasfrecuentes" component={EditarPreguntasFrecuentes} />
-          <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
-          <Route exact path="/formulario" component={Formulario}/>
-          <RutaProtegida path="/bonos" component={GestionBonos}         
+          <Route path="/prueba" component={PruebaC} />            {/* pantalla de Johana para todos :D */}
+          <Route exact path="/formulario" component={Formulario} />
+          <RutaProtegida path="/bonos" component={GestionBonos}
           />
           <Route exact path="/consulta" >  {/* pantalla de Johana :D */}
             <BarraInicial />
@@ -63,7 +64,7 @@ const App = () => {
             <BarraFinal />
           </Route>
           <RutaProtegida path="/monitoreo" component={Monitoreo}
-          /> 
+          />
           <RutaProtegida path="/reportequejas" component={ReporteQuejas}
           />
           <Route component={NoEncontrada}/>

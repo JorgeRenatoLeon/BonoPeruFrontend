@@ -105,17 +105,15 @@ export default function PreguntasFrecuentes() {
             <BarraInicial />
             <Container>
                 <div>
-                    <AppBar position="relative" style={{ background: 'transparent', boxShadow: 'none' }}>
-                        <Toolbar>
-                            <Grid container direction="row" justify="center">
-                                <Grid container item xs={10} justify="center">
-                                    <Typography variant="h3" gutterBottom justify="center" >
-                                        <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Preguntas Frecuentes</h1>
-                                    </Typography>
-                                </Grid>
+                    <Toolbar>
+                        <Grid container direction="row" justify="center">
+                            <Grid container item xs={10} justify="center">
+                                <Typography variant="h3" gutterBottom justify="center" >
+                                    <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Preguntas Frecuentes</h1>
+                                </Typography>
                             </Grid>
-                        </Toolbar>
-                    </AppBar>
+                        </Grid>
+                    </Toolbar>
                 </div>
                 <Grid container direction="row" justify="right">
                     <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="right" >
