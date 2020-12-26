@@ -19,8 +19,10 @@
      xs:12,
 
    }
+ 
 
    render(){
+    
      return (
        <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
            <Bar
