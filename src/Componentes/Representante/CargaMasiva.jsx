@@ -106,7 +106,11 @@ const CargaMasiva = (props) => {
         })
         .then(response =>{
             console.log("API Cargar Lugares Entrega: ",response.data)
-            setMensaje('Carga Exitosa')
+            if(response.data.errores.length===0) setMensaje('Los datos del archivo se han subido con exito')
+            else {
+                if(response.data.lugares) setMensaje('Algunos datos del archivo se han subido con exito. Ver el reporte de errores')
+                else setMensaje('Los datos del archivo no se han cargado ver el reporte')
+            }
             setOpen(true)
             setRegistros(response.data.lugares)
             setErrores(response.data.errores)
@@ -127,7 +131,7 @@ const CargaMasiva = (props) => {
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
-            setMensaje('Error al Cargar')
+            setMensaje('El archivo no tiene el formato correcto')
             setOpen(true)
         });
     }; 
@@ -161,7 +165,11 @@ const CargaMasiva = (props) => {
         })
         .then(response =>{
             console.log("API Cargar Lugares Entrega: ",response.data)
-            setMensaje('Carga Exitosa')
+            if(response.data.errores.length===0) setMensaje('Los datos del archivo se han subido con exito')
+            else {
+                if(response.data.beneficiarios) setMensaje('Algunos datos del archivo se han subido con exito. Ver el reporte de errores')
+                else setMensaje('Los datos del archivo no se han cargado ver el reporte')
+            }
             setOpen(true)
             setRegistros(response.data.beneficiarios)
             setErrores(response.data.errores)
@@ -182,7 +190,7 @@ const CargaMasiva = (props) => {
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
-            setMensaje('Error al Cargar')
+            setMensaje('El archivo no tiene el formato correcto')
             setOpen(true)
         });
     }; 
@@ -247,6 +255,9 @@ const CargaMasiva = (props) => {
                             "HH:MM-HH:MM / HH:MM-HH:MM" que representa los dos horarios 
                             de trabajo diarios del lugar de entrega
                         </Typography>
+                        <Typography variant="h5" color="inherit" style={{padding:"2%"}}>
+                            Ejemplo:
+                        </Typography>
                     </Grid>
                     <Grid container justify="center">
                         <img alt="Ejemplo" src={EjemploLugaresCarga} />
@@ -268,7 +279,7 @@ const CargaMasiva = (props) => {
                             </label>
                         </Grid>
                         <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                            <Link to='/'>
+                            <Link to='/bonos'>
                                 <Button variant="contained"  size="medium" color="secondary">
                                     Cancelar
                                 </Button>
@@ -294,6 +305,9 @@ const CargaMasiva = (props) => {
                             las cabeceras que representaran estos datos son respectivamente: “CO_HOGAR, UBIGEO, DE_GENERO, FLAG_DISCAP_SEVERA”, 
                             en caso contrario se mostrará un mensaje de error
                         </Typography>
+                        <Typography variant="h5" color="inherit" style={{padding:"2%"}}>
+                            Ejemplo:
+                        </Typography>
                     </Grid>
                     <Grid container justify="center">
                         <img alt="Ejemplo" src={EjemploBeneficiariosCarga} />
@@ -315,7 +329,7 @@ const CargaMasiva = (props) => {
                             </label>
                         </Grid>
                         <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                            <Link to='/'>
+                            <Link to='/bonos'>
                                 <Button variant="contained"  size="medium" color="secondary">
                                     Cancelar
                                 </Button>
