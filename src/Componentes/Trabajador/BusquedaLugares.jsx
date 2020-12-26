@@ -194,7 +194,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
         provAux.push({
           value: 0,
-          label: "Provincia",
+          label: "Todas",
         });   
       response.data.map(prov => {
         provAux.push({
@@ -219,7 +219,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
       disAux.push({
         value: 0,
-        label: "Distrito",
+        label: "Todos",
       });
       response.data.map(prov => {
         disAux.push({
@@ -351,7 +351,7 @@ const BusquedaLugares = (props) => {
       if(response.data.length> 0)
       depAux.push({
         value: 0,
-        label: "Departamento",
+        label: "Todos",
       });
       response.data.map(dep => {
         depAux.push({
@@ -471,17 +471,17 @@ const BusquedaLugares = (props) => {
                             Departamento:
                         </Typography>
                         <Combobox options={departamentos} onSeleccion={handleComboboxDep} 
-                        value={departamento} placeholder="Departamento"/>
+                        value={departamento} placeholder="Todos"/>
                         <Typography variant="subtitle1" color="inherit">
                             Provincia:
                         </Typography>
                         <Combobox options={provincias} onSeleccion={handleComboboxProv} 
-                        value={provincia} isDisabled={cbxProv} placeholder="Provincia"/>
+                        value={provincia} isDisabled={cbxProv} placeholder="Todas"/>
                         <Typography variant="subtitle1" color="inherit">
                             Distrito:
                         </Typography>
                         <Combobox options={distritos} onSeleccion={handleComboboxDis} 
-                        value={distrito} isDisabled={cbxDis} placeholder="Distrito"/>
+                        value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                     </Grid>
                     <Grid container direction="row" justify="space-evenly" alignItems="center">
                       <Grid container direction="row" justify="space-evenly" alignItems="center" item xs={6}>

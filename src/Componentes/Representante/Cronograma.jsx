@@ -31,7 +31,7 @@ import HorariosService from "../../Servicios/horarios.service";
 import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
-import DescargaService from "../../Servicios/descarga.cronograma";
+import DescargaService from "../../Servicios/descarga.service";
 import { SelectAll } from '@material-ui/icons';
 import  Cargando  from "../ModalCargando";
 
