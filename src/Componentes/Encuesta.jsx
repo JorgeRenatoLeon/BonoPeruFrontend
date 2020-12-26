@@ -9,7 +9,7 @@ const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanst
 
 const Encuesta = (props) => {
 
-    const [preguntasHard, setPreguntasHard] = useState([{id: 0,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "No"},{id:1, pregunta:'¿Recogió su bono en el lugar y hora indicado en su cronograma?',respuesta: "No"},{id: 2,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "Si"}])
+    // const [preguntasHard, setPreguntasHard] = useState([{id: 0,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "No"},{id:1, pregunta:'¿Recogió su bono en el lugar y hora indicado en su cronograma?',respuesta: "No"},{id: 2,pregunta:'¿Pudo recoger su bono asignado?',respuesta: "Si"}])
     const [opciones, setOpcion] = useState([
         {
             horario:{
@@ -95,10 +95,16 @@ const Encuesta = (props) => {
       setOpen(false);
     };
 
-    function handleChange(index,valor){
-        let preguntasAux = [...preguntasHard]
-        preguntasAux[index].respuesta = valor
-        setPreguntasHard(preguntasAux)
+    // function handleChange(index,valor){
+    //     let preguntasAux = [...preguntasHard]
+    //     preguntasAux[index].respuesta = valor
+    //     setPreguntasHard(preguntasAux)
+    // }
+
+    function handleChangeRespuesta(index,valor){
+        let opcionAux = [...opciones]
+        opcionAux[opcionSel-1].respuestas[index].respuesta = valor
+        setOpcion(opcionAux)
     }
 
     function handleChangeOpcion(index,valor){
@@ -139,21 +145,21 @@ const Encuesta = (props) => {
     }
 
 
-    const componentesPreguntas = preguntasHard.map((pregunta,index) => 
-        <Grid key={pregunta.id} container direction="row" justify="center">
-            <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>
-                <Typography variant="subtitle1" color="inherit">
-                    {(index+1)+'. '+pregunta.pregunta} 
-                </Typography>
-            </Grid>
-            <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
-                <RadioGroup row variant="subtitle1" value={pregunta.respuesta} color="inherit">
-                    <FormControlLabel value="Si" control={<Radio style={{color: 'black'}}/>} label="Si" onClick={() => handleChange(pregunta.id,"Si")}/>
-                    <FormControlLabel value="No" control={<Radio style={{color: 'black'}}/>} label="No" onClick={() => handleChange(pregunta.id,"No")}/>
-                </RadioGroup>
-            </Grid>
-        </Grid>
-    )
+    // const componentesPreguntas = preguntasHard.map((pregunta,index) => 
+    //     <Grid key={pregunta.id} container direction="row" justify="center">
+    //         <Grid container direction="row" item md={12} style={{paddingTop: '1.5vh'}}>
+    //             <Typography variant="subtitle1" color="inherit">
+    //                 {(index+1)+'. '+pregunta.pregunta} 
+    //             </Typography>
+    //         </Grid>
+    //         <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
+    //             <RadioGroup row variant="subtitle1" value={pregunta.respuesta} color="inherit">
+    //                 <FormControlLabel value="Si" control={<Radio style={{color: 'black'}}/>} label="Si" onClick={() => handleChange(pregunta.id,"Si")}/>
+    //                 <FormControlLabel value="No" control={<Radio style={{color: 'black'}}/>} label="No" onClick={() => handleChange(pregunta.id,"No")}/>
+    //             </RadioGroup>
+    //         </Grid>
+    //     </Grid>
+    // )
 
     const componentesPreguntasOpcion = opciones[opcionSel-1].respuestas.map((respuesta,index) => 
         <Grid key={respuesta.idRespuestaindividual} container direction="row" justify="center">
@@ -163,6 +169,12 @@ const Encuesta = (props) => {
                 </Typography>
             </Grid>
             <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
+                {respuesta.puntaje===-1?
+                <RadioGroup row variant="subtitle1" value={respuesta.respuesta} color="inherit">
+                    <FormControlLabel value="Si" control={<Radio style={{color: 'black'}}/>} label="Si" onClick={() => handleChangeRespuesta(index,"Si")}/>
+                    <FormControlLabel value="No" control={<Radio style={{color: 'black'}}/>} label="No" onClick={() => handleChangeRespuesta(index,"No")}/>
+                </RadioGroup>
+                :
                 <RadioGroup row variant="subtitle1" value={respuesta.puntaje} color="inherit">
                     <FormControlLabel value={1} control={<Radio style={{color: 'black'}}/>} label="1" onClick={() => handleChangeOpcion(index,1)}/>
                     <FormControlLabel value={2} control={<Radio style={{color: 'black'}}/>} label="2" onClick={() => handleChangeOpcion(index,2)}/>
@@ -170,6 +182,7 @@ const Encuesta = (props) => {
                     <FormControlLabel value={4} control={<Radio style={{color: 'black'}}/>} label="4" onClick={() => handleChangeOpcion(index,4)}/>
                     <FormControlLabel value={5} control={<Radio style={{color: 'black'}}/>} label="5" onClick={() => handleChangeOpcion(index,5)}/>
                 </RadioGroup>
+                }
             </Grid>
         </Grid>
     )
@@ -199,7 +212,7 @@ const Encuesta = (props) => {
                             Nos interesa su satisfacción , por eso le pedimos constestar las siguientes preguntas 
                         </Typography>
                     </Grid>
-                    {componentesPreguntas}
+                    {/* {componentesPreguntas} */}
                 </Grid>
                 
                 <Grid className='Contenedor'>

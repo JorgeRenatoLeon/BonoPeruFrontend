@@ -1,0 +1,28 @@
+
+body {
+    background-color: #95c2de;
+}
+
+.mainbox {
+    margin: auto;
+}
+
+.far {
+    font-size: 8.5rem;
+    color: #ffffff;
+}
+
+
+.msg {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: gray;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: gray;
+}

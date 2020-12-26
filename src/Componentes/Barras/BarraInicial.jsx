@@ -9,7 +9,7 @@ import { logout } from "../../actions/auth";
 import { clearMessage } from "../../actions/message";
 import { Link } from 'react-router-dom';
 
-function BarraInicial () {
+function BarraInicial (props) {
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -53,26 +53,26 @@ function BarraInicial () {
     const classes = useStyles();
 
     const tabsRepresentante = [
-                            {id: 0, nombre: 'Cargar Datos', path: '/carga'},
+                            {id: 0, nombre: 'Cargar Datos', path: '/carga',childs: []},
                             // {id: 1, nombre: 'Lugares de Entrega', path: '/lugaresentrega'},
-                            {id: 2, nombre: 'Gestión de Bonos', path: '/bonos'},
-                            {id: 3, nombre: 'Monitoreo', path: '/monitoreo'},
-                            {id: 4, nombre: 'Reportes', path: '/reportes'},
-                            {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes'},
-                            {id: 5, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena'}]
+                            {id: 2, nombre: 'Gestión de Bonos', path: '/bonos',childs: []},
+                            {id: 3, nombre: 'Monitoreo', path: '/monitoreo',childs: []},
+                            {id: 4, nombre: 'Reportes', path: '/reportes', childs: ['/reportequejas','/reporteincidentes']},
+                            {id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes',childs: []},
+                            {id: 7, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena',childs: []}]
     const tabsAdmin = [
-                        {id: 0, nombre: 'Gestión de Bonos', path: '/bonos'},
+                        {id: 0, nombre: 'Gestión de Bonos', path: '/bonos',childs: []},
                         // {nombre: 'Reportes', path: '/reportes'},
                        
-                        {id: 2, nombre: 'Encuestas', path: '/encuesta'},
-                        {id: 3, nombre: 'Usuarios', path: '/usuarios'},
-                        {id: 5, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena'}]
+                        {id: 1, nombre: 'Encuestas', path: '/encuesta',childs: []},
+                        {id: 2, nombre: 'Usuarios', path: '/usuarios',childs: []},
+                        {id: 3, nombre: currentUser?currentUser.username:'', path: '/cambiarcontrasena',childs: []}]
 
     const AdminTabs = 
         admin ? 
             (tabsAdmin.map(tab =>
-                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: (location.pathname===tab.path?"2px solid white":"inherit")}} align="center">
-                        <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
+                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: ((location.pathname===tab.path || tab.childs.includes(location.pathname))?"2px solid white":"inherit")}} align="center">
+                        <Link to={tab.path} style={{textDecoration: 'none', color:'black', fontWeight: ((location.pathname===tab.path || tab.childs.includes(location.pathname))?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
                     </Grid>
@@ -83,18 +83,48 @@ function BarraInicial () {
     const RepresentanteTabs = 
         representante ? 
             (tabsRepresentante.map(tab =>
-                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: (location.pathname===tab.path?"2px solid white":"inherit")}} align="center">
-                        <Link to={tab.path} style={{textDecoration: 'none', color:'white', fontWeight: (location.pathname===tab.path?'bold':'normal')}}>
+                    <Grid key={tab.id} item style={{marginLeft: 40, borderBottom: ((location.pathname===tab.path || tab.childs.includes(location.pathname))?"2px solid white":"inherit")}} align="center">
+                        <Link to={tab.path} style={{textDecoration: 'none', color:'white', fontWeight: ((location.pathname===tab.path || tab.childs.includes(location.pathname))?'bold':'normal')}}>
                             {tab.nombre}
                         </Link>
                     </Grid>
                 ))
             :
             (<Grid></Grid>)
+    
+    if(currentUser && admin){
+        let valid = false
+        for (let index = 0; index < tabsAdmin.length; index++) {
+           if(tabsAdmin[index].path===location.pathname){
+               valid = true
+               break
+           }
+           if(tabsAdmin[index].childs.includes(location.pathname)){
+               valid = true
+               break
+           }          
+        }
+        if(!valid) history.push("/usuarios");
+    }
+
+    if(currentUser && representante){
+        let valid = false
+        for (let index = 0; index < tabsRepresentante.length; index++) {
+           if(tabsRepresentante[index].path===location.pathname){
+               valid = true
+               break
+           }    
+           if(tabsRepresentante[index].childs.includes(location.pathname)){
+               valid = true
+               break
+           }            
+        }
+        if(!valid) history.push("/bonos");
+    }
 
     return (
         <div className={classes.root}>
-            <AppBar position="relative" style={{background:"#01B9DF"}}>
+            <AppBar position="fixed" style={{background:"#01B9DF"}}>
                 <Toolbar>
                     <Typography variant="h5" color="inherit" noWrap>
                         BONO PERU
@@ -127,6 +157,7 @@ function BarraInicial () {
                     </Grid>
                 </Toolbar>
             </AppBar>
+            <Grid style={{minHeight:"8vh"}}></Grid>
         </div>
     );
 }

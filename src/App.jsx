@@ -28,6 +28,8 @@ import OlvidarContrasena from "./Componentes/OlvidarContrasena";
 import ReporteQuejas from "./Componentes/Reportes/Quejas";
 
 import ReporteIncidentes from "./Componentes/Reportes/Incidentes";
+import NoEncontrada from "./Componentes/NoEncontrada";
+import Reportes from "./Componentes/Reportes/Reportes";
 const App = () => {
 
   return (
@@ -46,6 +48,7 @@ const App = () => {
           <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena}/>
           <RutaProtegida path="/encuesta" component={Encuesta}/>
           <RutaProtegida path="/carga" component={CargaMasiva}/>
+          <RutaProtegida path="/reportes" component={Reportes}/>
           <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />
           <Route path="/editarpreguntasfrecuentes" component={EditarPreguntasFrecuentes} />
           <Route path="/prueba" component={PruebaC}/>            {/* pantalla de Johana para todos :D */}
@@ -63,8 +66,7 @@ const App = () => {
           /> 
           <RutaProtegida path="/reportequejas" component={ReporteQuejas}
           />
-
-
+          <Route component={NoEncontrada}/>
         </Switch>
       </div>
     </Router>

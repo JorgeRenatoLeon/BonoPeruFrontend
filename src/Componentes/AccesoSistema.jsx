@@ -37,7 +37,9 @@ const AccesoSistema = (props) => {
         else{
             dispatch(login(usuario, contrasena))
             .then(() => {
-                props.history.push("/usuarios");
+                let usuarioRecibido = JSON.parse(localStorage.getItem("user"))
+                if(usuarioRecibido.roles.includes("ROLE_ADMIN")) props.history.push("/usuarios");
+                else props.history.push("/bonos");
                 // window.location.reload();
             })
             .catch(() => {
@@ -49,9 +51,9 @@ const AccesoSistema = (props) => {
     const { from } = props.location.state || {from: {pathname: '/'}};
     
     if (isLoggedIn) {
-        return (
-            <Redirect to={from}/>
-        )
+        let usuarioRecibido = JSON.parse(localStorage.getItem("user"))
+        if(usuarioRecibido.roles.includes("ROLE_ADMIN")) return <Redirect to="/usuarios" />
+        else return <Redirect to="/bonos" />
     }
 
     function onKeyPress(event) {
