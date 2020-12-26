@@ -28,7 +28,7 @@ function Quejas() {
     return ( 
         <Grid>
             <BarraInicial/>             
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
+            {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
@@ -38,7 +38,7 @@ function Quejas() {
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
-            </AppBar>
+            {/* </AppBar> */}
             {apiBeneficiario.map((opcion,index)=> (
                     <Queja name={opcion.horariolugarentrega.lugarentrega.nombre} numero={index+1} 
                         idHorario={opcion.idHorario}

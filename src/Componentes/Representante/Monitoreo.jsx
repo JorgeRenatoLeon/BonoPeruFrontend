@@ -165,6 +165,7 @@ export default function GestionBonos (){
       apiEntregados(cronogramaBusqueda);
       apiLugares(cronogramaBusqueda);
       apiTotales(cronogramaBusqueda);
+      llamadaGraficos();
     }
     //Fin de manejo de filtros
     //Para card de reporte 
@@ -306,123 +307,86 @@ export default function GestionBonos (){
     //  path: /monitoreo
     const classes = useStyles();
     var titulo="Monitoreo";
-    if(datosEntregados!==[] && datosEntregados.length!==0){
-      //Debo preguntar esto antes de llamar a los gráficos
-       var respuesta= rpta.map((rpta,index)   =>
-            <Grid key={rpta.id} container  justify="center">
-              <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
-          
-              <Bar chartData={datosTopLugares} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
-        
-               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
-               {/* <apiData></apiData> */}
-               <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Beneficiarios
-                        </Typography>                
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantmujeres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Mujeres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.canthombres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Hombres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
+    var respuesta;
+    const llamadaGraficos = () => {
+        if(datosEntregados!==[] && datosEntregados.length!==0){
+          //Debo preguntar esto antes de llamar a los gráficos
+          respuesta= rpta.map((rpta,index)   =>
+                <Grid key={rpta.id} container  justify="center">
+                  <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
+              
+                  <Bar chartData={datosTopLugares} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
+            
+                  <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
+                  {/* <apiData></apiData> */}
+                  <Card className={classes.root} variant="outlined">
+                        <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Beneficiarios
+                            </Typography>                
                                 {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantdisc}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Discapacitados
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                               {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantquejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                    Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-
-
-                        
-                    </CardContent>
-   
-                 </Card>
-                    {/* Card de Lugares de Entrega */}
-                {/* <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Lugares de entrega
-                        </Typography>                
-                                      
+                                    <Grid container direction="row" >
+                                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantmujeres}
+                                        </Typography>                                     
+                                        <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Mujeres
+                                        </Typography>                           
+                                    </Grid>                                
+                                ))
+                                } 
                                 {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalLugares}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 40,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Total
-                                    </Typography>                           
-                                </Grid>                                
-                            ))}
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalActivo}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Activos
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalQuejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
+                                    <Grid container direction="row" >
+                                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.canthombres}
+                                        </Typography>                                     
+                                        <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Hombres
+                                        </Typography>                           
+                                    </Grid>                                
+                                ))
+                                } 
+                                    {datosIndicadores.map(opcion=> (
+                                    <Grid container direction="row" >
+                                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantdisc}
+                                        </Typography>                                     
+                                        <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Discapacitados
+                                        </Typography>                           
+                                    </Grid>                                
+                                ))
+                                } 
+                                  {datosIndicadores.map(opcion=> (
+                                    <Grid container direction="row" >
+                                        <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantquejas}
+                                        </Typography>                                     
+                                        <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                        Quejas
+                                        </Typography>                           
+                                    </Grid>                                
+                                ))
+                                } 
 
 
-                        
-                    </CardContent> 
-                   
-               </Card> */}
+                            
+                        </CardContent>
+      
+                    </Card>
+                  
 
 
-            </Grid>
+                </Grid>
 
-            )
-          }
-    //PARA MODAL CARGANDO
+                )
+              }
+
+    
+        }
+    llamadaGraficos();
+    
+          //PARA MODAL CARGANDO
     const useStyles2 = makeStyles((theme) => ({
       root: {
         display: 'flex',
@@ -435,7 +399,7 @@ export default function GestionBonos (){
   //FIN DE MODAL CARGANDO
     return (
         <div style={{minHeight:"88vh"}}>
-               <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
+               {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
                     <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
@@ -445,7 +409,7 @@ export default function GestionBonos (){
                             </Grid>
                         </Grid>
                     </Toolbar>
-                </AppBar>
+                {/* </AppBar> */}
 
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>

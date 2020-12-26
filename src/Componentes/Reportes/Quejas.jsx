@@ -300,48 +300,62 @@ export default function GestionBonos (){
     
     //Colores del chart
     const backgroundColor=[       
-    'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
-    'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul
-    '	rgb(0, 255, 127,1)','rgb(144, 238, 144,1)',//verde
-    'pink',     '	rgb(240, 128, 128,1)', //rosado
-    'rgb(255, 127, 80,1)' ,'	rgb(244, 164, 96,1)',//naranjita palido
-    'rgb(0, 255, 255,0.8)', 'rgb(100, 149, 237,0.8)', //Celeste
-    'rgb(0, 0, 139,0.8) ' , '	rgb(51,51,255,0.8)',//azul
-    '	rgb(0, 255, 127,0.8)','rgb(144, 238, 144,0.8)',//verde
-    'pink',     '	rgb(240, 128, 128,1)', //rosado
-    'rgb(255, 127, 80,0.8)' ,'	rgb(244, 164, 96,0.8)',//naranjita palido
-    'rgb(0, 255, 255,0.6)', 'rgb(100, 149, 237,0.6)', //Celeste
-    'rgb(0, 0, 139,0.6) ' , '	rgb(51,51,255,0.6)',//azul
-    '	rgb(0, 255, 127,0.6)','rgb(144, 238, 144,0.6)',//verde
-    'pink',     '	rgb(240, 128, 128,0.6)', //rosado
-    'rgb(255, 127, 80,0.6)' ,'	rgb(244, 164, 96,0.6)',//naranjita palido
-    'rgb(0, 255, 255,0.4)', 'rgb(100, 149, 237,0.4)', //Celeste
-    'rgb(0, 0, 139,0.4) ' , '	rgb(51,51,255,0.4)',//azul
-    '	rgb(0, 255, 127,0.4)','rgb(144, 238, 144,0.4)',//verde
-    'pink',     '	rgb(240, 128, 128,0.4)', //rosado
-    'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   100% de la barra inicial
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+
     ];
     const backgroundColor2=[    
-      '	rgb(0, 255, 127,1)','rgb(144, 238, 144,1)',//verde   
-      'pink',     '	rgb(240, 128, 128,1)', //rosado
-      'rgb(255, 127, 80,1)' ,'	rgb(244, 164, 96,1)',//naranjita palido
-      'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
-      'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul   
-      '	rgb(0, 255, 127,0.8)','rgb(144, 238, 144,0.8)',//verde
-      'pink',     '	rgb(240, 128, 128,1)', //rosado
-      'rgb(255, 127, 80,0.8)' ,'	rgb(244, 164, 96,0.8)',//naranjita palido
-      'rgb(0, 255, 255,0.8)', 'rgb(100, 149, 237,0.8)', //Celeste
-      'rgb(0, 0, 139,0.8) ' , '	rgb(51,51,255,0.8)',//azul
-      '	rgb(0, 255, 127,0.6)','rgb(144, 238, 144,0.6)',//verde
-      'pink',     '	rgb(240, 128, 128,0.6)', //rosado
-      'rgb(255, 127, 80,0.6)' ,'	rgb(244, 164, 96,0.6)',//naranjita palido
-     'rgb(0, 255, 255,0.6)', 'rgb(100, 149, 237,0.6)', //Celeste
-      'rgb(0, 0, 139,0.6) ' , '	rgb(51,51,255,0.6)',//azul
-      '	rgb(0, 255, 127,0.4)','rgb(144, 238, 144,0.4)',//verde
-      'pink',     '	rgb(240, 128, 128,0.4)', //rosado
-      'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)',//naranjita palido
-     'rgb(0, 255, 255,0.4)', 'rgb(100, 149, 237,0.4)', //Celeste
-      'rgb(0, 0, 139,0.4) ' , '	rgb(51,51,255,0.4)',//azul
+      '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde   50%
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+  
       ];
     const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
     //const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
@@ -349,38 +363,38 @@ export default function GestionBonos (){
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
     const apiQuejas=async (reporteDeseado) => {   
-    console.log('filtros del reporte: ',reporteDeseado);
-    var response;
-    
-    if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
-         reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
-             response = await axios.post(QUEJAS_URL,reporteDeseado).then();
-         }
-     else response = await axios.post(QUEJAS_URL,reporteInicial).then();
-     setEstadoCargando(false);
-     console.log('rpta api.data: ',response.data);
-      if(response!==undefined && isResponse===false ){
-          //Para el chart reporte- Colores 
-          
-          isResponse=true;
-          setdatosEntregados({
-            labels:response.data.listacronogramas,
-            datasets:[
-              {
-                label:'Por Lugares',
-                 data:response.data.listalugares,
-                backgroundColor:backgroundColor,
-              },
-              {
-                label:'Por Horarios',
-                 data:response.data.listahorarios,
-                backgroundColor:backgroundColor2,
-              }
+        console.log('filtros del reporte: ',reporteDeseado);
+        var response;
+        
+        if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
+            reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
+                response = await axios.post(QUEJAS_URL,reporteDeseado).then();
+            }
+        else response = await axios.post(QUEJAS_URL,reporteInicial).then();
+        setEstadoCargando(false);
+        console.log('rpta api.data: ',response.data);
+          if(response!==undefined && isResponse===false ){
+              //Para el chart reporte- Colores 
+              
+              isResponse=true;
+              setdatosEntregados({
+                labels:response.data.listacronogramas,
+                datasets:[
+                  {
+                    label:'Por Lugares',
+                    data:response.data.listalugares,
+                    backgroundColor:backgroundColor,
+                  },
+                  {
+                    label:'Por Horarios',
+                    data:response.data.listahorarios,
+                    backgroundColor:backgroundColor2,
+                  }
 
-            ]
-          });
-          
-        }       
+                ]
+              });
+              
+            }       
     }
 
     useEffect(()=>{    
