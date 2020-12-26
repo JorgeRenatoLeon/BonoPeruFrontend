@@ -19,7 +19,7 @@ import HorariosService from "../../Servicios/horarios.service";
 import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
-import DescargaService from "../../Servicios/descarga.cronograma";
+import DescargaService from "../../Servicios/descarga.service";
 import Combobox from '../Elementos/Combobox';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";

@@ -26,7 +26,7 @@ function RespuestaPositiva (props) {
               direction="column"
               justify="center"
               alignItems="center">
-              <Paper elevation={1} style={{ marginBottom:76}} >
+              <Paper elevation={1} style={{ marginTop: 38, marginBottom:38}} >
                 <br></br>
                 <br></br>
                 {props.mensaje}

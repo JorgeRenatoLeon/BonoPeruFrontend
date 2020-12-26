@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import BarraInicial from '../Barras/BarraInicial';
 import BarraFinal from '../Barras/BarraFinal';
-import InfoService from '../../Servicios/info.beneficiario';
+import InfoService from '../../Servicios/infobeneficiario.service';
 import  Cargando  from "../ModalCargando";
 
 
