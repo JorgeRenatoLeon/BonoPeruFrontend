@@ -45,12 +45,12 @@ function getComparator(order, orderBy) {
 
 
 const headCells = [
-  { id: 'opción', numeric: false, disablePadding: false, label: ' ' },
-  { id: 'codigo', numeric: false, disablePadding: false, label: 'Codigo' },
+  { id: 'opcion', numeric: false, disablePadding: false, label: ' ' },
+  { id: 'codigo', numeric: false, disablePadding: false, label: 'Código' },
   { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
   { id: 'tipo', numeric: false, disablePadding: false, label: 'Tipo'},
   { id: 'lugar', numeric: false, disablePadding: false, label: 'Lugar' },
-  { id: 'direccion', numeric: false, disablePadding: false, label: 'Direccion' },
+  { id: 'direccion', numeric: false, disablePadding: false, label: 'Dirección' },
 ];
 
 const StyledTableCell = withStyles((theme) => ({
@@ -567,7 +567,9 @@ const BusquedaLugares = (props) => {
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}                    
+                    onChangeRowsPerPage={handleChangeRowsPerPage}    
+                    labelRowsPerPage={"Filas por página:"}  
+                            
                     />
                 </Grid>:
                     <Grid container direction="row" justify="center">

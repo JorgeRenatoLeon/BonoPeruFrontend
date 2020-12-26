@@ -856,6 +856,7 @@ const GestionBonos = (props)=>{
                         page={page}
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}                    
+                        labelRowsPerPage={"Filas por página:"} 
                         />
                     </Grid>:
                         // <Grid container direction="row" justify="center">

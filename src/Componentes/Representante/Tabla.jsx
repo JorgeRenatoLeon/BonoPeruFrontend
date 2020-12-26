@@ -147,6 +147,7 @@ const Tabla = (props) => {
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                labelRowsPerPage={"Filas por página:"} 
             />
         </Grid>
     );
