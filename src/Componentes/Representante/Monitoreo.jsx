@@ -220,7 +220,8 @@ export default function GestionBonos (){
     ];
     const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
     //const ENTREGADOS = "http://127.0.0.1:8084/api/cronograma/monitoreoentregabono";
-    const AVANCE = "http://127.0.0.1:8084/api/cronograma/monitoreoavanceentrega";
+    const AVANCE = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoavanceentrega";
+    //const AVANCE = "http://127.0.0.1:8084/api/cronograma/monitoreoavanceentrega";
      const TOPLUGARES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreotoplugares";
     //const TOPLUGARES = "http://127.0.0.1:8084/api/cronograma/monitoreotoplugares";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
