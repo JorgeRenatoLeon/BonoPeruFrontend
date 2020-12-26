@@ -7,8 +7,8 @@ import axios from "axios";
 import EjemploLugaresCarga from '../../assets/img/EjemploLugaresCarga.jpg'
 import EjemploBeneficiariosCarga from '../../assets/img/EjemploBeneficiariosCarga.jpg'
 
-// const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
-const API_URL = "http://localhost:8084/api/";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
+// const API_URL = "http://localhost:8084/api/";
 
 
 const CargaMasiva = (props) => {
