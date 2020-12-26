@@ -108,7 +108,6 @@ export default function GestionBonos (){
             });
         });
         setDis(disAux);
-        // console.log(distritos);
   
       })
       .catch(() => {
@@ -219,11 +218,11 @@ export default function GestionBonos (){
     'pink',     '	rgb(240, 128, 128,0.4)', //rosado
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
     ];
-    //const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
-    const ENTREGADOS = "http://127.0.0.1:8084/api/cronograma/monitoreoentregabono";
+    const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    //const ENTREGADOS = "http://127.0.0.1:8084/api/cronograma/monitoreoentregabono";
     const AVANCE = "http://127.0.0.1:8084/api/cronograma/monitoreoavanceentrega";
-    // const TOPLUGARES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreotoplugares";
-    const TOPLUGARES = "http://127.0.0.1:8084/api/cronograma/monitoreotoplugares";
+     const TOPLUGARES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreotoplugares";
+    //const TOPLUGARES = "http://127.0.0.1:8084/api/cronograma/monitoreotoplugares";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
     
 
@@ -257,10 +256,8 @@ export default function GestionBonos (){
     }
     const apiAvance=async (cronogramaDeseado) => {   
       const response = await axios.post(AVANCE,cronogramaDeseado).then();
-        console.log('filtros datos ',cronogramaDeseado);
       if(response!==undefined ){
           //Para el chart reporte- Colores 
-          console.log('api avance',response.data);
           isResponse=true;
           setdatosAvance({
             labels:response.data.listanombres,
@@ -279,8 +276,6 @@ export default function GestionBonos (){
     }
     //hola vale
     const apiLugares=async (cronogramaDeseado) => { 
-
-      console.log('filtro',cronogramaDeseado);
       axios.post(TOPLUGARES,cronogramaDeseado)
       .then(response =>{                    
                    
@@ -299,26 +294,7 @@ export default function GestionBonos (){
       .catch(() => {
           console.log('Error al obtener Totales');
       });
-      /*
-      const response = await axios.post(TOPLUGARES,cronogramaDeseado).then();
-        // console.log('rpta api.data: ',response.data);
-      if(response!==undefined && isResponse===false ){
-          //Para el chart reporte- Colores 
-          console.log('api Lugares',response.data);
-         
-          setTopLugares({
-            labels:response.data.listaLugares,
-            datasets:[
-              {
-                label:'Lugares de Entrega',
-                data:response.data.listaCantidades,
-                backgroundColor:backgroundColor,
-              }
-
-            ]
-          });
-          
-        }  */     
+     
     }
     const apiTotales = (cronogramaDeseado) => {
       axios.post(TOTALES)
@@ -460,7 +436,7 @@ export default function GestionBonos (){
                                   
                       </Grid>
                       <br></br>
-                        <Grid container direction="row"  item md={12} justify="space-evenly" alignItems="center" marginTop="20" >
+                        <Grid container direction="row"  item md={12} justify="flex-start" alignItems="center" marginTop="20" >
                             <Typography variant="subtitle1" color="inherit">
                                 Departamento:
                             </Typography>
@@ -478,7 +454,7 @@ export default function GestionBonos (){
                             value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                         </Grid>
                         <br></br>
-                        <Grid container direction="row" item md={6} justify="space-evenly" alignItems="center">
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
                             <Typography variant="subtitle1" color="inherit">
                                 Fechas:
                             </Typography>
@@ -486,15 +462,7 @@ export default function GestionBonos (){
                               <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                 Filtrar
                               </Button> 
-                              <Link to={{
-                                        pathname: "/reportequejas"
-                                       
-                                      }} style={{textDecoration:"none"}}>
-                                <Button variant="contained"size="medium" color="secondary" style={{margin: 10}}>
-                                  Reporte Quejas
-                                </Button> 
-                              </Link>
-
+                     
                               
                         </Grid>
                     </Grid>
@@ -504,9 +472,8 @@ export default function GestionBonos (){
                                    
                              {datosEntregados?
                              respuesta:
-                              <Grid container direction="row" justify="center">
-                                  <Cargando/>
-                              </Grid>       
+                                 <Cargando></Cargando> 
+                                
                              }
                             </Typography>
                         </Grid>

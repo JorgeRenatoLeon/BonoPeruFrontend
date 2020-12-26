@@ -1,5 +1,5 @@
 import React, {StrictMode, useEffect,useState} from 'react'
-import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider,TextField} from "@material-ui/core"
+import {   Toolbar,Typography,  Container, Paper, TextField} from "@material-ui/core"
  import { Grid, Button } from "@material-ui/core"
  import { Link } from "react-router-dom"
  import axios from "axios";
@@ -17,7 +17,6 @@ import {  AppBar, Toolbar,Typography,  Container,InputBase, Paper, Divider,TextF
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 //Para el api
-import { history } from "../../helpers/history";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 //Para el modal cargando
 import  Cargando  from "../ModalCargando";
@@ -161,8 +160,8 @@ function formato(texto){
 
    const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/resumencronograma";//Caro  
    //const API_URL = "http://127.0.0.1:8084/api/cronograma/resumencronograma";//Caro  
-   //const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
-   const ARI_URL = "http://127.0.0.1:8084/api/cronograma/generarcronograma";//Ari
+   const ARI_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/generarcronograma";//Ari
+   //const ARI_URL = "http://127.0.0.1:8084/api/cronograma/generarcronograma";//Ari
 
   var updateCronograma=false;
 //  path: /bonos
