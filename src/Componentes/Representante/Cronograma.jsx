@@ -568,7 +568,7 @@ const Cronograma = (props) => {
                 </Grid>:<Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
                             <Typography variant="h3"  gutterBottom justify="center" >
-                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay ningún lugar de entrega que coincida con la búsqueda</h3>
+                                    <h3 style={{color: 'black', margin: 20,justify:"center" }}>No hay información que coincida con la búsqueda</h3>
                             </Typography> 
                         </Grid>                                                  
                     </Grid>}
