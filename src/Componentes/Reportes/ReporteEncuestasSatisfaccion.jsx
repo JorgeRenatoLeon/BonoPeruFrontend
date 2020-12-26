@@ -14,36 +14,35 @@ import Combobox from '../Elementos/Combobox_vale';
 
 //Colores del chart
 const backgroundColor1 = [
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
-    'rgb(179,229,255,0.9)', 'rgb(179,229,255,0.9)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 1)',
 ];
 const backgroundColor2 = [
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 1)',
 ];
 const backgroundColor3 = [
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
-    'rgb(100, 149, 237,1)', 'rgb(11, 173, 255,1)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 0.6)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 0.6)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 0.6)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 0.6)',
+    'rgb(179,229,255, 1)', 'rgb(179,229,255, 0.6)',
 ];
 const backgroundColor4 = [
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
-    'rgb(100, 149, 237,1)', 'rgb(100, 149, 237,1)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 0.6)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 0.6)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 0.6)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 0.6)',
+    'rgb(100, 149, 237, 1)', 'rgb(100, 149, 237, 0.6)',
+
 ];
 
 
@@ -158,9 +157,9 @@ export default function ReporteEncuestasSatisfaccion() {
                 });
                 //llamamos al cronograma 2
                 let resp1crono2 = [0, 0, 0, 0, 0];
-                ReporteEncuestasSatisfaccionService.listarRespuestas_1(idcronograma2).then(response => {
-                    if (response.data.length > 0) {
-                        response.data.map(respuesta => {
+                ReporteEncuestasSatisfaccionService.listarRespuestas_1(idcronograma2).then(resp => {
+                    if (resp.data.length > 0) {
+                        resp.data.map(respuesta => {
                             if (respuesta[0] === 1) {
                                 resp1crono2[0] = respuesta[1];
                             } else if (respuesta[0] === 2) {
@@ -178,12 +177,12 @@ export default function ReporteEncuestasSatisfaccion() {
                             labels: labels1,
                             datasets: [
                                 {
-                                    label: "Cronograma 1: " + cronograma1.label,
+                                    label: cronograma1.label,
                                     data: resp1crono1,
                                     backgroundColor: backgroundColor1,
                                 },
                                 {
-                                    label: "Cronograma 2: " + cronograma2.label,
+                                    label: cronograma2.label,
                                     data: resp1crono2,
                                     backgroundColor: backgroundColor2,
                                 }
@@ -226,9 +225,9 @@ export default function ReporteEncuestasSatisfaccion() {
                 });
                 //llamamos al cronograma 2
                 let resp2crono2 = [0, 0, 0, 0, 0];
-                ReporteEncuestasSatisfaccionService.listarRespuestas_2(idcronograma2).then(response => {
-                    if (response.data.length > 0) {
-                        response.data.map(respuesta => {
+                ReporteEncuestasSatisfaccionService.listarRespuestas_2(idcronograma2).then(resp => {
+                    if (resp.data.length > 0) {
+                        resp.data.map(respuesta => {
                             if (respuesta[0] === 1) {
                                 resp2crono2[0] = respuesta[1];
                             } else if (respuesta[0] === 2) {
@@ -246,12 +245,12 @@ export default function ReporteEncuestasSatisfaccion() {
                             labels: labels1,
                             datasets: [
                                 {
-                                    label: "Cronograma 1: " + cronograma1.label,
+                                    label: cronograma1.label,
                                     data: resp2crono1,
                                     backgroundColor: backgroundColor1,
                                 },
                                 {
-                                    label: "Cronograma 2: " + cronograma2.label,
+                                    label: cronograma2.label,
                                     data: resp2crono2,
                                     backgroundColor: backgroundColor2,
                                 }
@@ -287,9 +286,9 @@ export default function ReporteEncuestasSatisfaccion() {
                     }
                 });
                 let resp3crono2 = [0, 0];
-                ReporteEncuestasSatisfaccionService.listarRespuestas_3(idcronograma2).then(response => {
-                    if (response.data.length > 0) {
-                        response.data.map(respuesta => {
+                ReporteEncuestasSatisfaccionService.listarRespuestas_3(idcronograma2).then(resp => {
+                    if (resp.data.length > 0) {
+                        resp.data.map(respuesta => {
                             if (respuesta[0] === 'Si') {
                                 resp3crono2[0] = respuesta[1];
                             } else if (respuesta[0] === 'No') {
@@ -301,14 +300,14 @@ export default function ReporteEncuestasSatisfaccion() {
                             labels: labels2,
                             datasets: [
                                 {
-                                    label: "Cronograma 1: " + cronograma1.label,
+                                    label: cronograma1.label,
                                     data: resp3crono1,
-                                    backgroundColor: backgroundColor1,
+                                    backgroundColor: backgroundColor3,
                                 },
                                 {
-                                    label: "Cronograma 2: " + cronograma2.label,
+                                    label: cronograma2.label,
                                     data: resp3crono2,
-                                    backgroundColor: backgroundColor2,
+                                    backgroundColor: backgroundColor4,
                                 }
                             ]
                         });
@@ -342,9 +341,9 @@ export default function ReporteEncuestasSatisfaccion() {
                     }
                 });
                 let resp4crono2 = [0, 0];
-                ReporteEncuestasSatisfaccionService.listarRespuestas_4(idcronograma2).then(response => {
-                    if (response.data.length > 0) {
-                        response.data.map(respuesta => {
+                ReporteEncuestasSatisfaccionService.listarRespuestas_4(idcronograma2).then(resp => {
+                    if (resp.data.length > 0) {
+                        resp.data.map(respuesta => {
                             if (respuesta[0] === 'Si') {
                                 resp4crono2[0] = respuesta[1];
                             } else if (respuesta[0] === 'No') {
@@ -356,14 +355,14 @@ export default function ReporteEncuestasSatisfaccion() {
                             labels: labels2,
                             datasets: [
                                 {
-                                    label: "Cronograma 1: " + cronograma1.label,
+                                    label: cronograma1.label,
                                     data: resp4crono1,
-                                    backgroundColor: backgroundColor1,
+                                    backgroundColor: backgroundColor3,
                                 },
                                 {
-                                    label: "Cronograma 2: " + cronograma2.label,
+                                    label: cronograma2.label,
                                     data: resp4crono2,
-                                    backgroundColor: backgroundColor2,
+                                    backgroundColor: backgroundColor4,
                                 }
                             ]
                         });
@@ -397,9 +396,9 @@ export default function ReporteEncuestasSatisfaccion() {
                     }
                 });
                 let resp5crono2 = [0, 0];
-                ReporteEncuestasSatisfaccionService.listarRespuestas_5(idcronograma2).then(response => {
-                    if (response.data.length > 0) {
-                        response.data.map(respuesta => {
+                ReporteEncuestasSatisfaccionService.listarRespuestas_5(idcronograma2).then(resp => {
+                    if (resp.data.length > 0) {
+                        resp.data.map(respuesta => {
                             if (respuesta[0] === 'Si') {
                                 resp5crono2[0] = respuesta[1];
                             } else if (respuesta[0] === 'No') {
@@ -408,17 +407,17 @@ export default function ReporteEncuestasSatisfaccion() {
                         });
                         //se actualizan ambos valores
                         setDatosPreg5({
-                            labels: ["Cronograma 1: " + cronograma1.label, "Cronograma 2: " + cronograma2.label],
+                            labels: labels2,
                             datasets: [
                                 {
-                                    label: "Cronograma 1: " + cronograma1.label,
+                                    label: cronograma1.label,
                                     data: resp5crono1,
-                                    backgroundColor: backgroundColor1,
+                                    backgroundColor: backgroundColor3,
                                 },
                                 {
-                                    label: "Cronograma 2: " + cronograma2.label,
+                                    label: cronograma2.label,
                                     data: resp5crono2,
-                                    backgroundColor: backgroundColor2,
+                                    backgroundColor: backgroundColor4,
                                 }
                             ]
                         });
