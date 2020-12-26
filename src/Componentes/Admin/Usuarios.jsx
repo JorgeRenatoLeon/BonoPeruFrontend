@@ -120,7 +120,7 @@ function EnhancedTableHead(props) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={e => createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -170,16 +170,7 @@ const useStyles = makeStyles({
   },
 });
 
-
 export default function EnhancedTable() {
-
-  let state = {
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    editIdx: -1,
-  };
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -187,25 +178,21 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [usuarios, setUsuarios] = useState([]);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-    console.log(property);
   };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    console.log(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleRemove = i => {
-    setUsuario(usuarios.filter((row, j) => j !== i));
   };
 
   const [openConfirmacion, setOpenConfirmacion] = useState(false);
@@ -221,28 +208,13 @@ export default function EnhancedTable() {
     setOpenConfirmacion(false);
   };
 
-  const startEditing = i => {
-    state.editIdx = i;
-  };
-
-  const stopEditing = () => {
-    state.editIdx = -1;
-  };
-
-  const handleSave = (i, x) => {
-    setUsuario(usuarios.map((row, j) => (j === i ? x : row)));
-    stopEditing();
-  };
-
   const actualizarTabla = (valores) => {
     UsuariosService.listarUsuariosFiltrado(valores).then(response => {
       let userAux = [];
       response.data.map(user => {
         userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
       });
-
-      setUsuario(userAux);
-      console.log(userAux);
+      setUsuarios(userAux);
     })
       .catch(() => {
         console.log('Error al actualizar la tabla')
@@ -256,17 +228,13 @@ export default function EnhancedTable() {
       response.data.map(user => {
         userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
       });
-
-      setUsuario(userAux);
-      console.log(userAux);
+      setUsuarios(userAux);
       handleOpenConfirmacion();
     })
       .catch(() => {
         console.log('Error al listar usuarios')
       });
   }
-
-  const [usuarios, setUsuario] = useState([]);
 
   useEffect(() => {
     UsuariosService.listarUsuarios().then(response => {
@@ -275,9 +243,7 @@ export default function EnhancedTable() {
       response.data.map(user => {
         userAux.push(createData(user.id, user.nombres, user.apellidos, user.username, user.correo));
       });
-
-      setUsuario(userAux);
-      console.log(userAux);
+      setUsuarios(userAux);
     })
       .catch(() => {
         console.log('Error al listar usuarios')
@@ -293,8 +259,8 @@ export default function EnhancedTable() {
           <Toolbar>
             <Grid container direction="row" justify="center">
               <Grid container item xs={10} justify="center">
-                <Typography variant="h3" gutterBottom justify="center" >
-                  <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Usuarios</h1>
+                <Typography variant="h2" gutterBottom style={{ color: 'black', margin: 20, justify: "center", fontWeight: "bold" }}>
+                  {"Usuarios"}
                 </Typography>
               </Grid>
             </Grid>
@@ -302,7 +268,7 @@ export default function EnhancedTable() {
         </div>
 
         <div className='Contenedor'>
-          <Grid container direction="row" justify="left">
+          <Grid container direction="row">
             <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="center" >
               <Buscador names={usuarios} onBuscar={actualizarTabla}></Buscador>
               <Formulario onActualizar={listarTabla} />
@@ -316,11 +282,6 @@ export default function EnhancedTable() {
                   className={classes.table}
                   aria-labelledby="tableTitle"
                   aria-label="enhanced table"
-                  handleRemove={handleRemove}
-                  startEditing={startEditing}
-                  editIdx={state.editIdx}
-                  stopEditing={stopEditing}
-                  handleSave={handleSave}
                 >
                   <EnhancedTableHead
                     classes={classes}

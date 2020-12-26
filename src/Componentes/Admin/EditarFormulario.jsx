@@ -24,13 +24,9 @@ export default function FormDialog(props) {
     };
 
     const handleClose = () => {
-        //setUsuario("");
-        //setApellido("");
-        //setNombre("");
         setUsuarioErr("");
         setNombreErr("");
         setApellidoErr("");
-        setCorreo("");
         setOpen(false);
     };
 
@@ -44,11 +40,12 @@ export default function FormDialog(props) {
 
     const changeUsuario = e => {
         setUsuario(e.target.value);
+        console.log(e.target.value);
     };
 
     const changeCorreo = e => {
         setCorreo(e.target.value);
-        setCorreoErr("");
+        console.log(e.target.value);
     };
 
     const [nombreErr, setNombreErr] = useState("");
@@ -104,28 +101,24 @@ export default function FormDialog(props) {
         if (!err) {
             const user = {
                 id: props.usuario.id,
-                usuario: usuario,
+                username: usuario,
                 nombres: nombre,
                 apellidos: apellido,
                 correo: correo,
                 usuarioactualizacion: JSON.parse(localStorage.getItem("user")).id,
             };
 
-            console.log(user);
-            console.log(props.usuario);
+            console.log("user modificado", user);
+            console.log("usuario anterior", props.usuario);
 
             UsuariosService.modificarUsuarios(user).then(response => {
-                //setUsuario("");
-                //setApellido("");
-                //setNombre("");
-                //setCorreo("");
+                props.onActualizar();
                 setUsuarioErr("");
                 setNombreErr("");
                 setApellidoErr("");
                 setCorreoErr("");
-                console.log(response);
-                props.onActualizar();
                 handleClose();
+                console.log(response.data);
             })
                 .catch(() => {
                     console.log('Error al editar el usuario')
@@ -148,7 +141,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Nombres"
                             id="name"
-                            hintText="Nombres"
                             value={nombre}
                             onChange={e => changeNombre(e)}
                             error={nombreErr === "" ? null : true}
@@ -162,7 +154,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="lastname"
                             label="Apellidos"
-                            hintText="Apellidos"
                             value={apellido}
                             onChange={e => changeApellido(e)}
                             error={apellidoErr === "" ? null : true}
@@ -176,7 +167,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="username"
                             label="Nombre de usuario"
-                            hintText="Nombre de usuario"
                             value={usuario}
                             onChange={e => changeUsuario(e)}
                             error={usuarioErr === "" ? null : true}
@@ -190,7 +180,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="email"
                             label="Correo"
-                            hintText="Correo"
                             value={correo}
                             onChange={e => changeCorreo(e)}
                             error={correoErr === "" ? null : true}

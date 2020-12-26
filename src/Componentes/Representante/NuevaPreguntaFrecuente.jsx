@@ -99,7 +99,6 @@ export default function FormDialog(props) {
                             fullWidth
                             variant="outlined"
                             label="Pregunta"
-                            hintText="Pregunta"
                             id="name"
                             value={pregunta}
                             onChange={p => changePregunta(p)}
@@ -114,7 +113,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="lastname"
                             label="Respuesta"
-                            hintText="Respuesta"
                             value={respuesta}
                             onChange={r => changeRespuesta(r)}
                             helperText={respuestaErr === "" ? null : respuestaErr}

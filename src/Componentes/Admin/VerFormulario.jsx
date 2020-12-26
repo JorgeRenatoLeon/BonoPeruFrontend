@@ -14,7 +14,6 @@ export default function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        console.log("imprimir", props);
         setOpen(true);
     };
 
@@ -37,7 +36,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Nombres"
                             id="name"
-                            hintText="Nombres"
                             value={props.usuario.nombre}
                             InputProps={{ readOnly: true, }}
                         />
@@ -49,7 +47,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Apellidos"
                             id="lastname"
-                            hintText="Apellidos"
                             value={props.usuario.apellido}
                             InputProps={{ readOnly: true, }}
                         />
@@ -61,7 +58,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Nombre de usuario"
                             id="username"
-                            hintText="Nombre de usuario"
                             value={props.usuario.usuario}
                             InputProps={{ readOnly: true, }}
                         />
@@ -73,7 +69,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Correo"
                             id="correo"
-                            hintText="Nombre de usuario"
                             value={props.usuario.correo}
                             InputProps={{ readOnly: true, }}
                         />
@@ -84,7 +79,7 @@ export default function FormDialog(props) {
                     <Link to='/usuarios' style={{ textDecoration: "none" }}>
                         <Button variant="contained" size="small" color="primary" onClick={handleClose}>
                             Aceptar
-                </Button>
+                        </Button>
                     </Link>
                 </DialogActions>
             </Dialog>
