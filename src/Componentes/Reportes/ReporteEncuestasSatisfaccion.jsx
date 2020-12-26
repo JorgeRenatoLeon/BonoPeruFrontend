@@ -51,11 +51,11 @@ export default function ReporteEncuestasSatisfaccion() {
     const [cronogramas, setCronogramas] = useState([]);
     const [preguntas, setPreguntas] = useState([]);
 
-    const [datosPreg1, setDatosPreg1] = useState({ labels: labels1, datasets: [{ label: "", data: [0, 0, 0, 0, 0], backgroundColor: backgroundColor }] });
-    const [datosPreg2, setDatosPreg2] = useState({ labels: labels1, datasets: [{ label: "", data: [0, 0, 0, 0, 0], backgroundColor: backgroundColor }] });
-    const [datosPreg3, setDatosPreg3] = useState({ labels: labels2, datasets: [{ label: "", data: [0, 0], backgroundColor: backgroundColor }] });
-    const [datosPreg4, setDatosPreg4] = useState({ labels: labels2, datasets: [{ label: "", data: [0, 0], backgroundColor: backgroundColor }] });
-    const [datosPreg5, setDatosPreg5] = useState({ labels: labels2, datasets: [{ label: "", data: [0, 0], backgroundColor: backgroundColor }] });
+    const [datosPreg1, setDatosPreg1] = useState(null);
+    const [datosPreg2, setDatosPreg2] = useState(null);
+    const [datosPreg3, setDatosPreg3] = useState(null);
+    const [datosPreg4, setDatosPreg4] = useState(null);
+    const [datosPreg5, setDatosPreg5] = useState(null);
 
     const handleOpenConfirmacion = (event, reason) => {
         setOpenConfirmacion(true);
@@ -130,17 +130,13 @@ export default function ReporteEncuestasSatisfaccion() {
                     console.log("esta es respuesta", respuesta);
                     if (respuesta[0] === 1) {
                         respAux1[0] = respuesta[1];
-                    }
-                    if (respuesta[0] === 2) {
+                    } else if (respuesta[0] === 2) {
                         respAux1[1] = respuesta[1];
-                    }
-                    if (respuesta[0] === 3) {
+                    } else if (respuesta[0] === 3) {
                         respAux1[2] = respuesta[1];
-                    }
-                    if (respuesta[0] === 4) {
+                    } else if (respuesta[0] === 4) {
                         respAux1[3] = respuesta[1];
-                    }
-                    if (respuesta[0] === 5) {
+                    } else if (respuesta[0] === 5) {
                         respAux1[4] = respuesta[1];
                     }
                 });
@@ -171,17 +167,13 @@ export default function ReporteEncuestasSatisfaccion() {
                     console.log("esta es respuesta", respuesta);
                     if (respuesta[0] === 1) {
                         respAux2[0] = respuesta[1];
-                    }
-                    if (respuesta[0] === 2) {
+                    } else if (respuesta[0] === 2) {
                         respAux2[1] = respuesta[1];
-                    }
-                    if (respuesta[0] === 3) {
+                    } else if (respuesta[0] === 3) {
                         respAux2[2] = respuesta[1];
-                    }
-                    if (respuesta[0] === 4) {
+                    } else if (respuesta[0] === 4) {
                         respAux2[3] = respuesta[1];
-                    }
-                    if (respuesta[0] === 5) {
+                    } else if (respuesta[0] === 5) {
                         respAux2[4] = respuesta[1];
                     }
                 });
@@ -212,8 +204,7 @@ export default function ReporteEncuestasSatisfaccion() {
                     console.log("esta es respuesta", respuesta);
                     if (respuesta[0] === 'Si') {
                         respAux3[0] = respuesta[1];
-                    }
-                    if (respuesta[0] === 'No') {
+                    } else if (respuesta[0] === 'No') {
                         respAux3[1] = respuesta[1];
                     }
                 });
@@ -244,8 +235,7 @@ export default function ReporteEncuestasSatisfaccion() {
                     console.log("esta es respuesta", respuesta);
                     if (respuesta[0] === 'Si') {
                         respAux4[0] = respuesta[1];
-                    }
-                    if (respuesta[0] === 'No') {
+                    } else if (respuesta[0] === 'No') {
                         respAux4[1] = respuesta[1];
                     }
                 });
@@ -334,11 +324,16 @@ export default function ReporteEncuestasSatisfaccion() {
                     <Grid container direction="row" justify="center">
                         <Typography variant="h5" gutterBottom justify="center" >
                             <Grid container justify="center">
-                                <Bar chartData={datosPreg1} md={10} sm={12} xs={12} nameTitle={preguntas[0]} legendPosition="bottom" />
-                                <Bar chartData={datosPreg2} md={10} sm={12} xs={12} nameTitle={preguntas[1]} legendPosition="bottom" />
-                                <Pie chartData={datosPreg3} md={6} sm={12} xs={12} nameTitle={preguntas[2]} legendPosition="bottom" />
-                                <Pie chartData={datosPreg4} md={6} sm={12} xs={12} nameTitle={preguntas[3]} legendPosition="bottom" />
-                                <Pie chartData={datosPreg5} md={6} sm={12} xs={12} nameTitle={preguntas[4]} legendPosition="bottom" />
+                                {datosPreg1 === null ? null :
+                                    <Bar chartData={datosPreg1} md={9} sm={12} xs={12} displayLegend={false} nameTitle={preguntas[0]} legendPosition="bottom" />}
+                                {datosPreg2 === null ? null :
+                                    <Bar chartData={datosPreg2} md={9} sm={12} xs={12} displayLegend={false} nameTitle={preguntas[1]} legendPosition="bottom" />}
+                                {datosPreg3 === null ? null :
+                                    <Pie chartData={datosPreg3} md={6} sm={12} xs={12} nameTitle={preguntas[2]} legendPosition="bottom" />}
+                                {datosPreg4 === null ? null :
+                                    <Pie chartData={datosPreg4} md={6} sm={12} xs={12} nameTitle={preguntas[3]} legendPosition="bottom" />}
+                                {datosPreg5 === null ? null :
+                                    <Pie chartData={datosPreg5} md={6} sm={12} xs={12} nameTitle={preguntas[4]} legendPosition="bottom" />}
                             </Grid>
                         </Typography>
                     </Grid>
