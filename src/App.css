@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Arvo&display=swap");
+import React from 'react';
+export default React.PureComponent;
+export const pureComponentAvailable = true;
 .App {
   text-align: center;
   background-image: url("../src/assets/img/FondoBeneficiario.jpg");
@@ -8,3 +11,7 @@
   background-position: center;
 }
 
+.CalendarDay__selected {
+  background: $dark-red;
+  color: white;
+}
