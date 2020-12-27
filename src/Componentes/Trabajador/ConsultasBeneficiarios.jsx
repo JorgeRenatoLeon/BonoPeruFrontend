@@ -239,6 +239,9 @@ const ConsultasBeneficiarios = (params) => {
           case 'dia horario':
             setMensaje("Este no es el lugar ni el dia que le corresponde al beneficiario");
             break;
+          case 'entregado':
+            setMensaje("El bono ya fue entregado");
+            break;
           default:
             setMensaje("Ups! Algo salió mal");
             break;
