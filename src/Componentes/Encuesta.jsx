@@ -1,9 +1,12 @@
 import { Button, Dialog, DialogActions, DialogTitle, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Select, Typography } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import authHeader from "../Servicios/auth-header";
 import axios from "axios";
 import EncuestaService from "../Servicios/encuestas.service";
+import BarraInicial from './Barras/BarraInicial';
+import BarraFinal from './Barras/BarraFinal';
+import ModalCargando from './ModalCargando';
 
 const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/encuesta/";
 
@@ -90,9 +93,12 @@ const Encuesta = (props) => {
     const [open, setOpen] = useState(false);
     const [mensaje, setMensaje] = useState('');
     const [disponible, setDisponible] = useState(true);
-  
+
+
+
     const handleClose = () => {
       setOpen(false);
+      props.history.push('/')
     };
 
     // function handleChange(index,valor){
@@ -114,24 +120,29 @@ const Encuesta = (props) => {
     }
 
     useEffect(() => {
-        axios
-        .post(API_URL + JSON.parse(localStorage.getItem("user")).id, { headers: authHeader() })
-        .then(response =>{
-            console.log("API OBT ENCUESTA: ",response.data)
-            let encuestas = []
-            encuestas.push(response.data)
-            if(encuestas[0]){
-                setOpcion(encuestas)
-                setLoading(false)
-            }
-            else{
-                setLoading(false)
-                setDisponible(false)
-            }
-        })
-        .catch(() => {
-            console.log('Error al obtener Encuestas')
-        });
+        if(JSON.parse(localStorage.getItem("beneficiarioKayt"))!==[] && JSON.parse(localStorage.getItem("beneficiarioKayt"))!==null && JSON.parse(localStorage.getItem("beneficiarioKayt"))!==undefined){
+            axios
+            .post(API_URL + JSON.parse(localStorage.getItem("beneficiarioKayt"))[0].beneficiario.idbeneficiario, { headers: authHeader() })
+            .then(response =>{
+                console.log("API OBT ENCUESTA: ",response.data)
+                let encuestas = []
+                encuestas.push(response.data)
+                if(encuestas[0]){
+                    setOpcion(encuestas)
+                    setLoading(false)
+                }
+                else{
+                    setLoading(false)
+                    setDisponible(false)
+                }
+            })
+            .catch(() => {
+                console.log('Error al obtener Encuestas')
+            });
+        }
+        else{
+            return <Redirect to='/'/>
+        }
     },[]);
 
     function enviarEncuesta(){
@@ -142,6 +153,7 @@ const Encuesta = (props) => {
             setMensaje('Estamos experimentando complicaciones..')
         }
         setOpen(true)
+        localStorage.removeItem("beneficiarioKayt")
     }
 
 
@@ -188,18 +200,32 @@ const Encuesta = (props) => {
     )
     
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <ModalCargando/>;
     }
     if (!disponible) {
-        return <Grid container justify="center" alignContent="center" style={{minHeight: '88vh'}}>
-                    <Typography variant="h3" color="inherit">
-                        No cuenta con encuestas pendientes
-                    </Typography>
+        return <Grid>
+                    <BarraInicial />
+                    <Grid container direction="column" justify="center" alignContent="center" style={{minHeight: '86.8vh'}}>
+                        <Grid container item justify="center">
+                            <Typography variant="h3" color="inherit">
+                                No cuenta con encuestas pendientes
+                            </Typography>
+                        </Grid>
+                        <Grid container item justify="center" style={{padding: "3%"}}>
+                            <Link to='/consulta'>
+                                <Button variant="contained"  size="medium" color="secondary" >
+                                    Volver
+                                </Button>
+                            </Link>
+                        </Grid>
+                    </Grid>
+                    <BarraFinal/>
                 </Grid>;
     }
 
     return ( 
         <Grid>
+            <BarraInicial />
             <Grid container direction="column" style={{minHeight: '88vh'}}>
                 <Grid container justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
                     <Typography variant="h3" color="inherit">
@@ -252,8 +278,8 @@ const Encuesta = (props) => {
                             </Button>
                         </Grid>
                         <Grid container item xs={6} sm={2} justify="center" style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
-                            <Link to='/'>
-                                <Button variant="contained"  size="medium" color="secondary">
+                            <Link to='/consulta'>
+                                <Button variant="contained"  size="medium" color="secondary" onClick={()=>{localStorage.removeItem("beneficiarioKayt")}}>
                                     Cancelar
                                 </Button>
                             </Link>
@@ -261,6 +287,7 @@ const Encuesta = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
+            <BarraFinal />
             <Dialog
                 open={open}
                 onClose={handleClose}
