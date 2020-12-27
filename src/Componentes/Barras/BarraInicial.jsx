@@ -59,15 +59,13 @@ function BarraInicial(props) {
         { id: 3, nombre: 'Monitoreo', path: '/monitoreo', childs: [] },
         { id: 4, nombre: 'Reportes', path: '/reportes', childs: ['/reportequejas', '/reporteincidentes', '/reporteencuestas'] },
         { id: 5, nombre: 'Preguntas Frecuentes', path: '/preguntasfrecuentes', childs: ['/editarpreguntasfrecuentes'] },
-        { id: 7, nombre: currentUser ? currentUser.username : '', path: '/cambiarcontrasena', childs: [] }]
+        { id: 7, nombre: currentUser ? currentUser.username : '', path: '/cambiarcontrasena', childs: [] }
+    ]
 
     const tabsAdmin = [
-        { id: 0, nombre: 'Gestión de Bonos', path: '/bonos', childs: [] },
-        // {nombre: 'Reportes', path: '/reportes'},
-
-        { id: 1, nombre: 'Encuestas', path: '/encuesta', childs: [] },
         { id: 2, nombre: 'Usuarios', path: '/usuarios', childs: [] },
-        { id: 3, nombre: currentUser ? currentUser.username : '', path: '/cambiarcontrasena', childs: [] }]
+        { id: 3, nombre: currentUser ? currentUser.username : '', path: '/cambiarcontrasena', childs: [] }
+    ]
 
     const AdminTabs =
         admin ?

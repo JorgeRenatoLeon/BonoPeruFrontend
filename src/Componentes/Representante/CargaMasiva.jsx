@@ -6,6 +6,7 @@ import Tabla from './Tabla'
 import axios from "axios";
 import EjemploLugaresCarga from '../../assets/img/EjemploLugaresCarga.jpg'
 import EjemploBeneficiariosCarga from '../../assets/img/EjemploBeneficiariosCarga.jpg'
+import ModalCargando from '../ModalCargando';
 
 const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
 // const API_URL = "http://localhost:8084/api/";
@@ -16,6 +17,7 @@ const CargaMasiva = (props) => {
     const [open, setOpen] = useState(false)
     const [mensaje, setMensaje] = useState('')
     const [value, setValue] = React.useState(0)
+    const [cargando, setCargando] = React.useState(false)
     //Registros Exitosos
     const [registros, setRegistros] = React.useState([])
 
@@ -79,7 +81,7 @@ const CargaMasiva = (props) => {
     ]
 
     const cargarLugaresEntrega = event => { 
-
+        setCargando(true)
         let file = event.target.files[0]
 
         const formData = new FormData();
@@ -128,15 +130,18 @@ const CargaMasiva = (props) => {
                 datos.push({especial: false, valor: index.toString(),compuesto: false})
             }
             setDatosErrores(datos)
+            setCargando(false)
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
             setMensaje('El archivo no tiene el formato correcto')
             setOpen(true)
+            setCargando(false)
         });
     }; 
 
     const cargarBeneficiarios = event => { 
+        setCargando(true)
 
         let file = event.target.files[0]
 
@@ -187,11 +192,13 @@ const CargaMasiva = (props) => {
                 datos.push({especial: false, valor: index.toString(),compuesto: false})
             }
             setDatosErrores(datos)
+            setCargando(false)
         })
         .catch(() => {
             console.log('Error al Cargar Lugares de Entrega')
             setMensaje('El archivo no tiene el formato correcto')
             setOpen(true)
+            setCargando(false)
         });
     }; 
     
@@ -336,6 +343,13 @@ const CargaMasiva = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
+                }
+                {cargando?
+                    <Grid container direction="row" justify="center">
+                        <ModalCargando value={2}/>
+                    </Grid>
+                    :
+                    null
                 }
                 {registros.length>0?
                     <Grid className='Contenedor'>
