@@ -238,10 +238,9 @@ export default function EditarPreguntasFrecuentes() {
                                                 fullWidth={true}
                                                 variant="outlined"
                                                 id={"respuesta" + preg.id}
+                                                value={preg.respuesta}
                                                 type='text'
                                                 size="medium"
-                                                hintText="Respuesta"
-                                                value={preg.respuesta}
                                                 onChange={newr => changeRespuesta(newr, preg, index)}
                                                 error={preg.respuestaErr === "" ? null : true}
                                                 helperText={preg.respuestaErr === "" ? null : preg.respuestaErr}
@@ -258,7 +257,7 @@ export default function EditarPreguntasFrecuentes() {
                                 )}
                             </List>
                         </Grid>
-                        <Grid container direction="row" justify="left">
+                        <Grid container direction="row">
                             <Grid container item xs={12} justify="space-evenly" direction="row" alignItems="center" >
                                 <Button variant="contained" size="small" color="primary" onClick={onSubmit}>
                                     Guardar
