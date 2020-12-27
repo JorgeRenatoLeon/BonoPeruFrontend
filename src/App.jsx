@@ -47,7 +47,7 @@ const App = () => {
           <Route exact path='/reporteincidentes' component={ReporteIncidentes} />
           <Route path="/acceso" component={AccesoSistema} />
           <RutaProtegida path="/cambiarcontrasena" component={OlvidarContrasena} />
-          <RutaProtegida path="/encuesta" component={Encuesta} />
+          <Route path="/encuesta" component={Encuesta} />
           <RutaProtegida path="/carga" component={CargaMasiva} />
           <RutaProtegida path="/reportes" component={Reportes} />
           <Route path="/preguntasfrecuentes" component={PreguntasFrecuentes} />

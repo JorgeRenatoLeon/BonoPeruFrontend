@@ -6,6 +6,9 @@ import axios from "axios";
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
 import Pie from "../../Componentes/Graficos/Pie.js"
+import Bar from "../../Componentes/Graficos/Bar.js"
+
+import ReporteEncuestasSatisfaccionService from "../../Servicios/rep.encuesta.satisfaccion";
 
 
 const URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
@@ -31,11 +34,14 @@ const backgroundColor=[
     'pink',     '	rgb(240, 128, 128,0.4)', //rosado
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
 ];
+var labels = ["Muy malo", "Malo", "Regular", "Bueno", "Muy bueno"];
 
 function Reportes (props){
 
-    const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
-    const [datosEntregados2,setdatosEntregados2]=useState([]); //Set cronograma, creando y un estado de toda la función
+    const [datosEntregados,setdatosEntregados]=useState([]); //Set reporte 1, creando y un estado de toda la función
+    const [datosEntregados2,setdatosEntregados2]=useState([]); //Set reporte 2, creando y un estado de toda la función
+    const [datosEntregados3,setdatosEntregados3]=useState(null); //Set reporte 3, creando y un estado de toda la función
+    const [pregunta,setPregunta]=useState(null); //Set reporte 3, creando y un estado de toda la función
 
     const rpta = [ { id: 1,  label: 'Respuesta' },];
     const inci = [ { id: 1,  label: 'Incidentes' },];
@@ -126,16 +132,76 @@ function Reportes (props){
         }       
     }
     
+    const apiEncuestas= async () => {
+        
+        ReporteEncuestasSatisfaccionService.listarPreguntas().then(response => {
+            let pregsAux = [];
+            response.data.map(preg => {
+                pregsAux.push(preg.pregunta);
+                return preg
+            });
+
+            ReporteEncuestasSatisfaccionService.cronogramaPublicado().then(responseCrono => {
+                let respuestas = [0, 0, 0, 0, 0];
+                ReporteEncuestasSatisfaccionService.listarRespuestas_1(responseCrono.data.idCronograma).then(responseResp => {
+                    if (responseResp.data.length > 0) {
+                        responseResp.data.map(resp => {
+                            if (resp[0] === 1) {
+                                respuestas[0] = resp[1];
+                            } else if (resp[0] === 2) {
+                                respuestas[1] = resp[1];
+                            } else if (resp[0] === 3) {
+                                respuestas[2] = resp[1];
+                            } else if (resp[0] === 4) {
+                                respuestas[3] = resp[1];
+                            } else if (respuesta[0] === 5) {
+                                respuestas[4] = resp[1];
+                            }
+                            return respuesta
+                        });
+                    }
+                    setPregunta(pregsAux[0])
+                    setdatosEntregados3({
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: responseCrono.data.nombre,
+                                data: respuestas,
+                                backgroundColor: backgroundColor,
+                            }
+                        ]
+                    });
+                })
+                .catch(() => {
+                    console.log('Error al listar cronogramas')
+                });
+            })
+            .catch(() => {
+                console.log('Error al listar cronogramas')
+            });
+        })
+        .catch(() => {
+            console.log('Error al listar preguntas')
+        });
+
+    }
+
     const filtrarReporte=()=>{
+        setdatosEntregados([])
+        setdatosEntregados2([])
+        setdatosEntregados3(null)
         apiQuejas();
-        apiIncidentes();
+        apiIncidentes(); 
+        apiEncuestas();
     }
 
     useEffect(()=>{    
         //Llamo a todos los api de monitoreo    
         apiQuejas();  
         apiIncidentes();  
+        apiEncuestas();
     },[]);
+
 
     return (
         <Grid style={{minHeight: '86.8vh'}}>
@@ -202,6 +268,31 @@ function Reportes (props){
                             <Grid container item justify="flex-end">
                                 <Grid item>
                                     <Link to="/reporteincidentes">
+                                        <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
+                                            Ver más
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid container item md={12} direction="column" justify="center">
+                            <Grid container item style={{paddingBottom: '3vh',paddingTop: '3vh'}}>
+                                <Typography variant="h4" color="inherit">
+                                    Reporte de Encuestas de Satisfacción
+                                </Typography>
+                            </Grid>
+                            <Grid container item>                 
+                                {datosEntregados3 && pregunta?
+                                <Bar chartData={datosEntregados3} md={12} sm={12} xs={12} nameTitle={pregunta} legendPosition="bottom"/>
+                                :
+                                <Grid container direction="row" justify="center">
+                                    <Cargando value={2}/>
+                                </Grid>
+                                }
+                            </Grid>
+                            <Grid container item justify="flex-end">
+                                <Grid item>
+                                    <Link to="/reporteencuestas">
                                         <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                             Ver más
                                         </Button>

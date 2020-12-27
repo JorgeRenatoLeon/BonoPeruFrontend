@@ -120,7 +120,6 @@ export default function FormDialog(props) {
             console.log(user);
 
             UsuariosService.insertarUsuarios(user).then(response => {
-                console.log(response);
                 setUsuario("");
                 setApellido("");
                 setNombre("");
@@ -131,10 +130,9 @@ export default function FormDialog(props) {
                 setCorreoErr("");
                 handleClose();
                 props.onActualizar();
-                //window.location.reload();
             })
                 .catch(() => {
-                    console.log('Error al editar el usuario')
+                    console.log('Error al insertar el usuario')
                 });
         }
     };
@@ -154,7 +152,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             label="Nombres"
                             id="name"
-                            hintText="Nombres"
                             value={nombre}
                             onChange={e => changeNombre(e)}
                             error={nombreErr === "" ? null : true}
@@ -168,7 +165,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="lastname"
                             label="Apellidos"
-                            hintText="Apellidos"
                             value={apellido}
                             onChange={e => changeApellido(e)}
                             error={apellidoErr === "" ? null : true}
@@ -182,7 +178,6 @@ export default function FormDialog(props) {
                             variant="outlined"
                             id="username"
                             label="Nombre de usuario"
-                            hintText="Nombre de usuario"
                             value={usuario}
                             onChange={e => changeUsuario(e)}
                             error={usuarioErr === "" ? null : true}
@@ -192,14 +187,13 @@ export default function FormDialog(props) {
                     <br />
                     <div sytle="padding: 15px">
                         <TextField
-                            error={correoErr === "" ? null : true}
                             fullWidth
                             variant="outlined"
                             id="email"
                             label="Correo"
-                            hintText="Correo"
                             value={correo}
                             onChange={e => changeCorreo(e)}
+                            error={correoErr === "" ? null : true}
                             helperText={correoErr === "" ? null : correoErr}
                         />
                     </div>

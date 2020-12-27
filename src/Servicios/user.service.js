@@ -3,6 +3,7 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/test/";
 const API_URL_2 = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/usuarios/";
+//const API_URL_2 = "http://localhost:8084/api/usuarios/";
 
 const usuario = {
   "idRol": null,
