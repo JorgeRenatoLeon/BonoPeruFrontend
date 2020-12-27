@@ -21,7 +21,16 @@ import Combobox from '../Elementos/Combobox';
 import ComboboxMultiple from '../Elementos/ComboboxMultiple';
 import RangoFechas from '../Elementos/RangoFechas';
 import  Cargando  from "../ModalCargando";
-import CronogramaListado from "../../Servicios/historico.service";
+//mANEJO COMOBOX CRONOGRAMAS 
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, useTheme, Theme } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import CronogramaService from "../../Servicios/historico.service";
 export default function GestionBonos (){
     
     function formato(texto){
@@ -31,11 +40,13 @@ export default function GestionBonos (){
     const rpta = [ { id: 'Respuesta',  label: 'Respuesta' },];
   //   cronograma que se desea monitorear
 
-    //inicio manejo de fecha inicial
-    var f = new Date();
-        var dd = f.getDate();//Mañana
-        var mm = f.getMonth()+1; 
-        if(dd<10)           dd='0'+dd;
+ //fecha de hace un mes
+    let f = new Date();
+    let dd = f.getDate();//Mañana
+    let mm = f.getMonth();
+    if(mm>1)     mm = f.getMonth()-1; 
+    if(dd<10)           dd='0'+dd;
+    if(mm<10)           mm='0'+mm;
         if(mm<10)           mm='0'+mm;
         //console.log( f.getFullYear()+"-" + mm+ "-"+dd);
      //fin manejo de fecha inicial
@@ -51,44 +62,19 @@ export default function GestionBonos (){
     const [departamentos, setDep] = useState([]);
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
-    const [cronogramass,setSelectedCro] = useState(null);  
-    const [cronogramas, setCronogramas] = useState([]); //Para el api
-    useEffect(() => {
-      const apiQuejas=async () => { 
-      const response = await CronogramaListado.mostrarHistorico().then(response =>{
-          let cronogramasAux = []; //Para comobox
-          let cronogramasAux2 = []; //Para el api
-          response.data.map(hist => {
-            //Para comobox
-            cronogramasAux.push({
-              value: hist.id, 
-              label: hist.nombre,
-              fechaIni: hist.fechaini,
-              fechaFin: hist.fechafin, 
-              });
-              //Para el api
-              cronogramasAux2.push(hist.id);
-          });
-          
-          setSelectedCro(cronogramasAux); //Combobox- cronogramass
-          setCronogramas(cronogramasAux2); // para el api- cronograma
-          // console.log(cronogramasAux);
-        })
-        .catch(() => {
-          console.log('Error al obtener historico')
-        });
-      }
-      apiQuejas();
-    
+    const [cronogramas, setCro]= useState([]);
+    const [names,setNames] = useState([]);
+ //fecha de hace un mes
 
-    },[]);
+    
+    let    FechaMes=f.getFullYear()+ '-'+mm+'-'+ dd ; //AAAA-MM-DD
     const reporteInicial={
-      cronogramas: [1,2,98,99],        
+      cronogramas: cronogramas,        
       iddepartamento:null,
       idprovincia:null,
       iddistrito:null,
      // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-      fechaini: "2020-11-01",//AAAA-MM-DD
+      fechaini: FechaMes,//AAAA-MM-DD
       fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
     }
     // console.log('reporte inicial',reporteInicial );
@@ -109,6 +95,24 @@ export default function GestionBonos (){
           console.log('Error al pedir los departamentos')
         });
   
+    },[]);
+    useEffect(() => { //Llamar al api de cronogramas
+     
+      CronogramaService.mostrarHistorico().then(response =>{
+        let croAux=[];
+        response.data.map(cro => {
+          croAux.push({
+            key: cro.id,
+            label: cro.nombre,
+          });
+        });
+        setNames(croAux);
+        console.log("cronogramas", croAux);
+        })
+        .catch(() => {
+          console.log('Error al pedir los cronogramas')
+        });
+      
     },[]);
     const apiProvincias=(valor)=>{
       setStateCbxProv(false);
@@ -135,7 +139,7 @@ export default function GestionBonos (){
         if(response.data.length> 0)
         disAux.push({
           value: 0,
-          label: "Distrito",
+          label: "Todos",
         });
         response.data.map(prov => {
           disAux.push({
@@ -162,23 +166,9 @@ export default function GestionBonos (){
           setStateCbxProv(true);
           setStateCbxDis(true);
           setSelectedDep(null);
-          const filtroLugar ={
-            iddepartamento: null,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-        //  apiLugares(filtroLugar);
         }else{
         
           apiProvincias(valor);
-          const filtroLugar ={
-            iddepartamento: valor,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-         // apiLugares(filtroLugar);
         }
     }
   
@@ -190,23 +180,11 @@ export default function GestionBonos (){
           setStateCbxDis(true);
           handleComboboxDis(0);
           setSelectedProv(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: null,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }else{
           console.log(valor,"id prov");
           apiDistritos(valor);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: valor,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }
     }
   
@@ -214,22 +192,10 @@ export default function GestionBonos (){
         setEstadoCargando(true);        
         if(valor === 0){
           setSelectedDis(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: null,
-            nombre: ""
-          }
-        //   apiLugares(filtroLugar);
+
         }else{
           setSelectedDis(valor);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: valor,
-            nombre: ""
-        }
-        //   apiLugares(filtroLugar);
+
         }
     }
   
@@ -257,130 +223,150 @@ export default function GestionBonos (){
       
       const reporteFiltrado={
         // cronogramas: [1,98,99],
-        cronogramas: cronogramas,
+        cronogramas: personName,
         iddepartamento: departamento,
         idprovincia: provincia,
         iddistrito: distrito,
         fechaini: fechaInicio,
-        fechafi: fechaFin,
+        fechafi: "2020-12-31",
       }    
       console.log("en filtrar",reporteFiltrado);
       apiQuejas(reporteFiltrado);
+      
     }
 
    
-    const handleComboboxCro=(valor)=>{
-        setEstadoCargando(true);     
-        console.log('cronogramas?',valor)  ; 
-        if(valor === 0){
-          setSelectedCro(null);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: null,
-            nombre: ""
-          }
-          apiQuejas(filtroLugar);
-        }else{
-          let arr=[];
-          arr.push(valor);
-          setSelectedCro(valor);
-          setCronogramas(arr);
-          const filtroLugar ={
-            iddepartamento: departamento,
-            idprovincia: provincia,
-            iddistrito: valor,
-            nombre: ""
-        }
-          apiQuejas(filtroLugar);
-        }
-    }
+    
   
     //Fin de manejo de filtros
     
     //Colores del chart
     const backgroundColor=[       
-    'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
-    'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul
-    '	rgb(0, 255, 127,1)','rgb(144, 238, 144,1)',//verde
-    'pink',     '	rgb(240, 128, 128,1)', //rosado
-    'rgb(255, 127, 80,1)' ,'	rgb(244, 164, 96,1)',//naranjita palido
-    'rgb(0, 255, 255,0.8)', 'rgb(100, 149, 237,0.8)', //Celeste
-    'rgb(0, 0, 139,0.8) ' , '	rgb(51,51,255,0.8)',//azul
-    '	rgb(0, 255, 127,0.8)','rgb(144, 238, 144,0.8)',//verde
-    'pink',     '	rgb(240, 128, 128,1)', //rosado
-    'rgb(255, 127, 80,0.8)' ,'	rgb(244, 164, 96,0.8)',//naranjita palido
-    'rgb(0, 255, 255,0.6)', 'rgb(100, 149, 237,0.6)', //Celeste
-    'rgb(0, 0, 139,0.6) ' , '	rgb(51,51,255,0.6)',//azul
-    '	rgb(0, 255, 127,0.6)','rgb(144, 238, 144,0.6)',//verde
-    'pink',     '	rgb(240, 128, 128,0.6)', //rosado
-    'rgb(255, 127, 80,0.6)' ,'	rgb(244, 164, 96,0.6)',//naranjita palido
-    'rgb(0, 255, 255,0.4)', 'rgb(100, 149, 237,0.4)', //Celeste
-    'rgb(0, 0, 139,0.4) ' , '	rgb(51,51,255,0.4)',//azul
-    '	rgb(0, 255, 127,0.4)','rgb(144, 238, 144,0.4)',//verde
-    'pink',     '	rgb(240, 128, 128,0.4)', //rosado
-    'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   100% de la barra inicial
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+    'rgb(1,185,223,1)', 'rgb(1,185,223,1)', //Celeste   
+
     ];
+    const backgroundColor2=[    
+      '	rgb(0, 255, 127,1)','	rgb(0, 255, 127,1)',//verde   50%
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+      '	rgb(0, 255, 127,1)','rgb(0, 255, 127,1)',//verde   
+  
+      ];
     const QUEJAS_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/quejas/reporte";
     //const QUEJAS_URL = "http://127.0.0.1:8084/api/quejas/reporte";
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
     const apiQuejas=async (reporteDeseado) => {   
-    console.log('filtros del reporte: ',reporteDeseado);
-    var response;
-    
-    if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
-         reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
-             response = await axios.post(QUEJAS_URL,reporteDeseado).then();
-         }
-     else response = await axios.post(QUEJAS_URL,reporteInicial).then();
-     setEstadoCargando(false);
-     console.log('rpta api.data: ',response.data);
-      if(response!==undefined && isResponse===false ){
-          //Para el chart reporte- Colores 
-          
-          isResponse=true;
-          setdatosEntregados({
-            labels:response.data.listacronogramas,
-            datasets:[
-              {
-                label:'Por Lugares',
-                 data:response.data.listalugares,
-                backgroundColor:backgroundColor,
-              },
-              {
-                label:'Por Horarios',
-                 data:response.data.listahorarios,
-                backgroundColor:backgroundColor,
-              }
+        console.log('filtros del reporte: ',reporteDeseado);
+        var response;
+        
+        if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
+            reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
+                response = await axios.post(QUEJAS_URL,reporteDeseado).then();
+            }
+        else response = await axios.post(QUEJAS_URL,reporteInicial).then();
+        setEstadoCargando(false);
+        console.log('rpta api.data: ',response.data);
+          if(response!==undefined && isResponse===false ){
+              //Para el chart reporte- Colores 
+              
+              isResponse=true;
+              setdatosEntregados({
+                labels:response.data.listacronogramas,
+                datasets:[
+                  {
+                    label:'Por Lugares',
+                    data:response.data.listalugares,
+                    backgroundColor:backgroundColor,
+                  },
+                  {
+                    label:'Por Horarios',
+                    data:response.data.listahorarios,
+                    backgroundColor:backgroundColor2,
+                  }
 
-            ]
-          });
-          
-        }       
+                ]
+              });
+              
+            }      
+            llamadaGraficos();  
     }
 
     useEffect(()=>{    
       //Llamo a todos los api de monitoreo    
-        apiQuejas(reporteInicial);      
+        apiQuejas(reporteInicial); 
+           
     },[]);
 
     //fin del chart reporte 
 
  
     var titulo="Reporte de Quejas";
-    if(datosEntregados!==[] && datosEntregados.length!==0){
-      //Debo preguntar esto antes de llamar a los gráficos
-       var respuesta= rpta.map((rpta,index)   =>
-            <Grid key={rpta.id} container  justify="center">
-              <Bar chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Cantidad de Quejas" legendPosition="bottom"/> 
-              <Pie chartData={datosEntregados} md={9} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/> 
-            </Grid>
+    var respuesta;
+    const llamadaGraficos= () => {  
+            if(datosEntregados!==[] && datosEntregados.length!==0){
+              //Debo preguntar esto antes de llamar a los gráficos
+              respuesta= rpta.map((rpta,index)   =>
+                    <Grid key={rpta.id} container  justify="center">
+                      <Bar chartData={datosEntregados} md={12} sm={10} xs={10}  nameTitle="Cantidad de Quejas Por Cronograma" legendPosition="bottom"/> 
+                      {/* <Pie chartData={datosEntregados} md={6} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/>  */}
+                      <Typography variant="h4" style={{color: 'white', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                    "Grupo IMposible"
+                                </Typography>
+                    </Grid>
 
-            )
-          }
-    
+                    )
+                  }
+    }
+    llamadaGraficos();
      const [estadoCargando,setEstadoCargando]= useState(true);
     //PARA MODAL CARGANDO
 
@@ -395,6 +381,74 @@ export default function GestionBonos (){
   const classes2 = useStyles2();
   //FIN DE MODAL CARGANDO
 
+
+    //COMBOBOX MULTIPLE MATERIAL UI
+    const useStyles3 = makeStyles((theme) =>
+    createStyles({
+      formControl: {
+        margin: theme.spacing(1),
+        minWidth: 200,
+        maxWidth: 1070,
+      },
+      chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+      chip: {
+        margin: 2,
+      },
+      noLabel: {
+        marginTop: theme.spacing(3),
+      },
+      
+    }),
+  );
+  
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  
+  
+  
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+  
+ 
+    const classes3 = useStyles3();
+    const theme = useTheme();
+    const [personName, setPersonName] = useState([]);    
+      
+    const handleChange = (event) => {
+      setPersonName(event.target.value);
+      
+    };
+  
+    const handleChangeMultiple = (event) => {
+      const { options } = event.target;
+      const value= [];
+      for (let i = 0, l = options.length; i < l; i += 1) {
+        if (options[i].selected) {
+          value.push(options[i].value);
+        }
+      }
+      setPersonName(value);
+    };
+
+
+    //FIN DE COMBOBOX MULTIPLE MATERIAL UI
 
 
     return (
@@ -414,7 +468,7 @@ export default function GestionBonos (){
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center" >
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center" >
                             <Typography variant="subtitle1"  color="inherit">
                                 Departamento:
                             </Typography>
@@ -432,19 +486,58 @@ export default function GestionBonos (){
                                     value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                             </Grid>
                         <br></br>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center">
-                            <Typography variant="subtitle1" color="inherit">
-                                Fechas:
-                            </Typography>
-                              <RangoFechas onCambio={cambiar}/>  
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
+                        
                               <Typography variant="subtitle1" color="inherit">
                                 Cronogramas:
                             </Typography>
-                            <Combobox options={cronogramass} onSeleccion={handleComboboxCro} 
-                                    value={cronogramass} placeholder="Todos"/>
-                             <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
-                                Filtrar
-                              </Button> 
+
+                              {/* comobox multiple
+                               */}
+                            <Grid>
+                                  <FormControl className={classes3.formControl}>
+                                    <InputLabel id="demo-mutiple-chip-label"></InputLabel>
+                                    <Select
+                                      labelId="demo-mutiple-chip-label"
+                                      id="demo-mutiple-chip"
+                                      multiple
+                                      value={personName}
+                                      onChange={handleChange}
+                                      input={<Input id="select-multiple-chip" />}
+                                      renderValue={(selected) => (
+                                        <div className={classes3.chips}>
+                                          {(selected).map((value) => (
+                                            <Chip key={value} label={value} className={classes3.chip} />
+                                          ))}
+                                        </div>
+                                      )}
+                                      MenuProps={MenuProps}
+                                    >
+                                      {names.map((name) => (
+                                        <MenuItem key={name.key}  value={name.label} style={getStyles(name, personName, theme)}>
+                                          {name.label}
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+
+                               {/* fin de comobox multiple */}
+
+                               <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
+                                  <Typography variant="subtitle1" color="inherit">
+                                      Fechas:
+                                  </Typography>
+                                  <RangoFechas onCambio={cambiar}/> 
+                                  <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 20}}>
+                                      Filtrar
+                                   </Button> 
+                              </Grid>
+
+
+
+
+                            
                            
                               
                         </Grid>

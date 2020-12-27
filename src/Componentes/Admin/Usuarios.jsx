@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { AppBar, Container, Grid } from "@material-ui/core"
+import { Container, Grid } from "@material-ui/core"
 import Buscador from './BuscadorUsuarios'
 import Formulario from './Formulario'
 import VerFormulario from './VerFormulario'
@@ -290,17 +290,15 @@ export default function EnhancedTable() {
       <BarraInicial />
       <Container>
         <div>
-          <AppBar position="relative" style={{ background: 'transparent', boxShadow: 'none' }}>
-            <Toolbar>
-              <Grid container direction="row" justify="center">
-                <Grid container item xs={10} justify="center">
-                  <Typography variant="h3" gutterBottom justify="center" >
-                    <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Usuarios</h1>
-                  </Typography>
-                </Grid>
+          <Toolbar>
+            <Grid container direction="row" justify="center">
+              <Grid container item xs={10} justify="center">
+                <Typography variant="h3" gutterBottom justify="center" >
+                  <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Usuarios</h1>
+                </Typography>
               </Grid>
-            </Toolbar>
-          </AppBar>
+            </Grid>
+          </Toolbar>
         </div>
 
         <div className='Contenedor'>

@@ -122,12 +122,15 @@ const Tabla = (props) => {
                                   {props.cabeceras.map((cabecera, indexAux)=>{
                                     return (
                                       cabecera.especial?
-                                      <TableCell key={indexAux} align="left">{row[cabecera.valor]?cabecera.verdadero:cabecera.falso}</TableCell>
+                                        (cabecera.valor==='masculino'?
+                                        <TableCell key={indexAux} align="left">{row[cabecera.valor]===1?cabecera.verdadero:cabecera.falso}</TableCell>
+                                        :
+                                        <TableCell key={indexAux} align="left">{row[cabecera.valor]?cabecera.verdadero:cabecera.falso}</TableCell>)
                                       :
-                                      (cabecera.compuesto?
-                                      <TableCell key={indexAux} align="left">{row[cabecera.valor][cabecera.segundo]}</TableCell>
-                                      :
-                                      <TableCell key={indexAux} align="left">{row[cabecera.valor]}</TableCell>)
+                                        (cabecera.compuesto?
+                                        <TableCell key={indexAux} align="left">{row[cabecera.valor][cabecera.segundo]}</TableCell>
+                                        :
+                                        <TableCell key={indexAux} align="left">{row[cabecera.valor]}</TableCell>)
                                     )
                                   })}
                                 </TableRow>

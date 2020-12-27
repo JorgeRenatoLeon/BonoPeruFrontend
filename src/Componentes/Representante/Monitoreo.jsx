@@ -35,17 +35,24 @@ export default function GestionBonos (){
     var cronogramaGestionBonos = JSON.parse(localStorage.getItem("cronogramaKaytlin")) ; //Para el id
     //cronogramaGestionBonos.idcronograma,
     //inicio manejo de filtros
+//fecha de hoy
+      let f = new Date();
+      let dd = f.getDate()+1;//Mañana
+      let mm = f.getMonth()+1; 
+      if(dd<10)           dd='0'+dd;
+      if(mm<10)           mm='0'+mm;
+      
+       let    FechaHoy=f.getFullYear()+ '-'+mm+'-'+ dd ; //AAAA-MM-DD
+
     const cronogramaInicial={
-      idcronograma: cronogramaGestionBonos.idcronograma,
-      iddepartamento:null,
-      idprovincia:null,
-      iddistrito:null,
+      listaDepartamentos:[],
+      listaProvincias:[],
+      listaDistritos:[],
       fechaini: cronogramaGestionBonos.fechaini,
-      fechafin: cronogramaGestionBonos.fechafin,
-      nombre:""
+      fechafin: FechaHoy,
+      fechaactual:FechaHoy
     }
-    // console.log(cronogramaInicial.fechaini);
-    // console.log(cronogramaInicial.fechafin);
+
     const [departamento,setSelectedDep] = useState(null);
     const [provincia,setSelectedProv] = useState(null);
     const [distrito,setSelectedDis] = useState(null);  
@@ -55,7 +62,7 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     useEffect(() => {
-      // console.log("dentro del use effect",cronogramaInicial);
+    
       DepartamentosService.mostrarDepartamentos().then(response =>{
         let depAux=[];
         response.data.map(dep => {
@@ -101,7 +108,6 @@ export default function GestionBonos (){
             });
         });
         setDis(disAux);
-        // console.log(distritos);
   
       })
       .catch(() => {
@@ -111,19 +117,27 @@ export default function GestionBonos (){
     }
   
     const handleComboboxDep=(valor)=>{
-      setSelectedDep(valor);
-      // console.log(departamento,"id depa"); 
+      let arr=[];
+      arr.push(valor);
+      setSelectedDep(arr);
+      // console.log("arr depa ",departamento); 
+      // console.log("arr depa ",arr); 
+      // console.log("valor ",valor); 
       apiProvincias(valor);
     }
   
     const handleComboboxProv=(valor)=>{
-      setSelectedProv(valor);
+      let arr=[];
+      arr.push(valor);
+      setSelectedProv(arr);
       // console.log(valor,"id prov");
       apiDistritos(valor);
     }
   
     const handleComboboxDis=(valor)=>{
-      setSelectedDis(valor);
+      let arr=[];
+      arr.push(valor);
+      setSelectedDis(arr);
     }
   
     const [fechaInicio,setSelectedFechaIni]=useState(cronogramaInicial.fechaini);
@@ -150,14 +164,17 @@ export default function GestionBonos (){
       // console.log("en buscar",fechaInicio,fechaFin);
       const cronogramaBusqueda={
         idcronograma: cronogramaGestionBonos.idcronograma,
-        iddepartamento: departamento,
-        idprovincia: provincia,
-        iddistrito: distrito,
+        listaDepartamentos: departamento,
+        listaProvincias: provincia,
+        listaDistritos: distrito,
         fechaini: fechaInicio,
         fechafin: fechaFin,
       }    
+      console.log('cronogramaBusqueda',cronogramaBusqueda)
       apiEntregados(cronogramaBusqueda);
+      apiLugares(cronogramaBusqueda);
       apiTotales(cronogramaBusqueda);
+      llamadaGraficos();
     }
     //Fin de manejo de filtros
     //Para card de reporte 
@@ -202,30 +219,53 @@ export default function GestionBonos (){
     'rgb(255, 127, 80,0.4)' ,'	rgb(244, 164, 96,0.4)'//naranjita palido
     ];
     const ENTREGADOS = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoentregabono";
+    //const ENTREGADOS = "http://127.0.0.1:8084/api/cronograma/monitoreoentregabono";
+    const AVANCE = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreoavanceentrega";
+    //const AVANCE = "http://127.0.0.1:8084/api/cronograma/monitoreoavanceentrega";
+     const TOPLUGARES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/monitoreotoplugares";
+    //const TOPLUGARES = "http://127.0.0.1:8084/api/cronograma/monitoreotoplugares";
     const TOTALES = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/cronograma/reportebeneficiarios";
+    
+
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
+    const [datosTopLugares,setTopLugares]=useState([]); //Set cronograma, creando y un estado de toda la función
     const [datosIndicadores,setdatosIndicadores]=useState([]); //Set cronograma, creando y un estado de toda la función
+    const [datosAvance,setdatosAvance]=useState([]); //Set cronograma, creando y un estado de toda la función
     
     const apiEntregados=async (cronogramaDeseado) => {   
-      const response = await axios.post(ENTREGADOS).then();
+      const response = await axios.post(ENTREGADOS,cronogramaDeseado).then();
         // console.log('rpta api.data: ',response.data);
       if(response!==undefined && isResponse===false ){
           //Para el chart reporte- Colores 
           console.log('api entregados',response.data);
           isResponse=true;
           setdatosEntregados({
-            labels:response.data.listaFechas,//[,,]
-            /*labels:["Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder",
-            "Ari","Caro","Kayt","Vale","Jorge","Johana","Eder","JP"],//[,,]*/
+            labels:response.data.listaFechas,
             datasets:[
               {
                 label:'Fechas de entrega de bonos',
-                 data:response.data.listaCantidades,
-                /* data:[201,456,98,12,456,999,441,
-                  420,456,98,12,456,999,441,
-                  300,456,98,12,456,999,441,785],*/
+                data:response.data.listaCantidades,
+                backgroundColor:backgroundColor,
+              }
+
+            ]
+          });
+          
+        }     
+        
+    }
+    const apiAvance=async (cronogramaDeseado) => {   
+      const response = await axios.post(AVANCE,cronogramaDeseado).then();
+      if(response!==undefined ){
+          //Para el chart reporte- Colores 
+          isResponse=true;
+          setdatosAvance({
+            labels:response.data.listanombres,
+            datasets:[
+              {
+                label:'Fechas de entrega de bonos',
+                data:response.data.listacantidades,
                 backgroundColor:backgroundColor,
               }
 
@@ -233,6 +273,29 @@ export default function GestionBonos (){
           });
           
         }       
+        llamadaGraficos();  
+    }
+    //hola vale
+    const apiLugares=async (cronogramaDeseado) => { 
+      axios.post(TOPLUGARES,cronogramaDeseado)
+      .then(response =>{                    
+                   
+          setTopLugares({
+            labels:response.data.listaLugares,
+            datasets:[
+              {
+                label:'Lugares de Entrega',
+                data:response.data.listaCantidades,
+                backgroundColor:backgroundColor,
+              }
+
+            ]
+          }); 
+      })
+      .catch(() => {
+          console.log('Error al obtener Totales');
+      });
+     
     }
     const apiTotales = (cronogramaDeseado) => {
       axios.post(TOTALES)
@@ -250,6 +313,8 @@ export default function GestionBonos (){
       //Llamo a todos los api de monitoreo    
         apiEntregados(cronogramaInicial);
         apiTotales(cronogramaInicial);
+        apiLugares(cronogramaInicial);
+        apiAvance(cronogramaInicial);
     },[]);
 
     //fin del chart reporte 
@@ -257,123 +322,32 @@ export default function GestionBonos (){
     //  path: /monitoreo
     const classes = useStyles();
     var titulo="Monitoreo";
-    if(datosEntregados!==[] && datosEntregados.length!==0){
-      //Debo preguntar esto antes de llamar a los gráficos
-       var respuesta= rpta.map((rpta,index)   =>
-            <Grid key={rpta.id} container  justify="center">
-              <Pie chartData={datosEntregados}  md={6} sm={12}  xs={12}  nameTitle="Progreso Entrega" legendPosition="bottom"/>
-          
-              <Bar chartData={datosEntregados} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
-        
-               <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
-               {/* <apiData></apiData> */}
-               <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Beneficiarios
-                        </Typography>                
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantmujeres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Mujeres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.canthombres}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Hombres
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                                {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantdisc}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Discapacitados
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                               {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.cantquejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                    Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
+    var respuesta;
+    const llamadaGraficos = () => {
+        if(datosEntregados!==[] && datosEntregados.length!==0){
+          //Debo preguntar esto antes de llamar a los gráficos
+          respuesta= rpta.map((rpta,index)   =>
+                <Grid key={rpta.id} container  justify="center">
+                  <Pie chartData={datosAvance}  md={6} sm={12}  xs={12}  nameTitle="Cantidad de Bonos en Progreso de Entrega" legendPosition="bottom"/>
+              
+                  <Bar chartData={datosTopLugares} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
+            
+                  <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
+                  {/* <apiData></apiData> */}
+              
+                  
 
 
-                        
-                    </CardContent>
-   
-                 </Card>
-                    {/* Card de Lugares de Entrega */}
-                {/* <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Lugares de entrega
-                        </Typography>                
-                                      
-                                {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalLugares}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 40,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Total
-                                    </Typography>                           
-                                </Grid>                                
-                            ))}
-                            {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalActivo}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Activos
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
-                             {datosIndicadores.map(opcion=> (
-                                <Grid container direction="row" >
-                                    <Typography variant="h4" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                    {opcion.totalQuejas}
-                                    </Typography>                                     
-                                    <Typography variant="h5" style={{color: 'black', margin: 30,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                         Quejas
-                                    </Typography>                           
-                                </Grid>                                
-                            ))
-                            } 
+                </Grid>
 
+                )
+              }
 
-                        
-                    </CardContent> 
-                   
-               </Card> */}
-
-
-            </Grid>
-
-            )
-          }
-    //PARA MODAL CARGANDO
+    
+        }
+    llamadaGraficos();
+    
+          //PARA MODAL CARGANDO
     const useStyles2 = makeStyles((theme) => ({
       root: {
         display: 'flex',
@@ -386,7 +360,7 @@ export default function GestionBonos (){
   //FIN DE MODAL CARGANDO
     return (
         <div style={{minHeight:"88vh"}}>
-               <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
+               {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
                     <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
@@ -396,12 +370,74 @@ export default function GestionBonos (){
                             </Grid>
                         </Grid>
                     </Toolbar>
-                </AppBar>
+                {/* </AppBar> */}
 
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
                     <Grid>
-                        <Grid container direction="row" item md={12} justify="space-evenly" alignItems="center" >
+                      <Grid>
+                        <Card className={classes.root} variant="outlined">
+                          <CardContent>
+                          <Grid container direction="row" >
+                            <Grid container item md={6} justify="flex-start"  >
+                            
+                                  <Typography className={classes.title}  color="textSecondary" gutterBottom>
+                                    Beneficiarios
+                                  </Typography>   
+                                 
+                            </Grid>    
+                            <Grid container  item md={6} justify="flex-start"  >
+   
+                                  <Typography className={classes.title}  color="textSecondary" gutterBottom>
+                                    Lugares
+                                  </Typography> 
+                                 
+                             </Grid>
+                        </Grid>
+                       
+                                 
+                                {datosIndicadores.map(opcion=> (
+                                    <Grid container direction="row" >
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantmujeres}
+                                        </Typography>                                     
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Mujeres
+                                        </Typography>   
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.canthombres}
+                                        </Typography>                                     
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Hombres
+                                        </Typography>    
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantdisc}
+                                        </Typography>                                     
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Discapacitados
+                                        </Typography> 
+                                        
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                        {opcion.cantquejas}
+                                        </Typography>                                     
+                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                        Quejas
+                                        </Typography>                         
+                                    </Grid>                                
+                                ))
+                                }    
+
+
+                              
+                          </CardContent>
+        
+                        </Card>
+                       
+                        
+                                  
+                      </Grid>
+                      <br></br>
+                        <Grid container direction="row"  item md={12} justify="flex-start" alignItems="center" marginTop="20" >
                             <Typography variant="subtitle1" color="inherit">
                                 Departamento:
                             </Typography>
@@ -419,7 +455,7 @@ export default function GestionBonos (){
                             value={distrito} isDisabled={cbxDis} placeholder="Todos"/>
                         </Grid>
                         <br></br>
-                        <Grid container direction="row" item md={6} justify="space-evenly" alignItems="center">
+                        <Grid container direction="row" item md={12} justify="flex-start" alignItems="center">
                             <Typography variant="subtitle1" color="inherit">
                                 Fechas:
                             </Typography>
@@ -427,15 +463,7 @@ export default function GestionBonos (){
                               <Button variant="contained" onClick={filtrarReporte} size="medium" color="primary" style={{margin: 10}}>
                                 Filtrar
                               </Button> 
-                              <Link to={{
-                                        pathname: "/reportequejas"
-                                       
-                                      }} style={{textDecoration:"none"}}>
-                                <Button variant="contained"size="medium" color="secondary" style={{margin: 10}}>
-                                  Reporte Quejas
-                                </Button> 
-                              </Link>
-
+                     
                               
                         </Grid>
                     </Grid>
@@ -445,9 +473,8 @@ export default function GestionBonos (){
                                    
                              {datosEntregados?
                              respuesta:
-                              <Grid container direction="row" justify="center">
-                                  <Cargando/>
-                              </Grid>       
+                                 <Cargando></Cargando> 
+                                
                              }
                             </Typography>
                         </Grid>

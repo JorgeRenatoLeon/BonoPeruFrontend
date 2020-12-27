@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8084/api/preguntasfrecuentes/";
+const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/preguntasfrecuentes/";
+// const API_URL = "http://localhost:8084/api/preguntasfrecuentes/";
 
 const pregunta = {
     "idpreguntasfrecuentes": null,

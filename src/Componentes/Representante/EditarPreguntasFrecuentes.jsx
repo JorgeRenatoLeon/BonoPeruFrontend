@@ -201,17 +201,16 @@ export default function EditarPreguntasFrecuentes() {
             <BarraInicial />
             <Container>
                 <div>
-                    <AppBar position="relative" style={{ background: 'transparent', boxShadow: 'none' }}>
-                        <Toolbar>
-                            <Grid container direction="row" justify="center">
-                                <Grid container item xs={10} justify="center">
-                                    <Typography variant="h3" gutterBottom justify="center" >
-                                        <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Preguntas Frecuentes</h1>
-                                    </Typography>
-                                </Grid>
+
+                    <Toolbar>
+                        <Grid container direction="row" justify="center">
+                            <Grid container item xs={10} justify="center">
+                                <Typography variant="h3" gutterBottom justify="center" >
+                                    <h1 style={{ color: 'black', margin: 20, justify: "center" }}>Editar preguntas Frecuentes</h1>
+                                </Typography>
                             </Grid>
-                        </Toolbar>
-                    </AppBar>
+                        </Grid>
+                    </Toolbar>
                 </div>
                 <div className='Contenedor'>
                     <div className={classes.root}>

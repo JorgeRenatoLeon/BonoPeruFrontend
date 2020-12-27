@@ -19,8 +19,10 @@
      xs:12,
 
    }
+ 
 
    render(){
+    
      return (
        <Grid  container  item xs={this.props.xs} sm={this.props.sm} md={this.props.md} justify="center" >
            <Bar
@@ -34,6 +36,14 @@
              legend:{
                display:this.props.displayLegend,
                position:this.props.legendPosition
+             },
+             scales: {
+              yAxes: [{
+                  ticks: {
+                    min: 0,
+                    stepSize: 1
+                  }
+              }]
              }
            }} 
          />
