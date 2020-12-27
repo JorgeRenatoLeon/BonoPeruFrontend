@@ -46,6 +46,8 @@ class RangoFechas extends Component{
                 //showDefaultInputIcon={this.state.showDefaultInputIcon}
                 readOnly={this.state.readOnly}
                 showClearDates={this.state.showClearDates}
+                //initialVisibleMonth={() => moment().subtract(1, 'month')}
+                isOutsideRange={() => false}
             />
             
         )

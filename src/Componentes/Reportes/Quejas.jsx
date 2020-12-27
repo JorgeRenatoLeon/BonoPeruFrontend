@@ -30,7 +30,7 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, useTheme, Theme } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import CronogramaService from "../../Servicios/historico.service";
+import CronogramaService from "../../Servicios/cronograma.service";
 export default function GestionBonos (){
     
     function formato(texto){
@@ -98,7 +98,7 @@ export default function GestionBonos (){
     },[]);
     useEffect(() => { //Llamar al api de cronogramas
      
-      CronogramaService.mostrarHistorico().then(response =>{
+      CronogramaService.listar().then(response =>{
         let croAux=[];
         response.data.map(cro => {
           croAux.push({
