@@ -183,7 +183,8 @@ const ConsultasBeneficiarios = (params) => {
     const [mostrarErrorBusqueda, setErrorBusqueda]= useState(false);
 
     const buscarBeneficiario=(texto) =>{
-      var letters = /^\d*[a-zA-Z][a-zA-Z\d]*$/;
+      //var letters = /^\d*[a-zA-Z-z0-9][a-zA-Z-z0-9\d]*$/;
+      var letters = /^\d*[a-zA-Z-z0-9\d]*$/;
       setBusq(texto);
       if(!letters.test(texto)){
         setErrorBusqueda(true);
