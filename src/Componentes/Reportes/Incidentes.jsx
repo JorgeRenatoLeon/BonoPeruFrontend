@@ -14,7 +14,7 @@ import HorariosService from "../../Servicios/horarios.service";
 import DepartamentosService from "../../Servicios/departamentos.service";
 import ProvinciasService from "../../Servicios/provincias.service";
 import DistritosService from "../../Servicios/distritos.service";
-import CronogramaService from "../../Servicios/historico.service";
+import CronogramaService from "../../Servicios/cronograma.service";
 import ReporteService from "../../Servicios/reporteincidentes.service";
 import { SelectAll } from '@material-ui/icons';
 import  Cargando  from "../ModalCargando";
@@ -346,7 +346,7 @@ const ReporteIncidentes = (props) => {
         console.log('Error al pedir los departamentos')
       });
     
-    CronogramaService.mostrarHistorico().then(response =>{
+    CronogramaService.listar().then(response =>{
       let croAux=[];
       response.data.map(cro => {
         croAux.push({
