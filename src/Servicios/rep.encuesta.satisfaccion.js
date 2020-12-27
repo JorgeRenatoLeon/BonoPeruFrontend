@@ -4,9 +4,9 @@ const API_URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanst
 // const API_URL_1 = "http://localhost:8084/api/cronograma/";
 // const API_URL_2 = "http://localhost:8084/api/pregunta/";
 // const API_URL_3 = "http://localhost:8084/api/encuesta/";
-const API_URL_1 = API_URL+"cronograma/";
-const API_URL_2 = API_URL+"pregunta/";
-const API_URL_3 = API_URL+"encuesta/";
+const API_URL_1 = API_URL + "cronograma/";
+const API_URL_2 = API_URL + "pregunta/";
+const API_URL_3 = API_URL + "encuesta/";
 
 const listarCronogramas = () => {
     return axios
