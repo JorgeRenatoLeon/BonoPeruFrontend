@@ -184,7 +184,7 @@ const ConsultasBeneficiarios = (params) => {
 
     const buscarBeneficiario=(texto) =>{
       //var letters = /^\d*[a-zA-Z-z0-9][a-zA-Z-z0-9\d]*$/;
-      var letters = /^\d*[a-zA-Z-z0-9][a-zA-Z-z0-9\d]*$/;
+      var letters = /^\d*[a-zA-Z0-9][a-zA-Z0-9\d]*$/;
       setBusq(texto);
       if(!letters.test(texto)){
         setErrorBusqueda(true);
