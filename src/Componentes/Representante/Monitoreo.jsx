@@ -49,7 +49,7 @@ export default function GestionBonos (){
       listaProvincias:[],
       listaDistritos:[],
       fechaini: cronogramaGestionBonos.fechaini,
-      fechafin: FechaHoy,
+      fechafin: cronogramaGestionBonos.fechafin,
       fechaactual:FechaHoy
     }
 
