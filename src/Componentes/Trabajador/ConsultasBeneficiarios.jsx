@@ -211,7 +211,7 @@ const ConsultasBeneficiarios = (params) => {
       }
       ConsultaService.consultarCodigoFamilia(datos).then(response =>{
         console.log(response.data);
-        let respuesta= response.data;
+        let respuesta= response.data.trim();
         switch (respuesta) {
           case 'bono':
             setMensaje("Si le corresponde recibir bono al beneficiario");
