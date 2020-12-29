@@ -810,7 +810,7 @@ const GestionBonos = (props)=>{
             <Grid> 
                 <Grid container style={{paddingBottom: '3vh',paddingTop: '3vh',marginLeft: 40}}>
                     <Typography variant="h4" color="inherit">
-                        Monitoreo Histórico
+                        Histórico de Cronogramas
                     </Typography>
                 </Grid>
                 <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, marginTop:10,  boxShadow: 'none'}}>

@@ -184,7 +184,7 @@ const ConsultasBeneficiarios = (params) => {
 
     const buscarBeneficiario=(texto) =>{
       //var letters = /^\d*[a-zA-Z-z0-9][a-zA-Z-z0-9\d]*$/;
-      var letters = /^\d*[a-zA-Z-z0-9\d]*$/;
+      var letters = /^\d*[a-zA-Z0-9][a-zA-Z0-9\d]*$/;
       setBusq(texto);
       if(!letters.test(texto)){
         setErrorBusqueda(true);
@@ -211,7 +211,7 @@ const ConsultasBeneficiarios = (params) => {
       }
       ConsultaService.consultarCodigoFamilia(datos).then(response =>{
         console.log(response.data);
-        let respuesta= response.data;
+        let respuesta= response.data.trim();
         switch (respuesta) {
           case 'bono':
             setMensaje("Si le corresponde recibir bono al beneficiario");
