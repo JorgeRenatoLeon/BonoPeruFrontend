@@ -181,7 +181,7 @@ const Encuesta = (props) => {
                 </Typography>
             </Grid>
             <Grid container direction="row" item md={12} style={{paddingBottom: '1.5vh'}}>
-                {respuesta.puntaje!==-1?
+                {respuesta.respuesta==="Sin respuesta" || respuesta.respuesta==="Si" || respuesta.respuesta==="No" ?
                 <RadioGroup row variant="subtitle1" value={respuesta.respuesta} color="inherit">
                     <FormControlLabel value="Si" control={<Radio style={{color: 'black'}}/>} label="Si" onClick={() => handleChangeRespuesta(index,"Si")}/>
                     <FormControlLabel value="No" control={<Radio style={{color: 'black'}}/>} label="No" onClick={() => handleChangeRespuesta(index,"No")}/>
