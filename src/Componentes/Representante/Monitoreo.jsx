@@ -53,9 +53,9 @@ export default function GestionBonos (){
       fechaactual:FechaHoy
     }
 
-    const [departamento,setSelectedDep] = useState(null);
-    const [provincia,setSelectedProv] = useState(null);
-    const [distrito,setSelectedDis] = useState(null);  
+    const [departamento,setSelectedDep] = useState([]);
+    const [provincia,setSelectedProv] = useState([]);
+    const [distrito,setSelectedDis] = useState([]);  
     const [cbxProv, setStateCbxProv] = useState(true);
     const [cbxDis,setStateCbxDis] = useState(true);
     const [departamentos, setDep] = useState([]);
@@ -279,7 +279,7 @@ export default function GestionBonos (){
     const apiLugares=async (cronogramaDeseado) => { 
       axios.post(TOPLUGARES,cronogramaDeseado)
       .then(response =>{                    
-                   
+                   console.log('Lugares: ',response.data);
           setTopLugares({
             labels:response.data.listaLugares,
             datasets:[
@@ -293,7 +293,7 @@ export default function GestionBonos (){
           }); 
       })
       .catch(() => {
-          console.log('Error al obtener Totales');
+          console.log('Error al obtener Lugares de entrega');
       });
      
     }
@@ -312,8 +312,9 @@ export default function GestionBonos (){
     useEffect(()=>{    
       //Llamo a todos los api de monitoreo    
         apiEntregados(cronogramaInicial);
-        apiTotales(cronogramaInicial);
         apiLugares(cronogramaInicial);
+
+        apiTotales(cronogramaInicial);
         apiAvance(cronogramaInicial);
     },[]);
 
@@ -324,7 +325,9 @@ export default function GestionBonos (){
     var titulo="Monitoreo";
     var respuesta;
     const llamadaGraficos = () => {
-        if(datosEntregados!==[] && datosEntregados.length!==0){
+        if(datosEntregados!==[] && datosEntregados.length!==0 && datosEntregados!==undefined &&
+          datosTopLugares!==[] && datosTopLugares.length!==0 && datosTopLugares!==undefined
+          ){
           //Debo preguntar esto antes de llamar a los gráficos
           respuesta= rpta.map((rpta,index)   =>
                 <Grid key={rpta.id} container  justify="center">
@@ -333,11 +336,7 @@ export default function GestionBonos (){
                   <Bar chartData={datosTopLugares} md={6} sm={12} xs={12}  nameTitle="Top Peores Lugares de Entrega" legendPosition="bottom"/> 
             
                   <Line chartData={datosEntregados} md={10} sm={12} xs={12} nameTitle="Cantidad de Bonos Entregados" legendPosition="bottom"/>
-                  {/* <apiData></apiData> */}
-              
-                  
-
-
+               
                 </Grid>
 
                 )
@@ -379,14 +378,14 @@ export default function GestionBonos (){
                         <Card className={classes.root} variant="outlined">
                           <CardContent>
                           <Grid container direction="row" >
-                            <Grid container item md={6} justify="flex-start"  >
+                            <Grid container item md={8} justify="flex-start"  >
                             
                                   <Typography className={classes.title}  color="textSecondary" gutterBottom>
                                     Beneficiarios
                                   </Typography>   
                                  
                             </Grid>    
-                            <Grid container  item md={6} justify="flex-start"  >
+                            <Grid container  item md={2} justify="flex-start"  >
    
                                   <Typography className={classes.title}  color="textSecondary" gutterBottom>
                                     Lugares
@@ -398,31 +397,34 @@ export default function GestionBonos (){
                                  
                                 {datosIndicadores.map(opcion=> (
                                     <Grid container direction="row" >
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                        {opcion.cantmujeres}
-                                        </Typography>                                     
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                            Mujeres
-                                        </Typography>   
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                        {opcion.canthombres}
-                                        </Typography>                                     
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                            Hombres
-                                        </Typography>    
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                        {opcion.cantdisc}
-                                        </Typography>                                     
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                            Discapacitados
-                                        </Typography> 
-                                        
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
-                                        {opcion.cantquejas}
-                                        </Typography>                                     
-                                        <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
-                                        Quejas
-                                        </Typography>                         
+                                       <Grid container  item md={8} justify="flex-start"  >
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.cantmujeres}
+                                            </Typography>                                     
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                                Mujeres
+                                            </Typography>   
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.canthombres}
+                                            </Typography>                                     
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                                Hombres
+                                            </Typography>    
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.cantdisc}
+                                            </Typography>                                     
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                                Discapacitados
+                                            </Typography> 
+                                        </Grid>
+                                        <Grid container  item md={2} justify="flex-start"  >
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , fontWeight:"bold", textAlign:"center"}} gutterBottom justify="center" >
+                                            {opcion.cantquejas}
+                                            </Typography>                                     
+                                            <Typography variant="h6" style={{color: 'black', margin: 15,marginTop:-5,marginBottom:0,justify:"center" , textAlign:"center"}} gutterBottom justify="center" >
+                                            Quejas
+                                            </Typography>  
+                                        </Grid>                       
                                     </Grid>                                
                                 ))
                                 }    
@@ -471,7 +473,7 @@ export default function GestionBonos (){
                         <Grid container item xs={12} justify="center">                            
                             <Typography variant="h5"  gutterBottom justify="center" >
                                    
-                             {datosEntregados?
+                             {datosEntregados  ?
                              respuesta:
                                  <Cargando></Cargando> 
                                 

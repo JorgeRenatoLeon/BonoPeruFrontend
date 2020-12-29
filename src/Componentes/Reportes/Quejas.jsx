@@ -40,16 +40,19 @@ export default function GestionBonos (){
     const rpta = [ { id: 'Respuesta',  label: 'Respuesta' },];
   //   cronograma que se desea monitorear
 
- //fecha de hace un mes
-    let f = new Date();
-    let dd = f.getDate();//Mañana
-    let mm = f.getMonth();
-    if(mm>1)     mm = f.getMonth()-1; 
-    if(dd<10)           dd='0'+dd;
-    if(mm<10)           mm='0'+mm;
-        if(mm<10)           mm='0'+mm;
-        //console.log( f.getFullYear()+"-" + mm+ "-"+dd);
-     //fin manejo de fecha inicial
+
+
+//fecha del mes anterior
+      let f = new Date();
+      let dd = f.getDate();//Mañana
+      let mm = f.getMonth()+1; 
+      if(dd<10)           dd='0'+dd;
+      if(mm<10)           mm='0'+mm;
+       let fechaHoy = f.getFullYear()+"-" + mm+ "-"+dd;
+       
+       let    FechaMes=f.getFullYear()+ '-'+f.getMonth()+'-'+ dd ; //AAAA-MM-DD
+
+
 
 
   
@@ -63,20 +66,18 @@ export default function GestionBonos (){
     const [provincias, setProv] =useState([]);
     const [distritos, setDis] =useState([]);
     const [cronogramas, setCro]= useState([]);
-    const [names,setNames] = useState([]);
- //fecha de hace un mes
-
+    const [names,setNames] = useState([]);   
     
-    let    FechaMes=f.getFullYear()+ '-'+mm+'-'+ dd ; //AAAA-MM-DD
     const reporteInicial={
       cronogramas: cronogramas,        
       iddepartamento:null,
       idprovincia:null,
       iddistrito:null,
      // fechaini: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
-      fechaini: FechaMes,//AAAA-MM-DD
-      fechafi: f.getFullYear()+"-" + mm+ "-"+dd,//AAAA-MM-DD
+      fechaini: FechaMes,//AAAA-MM-DD fecha un mes anterior
+      fechafi: fechaHoy,
     }
+    // console.log('cronograma inicial: ',reporteInicial);
     // console.log('reporte inicial',reporteInicial );
     useEffect(() => {
       // console.log("dentro del use effect",reporteInicial);
@@ -94,9 +95,6 @@ export default function GestionBonos (){
         .catch(() => {
           console.log('Error al pedir los departamentos')
         });
-  
-    },[]);
-    useEffect(() => { //Llamar al api de cronogramas
      
       CronogramaService.listar().then(response =>{
         let croAux=[];
@@ -113,6 +111,8 @@ export default function GestionBonos (){
           console.log('Error al pedir los cronogramas')
         });
       
+
+        apiQuejas(reporteInicial); 
     },[]);
     const apiProvincias=(valor)=>{
       setStateCbxProv(false);
@@ -220,18 +220,53 @@ export default function GestionBonos (){
   
     }
     const filtrarReporte=()=>{
+      let reporteFiltrado;
+      if(fechaInicio===undefined && fechaFin===undefined ){
+        reporteFiltrado={
+          cronogramas: personName,
+          iddepartamento: departamento,
+          idprovincia: provincia,
+          iddistrito: distrito,
+          fechaini: fechaHoy,
+          fechafi: FechaMes,
+        } 
+        console.log('ambos indefinidos')
+      }
+      else if (fechaInicio===undefined){
+        reporteFiltrado={
+          cronogramas: personName,
+          iddepartamento: departamento,
+          idprovincia: provincia,
+          iddistrito: distrito,
+          fechaini: fechaHoy,
+          fechafi: fechaFin,
+        }   
+        console.log('fecha ini indefinidos')
+      }
+      else if (fechaFin ===undefined){
+        reporteFiltrado={
+          cronogramas: personName,
+          iddepartamento: departamento,
+          idprovincia: provincia,
+          iddistrito: distrito,
+          fechaini: fechaInicio,
+          fechafi: fechaHoy,
+        }   
+      }
+      else{
+        reporteFiltrado={
+          cronogramas: personName,
+          iddepartamento: departamento,
+          idprovincia: provincia,
+          iddistrito: distrito,
+          fechaini: fechaInicio,
+          fechafi: fechaFin,
+        }   
+      }
       
-      const reporteFiltrado={
-        // cronogramas: [1,98,99],
-        cronogramas: personName,
-        iddepartamento: departamento,
-        idprovincia: provincia,
-        iddistrito: distrito,
-        fechaini: fechaInicio,
-        fechafi: "2020-12-31",
-      }    
-      console.log("en filtrar",reporteFiltrado);
       apiQuejas(reporteFiltrado);
+      console.log("en filtrar",reporteFiltrado);
+     
       
     }
 
@@ -304,47 +339,72 @@ export default function GestionBonos (){
     var isResponse=false;
     const [datosEntregados,setdatosEntregados]=useState([]); //Set cronograma, creando y un estado de toda la función
     
-    const apiQuejas=async (reporteDeseado) => {   
+    const apiQuejas= (reporteDeseado) => {   
         console.log('filtros del reporte: ',reporteDeseado);
         var response;
-        
+        /*
         if(reporteDeseado.iddepartamento!==null || reporteDeseado.iddistrito!==null  || reporteDeseado.idprovincia!==null ||
             reporteDeseado.fechaini!==reporteInicial.fechaini || reporteDeseado.fechafi!==reporteInicial.fechafin ){
                 response = await axios.post(QUEJAS_URL,reporteDeseado).then();
             }
-        else response = await axios.post(QUEJAS_URL,reporteInicial).then();
-        setEstadoCargando(false);
-        console.log('rpta api.data: ',response.data);
-          if(response!==undefined && isResponse===false ){
-              //Para el chart reporte- Colores 
-              
-              isResponse=true;
-              setdatosEntregados({
-                labels:response.data.listacronogramas,
-                datasets:[
-                  {
-                    label:'Por Lugares',
-                    data:response.data.listalugares,
-                    backgroundColor:backgroundColor,
-                  },
-                  {
-                    label:'Por Horarios',
-                    data:response.data.listahorarios,
-                    backgroundColor:backgroundColor2,
-                  }
+        else{ 
+          response = await axios.post(QUEJAS_URL,reporteInicial).then();
+        }
+*/
+        axios.post(QUEJAS_URL,reporteDeseado).then(response =>{
+          console.log('rpta api.data: ',response.data);
+          console.log('response: ',response);
+  
+            if(response!==undefined ){
+          
+                setdatosEntregados({
+                  labels:response.data.listacronogramas,
+                  datasets:[
+                    {
+                      label:'Por Lugares',
+                      data:response.data.listalugares,
+                      backgroundColor:backgroundColor,
+                    },
+                    {
+                      label:'Por Horarios',
+                      data:response.data.listahorarios,
+                      backgroundColor:backgroundColor2,
+                    }
+  
+                  ]
+                });
+                
+              }      
+                  if(datosEntregados!==[] && datosEntregados.length!==0 && datosEntregados!==undefined){
+                    console.log('datosEntregados',datosEntregados);
+                    //Debo preguntar esto antes de llamar a los gráficos
+                    respuesta= rpta.map((rpta,index)   =>
+                          <Grid key={rpta.id} container  justify="center">
+                            <Bar chartData={datosEntregados} md={12} sm={10} xs={10}  nameTitle="Cantidad de Quejas Por Cronograma" legendPosition="bottom"/> 
+                            {/* <Pie chartData={datosEntregados} md={6} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/>  */}
+                            <Typography variant="h4" style={{color: 'white', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
+                                          Grupo IMposible
+                                      </Typography>
+                          </Grid>
+  
+                          )
+                    }
+                    else{
+                      respuesta=null;
+                    } 
 
-                ]
-              });
-              
-            }      
-            llamadaGraficos();  
-    }
 
-    useEffect(()=>{    
-      //Llamo a todos los api de monitoreo    
-        apiQuejas(reporteInicial); 
-           
-    },[]);
+        }
+        );
+
+
+        
+
+
+
+    } //termina apiquejas
+
+
 
     //fin del chart reporte 
 
@@ -352,18 +412,21 @@ export default function GestionBonos (){
     var titulo="Reporte de Quejas";
     var respuesta;
     const llamadaGraficos= () => {  
-            if(datosEntregados!==[] && datosEntregados.length!==0){
+            if(datosEntregados!==[] && datosEntregados.length!==0 && datosEntregados!==undefined){
               //Debo preguntar esto antes de llamar a los gráficos
               respuesta= rpta.map((rpta,index)   =>
                     <Grid key={rpta.id} container  justify="center">
                       <Bar chartData={datosEntregados} md={12} sm={10} xs={10}  nameTitle="Cantidad de Quejas Por Cronograma" legendPosition="bottom"/> 
                       {/* <Pie chartData={datosEntregados} md={6} sm={10} xs={10}  nameTitle="Porcentaje de Quejas" legendPosition="bottom"/>  */}
                       <Typography variant="h4" style={{color: 'white', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
-                                    "Grupo IMposible"
+                                    Grupo IMposible
                                 </Typography>
                     </Grid>
 
                     )
+                  }
+                  else{
+                    respuesta=null;
                   }
     }
     llamadaGraficos();
