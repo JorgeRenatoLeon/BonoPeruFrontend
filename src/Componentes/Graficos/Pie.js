@@ -1,6 +1,7 @@
  import React, {Component} from 'react';
  import {Pie} from 'react-chartjs-2';
  import { Grid} from "@material-ui/core"
+ import "chartjs-plugin-datalabels";
  class Chart extends Component{
    constructor(props){
      super(props);
@@ -33,7 +34,13 @@
              legend:{
                display:this.props.displayLegend,
                position:this.props.legendPosition
-             }
+             },
+             plugins: {
+                datalabels: {
+                  display: true,
+                  color: 'gray'
+                }
+              }
            }}
            
          /> 

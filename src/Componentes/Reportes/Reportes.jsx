@@ -14,7 +14,7 @@ import ReporteEncuestasSatisfaccionService from "../../Servicios/rep.encuesta.sa
 const URL = "http://bonoperubackend-env.eba-gtzdnmjw.us-east-1.elasticbeanstalk.com/api/";
 const backgroundColor=[       
     'rgb(179,229,252,0.5)', 'rgb(100, 149, 237,1)', //Celeste
-    'rgb(0, 0, 139,1) ' , '	rgb(51,51,255,1)',//azul
+    'rgb(0, 0, 139,0.7)' , '	rgb(51,51,255,0.7)',//azul
     '	rgb(0, 255, 127,1)','rgb(144, 238, 144,1)',//verde
     'pink',     '	rgb(240, 128, 128,1)', //rosado
     'rgb(255, 127, 80,1)' ,'	rgb(244, 164, 96,1)',//naranjita palido
