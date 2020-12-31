@@ -37,7 +37,7 @@ export default function GestionBonos (){
     //inicio manejo de filtros
 //fecha de hoy
       let f = new Date();
-      let dd = f.getDate()+1;//Mañana
+      let dd = f.getDate();//Mañana
       let mm = f.getMonth()+1; 
       if(dd<10)           dd='0'+dd;
       if(mm<10)           mm='0'+mm;
@@ -172,6 +172,7 @@ export default function GestionBonos (){
       }    
       console.log('cronogramaBusqueda',cronogramaBusqueda)
       apiEntregados(cronogramaBusqueda);
+      apiAvance(cronogramaBusqueda);
       apiLugares(cronogramaBusqueda);
       apiTotales(cronogramaBusqueda);
       llamadaGraficos();

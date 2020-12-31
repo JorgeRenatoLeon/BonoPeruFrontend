@@ -88,7 +88,7 @@ const ReporteIncidentes = (props) => {
   var mes1 = ("0" + ((new Date()).getMonth())).slice(-2);
   var mes2 = ("0" + ((new Date()).getMonth()+1)).slice(-2);
   var anho = (new Date()).getFullYear();
-  var fechaini = anho+'-'+mes1+'-'+dia;
+  var fechaini = anho+'-'+mes1+'-'+"28";
   var fechafin = anho+'-'+mes2+'-'+dia;
   console.log(fechaini);
   console.log(fechafin);

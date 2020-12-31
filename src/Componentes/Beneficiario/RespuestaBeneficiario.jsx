@@ -31,7 +31,8 @@ const StyledTableCell = withStyles((theme) => ({
   }))(TableCell);
   const headCells = [
     { id: 'Descripción', numeric: false, disablePadding: false, label: 'Descripción' },
-    { id: 'Opciones', numeric: false, disablePadding: false, label: 'Opciones' },
+    { id: 'Opción 1', numeric: false, disablePadding: false, label: 'Opción 1' },
+    { id: 'Opción 2', numeric: false, disablePadding: false, label: 'Opción 2' },
     // { id: 'Opcion', numeric: false, disablePadding: false, label: 'Opciones' },
    
   ];

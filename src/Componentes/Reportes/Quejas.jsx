@@ -44,7 +44,7 @@ export default function GestionBonos (){
 
 //fecha del mes anterior
       let f = new Date();
-      let dd = f.getDate();//Mañana
+      let dd = f.getDate()-1;
       let mm = f.getMonth()+1; 
       if(dd<10)           dd='0'+dd;
       if(mm<10)           mm='0'+mm;
