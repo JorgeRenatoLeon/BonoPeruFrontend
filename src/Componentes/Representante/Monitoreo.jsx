@@ -359,7 +359,6 @@ export default function GestionBonos (){
   //FIN DE MODAL CARGANDO
     return (
         <div style={{minHeight:"88vh"}}>
-               {/* <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}> */}
                     <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
@@ -369,7 +368,6 @@ export default function GestionBonos (){
                             </Grid>
                         </Grid>
                     </Toolbar>
-                {/* </AppBar> */}
 
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>

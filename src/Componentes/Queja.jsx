@@ -327,9 +327,9 @@ const Queja=(props)=>{
                                 </Button>
                         </DialogActions>
                     </Dialog>
-                    <Link to='/' style={{textDecoration:"none"}}>
+                    <Link to='/consulta' style={{textDecoration:"none"}}>
                         <Button variant="contained"  size="medium" color="secondary" style={{margin: 10}}>
-                            Salir
+                            Volver
                         </Button>
                     </Link> 
                 </Grid>                  

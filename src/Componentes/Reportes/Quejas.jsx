@@ -516,8 +516,7 @@ export default function GestionBonos (){
 
     return (
         <div style={{minHeight:"88vh"}}>
-               <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
-                    <Toolbar>
+                 <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
                                 <Typography variant="h2" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
@@ -526,7 +525,6 @@ export default function GestionBonos (){
                             </Grid>
                         </Grid>
                     </Toolbar>
-                </AppBar>
 
             <div className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>

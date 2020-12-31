@@ -259,7 +259,6 @@ const ConsultasBeneficiarios = (params) => {
         <Grid>
           <Grid style={{minHeight: "92vh"}}>
             <BarraInicial/>                
-            <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <Grid container direction="row" justify="center">
                         <Grid container item xs={12} justify="center">
@@ -269,7 +268,7 @@ const ConsultasBeneficiarios = (params) => {
                         </Grid>                                                  
                     </Grid>
                 </Toolbar>
-            </AppBar> 
+           
             <Paper elevation={0} style={{marginLeft: 40, marginRight: 40, boxShadow: 'none'}}>
                 <TableContainer>
                         <Table

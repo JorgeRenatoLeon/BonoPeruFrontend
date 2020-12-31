@@ -124,14 +124,16 @@ function RespuestaBeneficiario (props) {
             
                     //La hemos obtenido             
                 if(cronograma===undefined || cronograma.length===0){ localStorage.setItem("beneficiarioKayt",JSON.stringify(apiBeneficiario)); //Guardar la rpta del apibenefici
-                    if (apiBeneficiario ===undefined || apiBeneficiario===null) {
+                setCronograma(apiBeneficiario); 
+                /*
+                if (apiBeneficiario ===undefined || apiBeneficiario===null) {
                         history.push('/'); //si no tengo pokemones ni item en beneficiario,lo mando a consutla
                     }
                     else{
-                        setCronograma(apiBeneficiario); 
+                       
                         localStorage.removeItem("beneficiario");                        
                     }
-                   
+                */
 
                 }
             },  [])
@@ -350,7 +352,7 @@ function RespuestaBeneficiario (props) {
    
     return (
         <Grid style={{minHeight:"88vh"}}>
-               <AppBar position="relative" style={{background: 'transparent', boxShadow: 'none'}}>
+               
                     <Toolbar>
                         <Grid container direction="row" justify="center">
                             <Grid container item xs={12} justify="center">
@@ -358,13 +360,11 @@ function RespuestaBeneficiario (props) {
                                 <Typography variant="h3" style={{color: 'black', margin: 20,justify:"center" , fontWeight:"bold"}} gutterBottom justify="center" >
                                      {titulo}                                     
                                 </Typography> 
-                                {/* Para leer lo que traigo de beneficiario */}                           
-
                               
                             </Grid>                                                  
                         </Grid>
                     </Toolbar>
-                </AppBar>
+                
             
             <Grid className='Contenedor'>
                 <Container style={{margin: 10, boxShadow: 'none'}}>
